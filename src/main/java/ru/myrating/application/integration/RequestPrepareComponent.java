@@ -52,7 +52,9 @@ public class RequestPrepareComponent {
         id.setSeriesNumber(orderRequest.getOrderData().getPassportSerial().toString());
         id.setIssueCountry("Неизвестно");
         id.setIssueAuthority("Неизвестно");
-        id.setIssueDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(orderRequest.getOrderData().getPassportDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
+        id.setIssueDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(orderRequest.getOrderData().getBirthDate()
+                .plusYears(16)
+                .plusMonths(4).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
         creditReportRequest.getIdReq().add(id);
 
         Person person = objectFactory.createPerson();

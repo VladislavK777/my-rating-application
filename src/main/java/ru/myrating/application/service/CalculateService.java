@@ -8,9 +8,7 @@ import ru.myrating.application.domain.catalog.*;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -49,9 +47,12 @@ public class CalculateService {
             mapResultRating.put("closeCreditCard", "Нет");
             mapResultRating.put("activeOtherCredit", "Нет");
             mapResultRating.put("closeOtherCredit", "Нет");
-            mapResultRating.put("box2Header1", "Нет");
-            mapResultRating.put("box2Header2", "Нет");
-            mapResultRating.put("box2Header3", "Нет");
+            mapResultRating.put("box2HeaderName1", "Количество активных кредитов");
+            mapResultRating.put("box2HeaderValue1", "Нет");
+            mapResultRating.put("box2HeaderName2", "Сумма всех активных кредитов");
+            mapResultRating.put("box2HeaderValue2", "Нет");
+            mapResultRating.put("box2HeaderName3", "Остаток долга по активным кредитам");
+            mapResultRating.put("box2HeaderValue3", "Нет");
             return mapResultRating;
         }
 
@@ -312,33 +313,35 @@ public class CalculateService {
 
     // Расчет заголовков и значений в Блоке 2
     private void calculateHeaders1Box2(Map<String, Object> mapResultRating, CatActiveAccount catActiveAccountA1) {
-        List<String> list = new ArrayList<>();
-        list.add("Количество активных кредитов");
-        list.add(catActiveAccountA1.getDescription());
-        mapResultRating.put("box2Header1", list);
+        mapResultRating.put("box2HeaderName1", "Количество активных кредитов");
+        mapResultRating.put("box2HeaderValue1", catActiveAccountA1.getDescription());
     }
 
     private void calculateHeaders2Box2(Map<String, Object> mapResultRating, String d1, CatSumExistingCredit catSumExistingCreditA3, CatSumOverdueCredit catSumOverdueCreditD2) {
-        List<String> list = new ArrayList<>();
+        String name;
+        String value;
         if (d1.equals("0") || d1.equals("1")) {
-            list.add("Сумма всех активных кредитов");
-            list.add(catSumExistingCreditA3.getDescription());
+            name = "Сумма всех активных кредитов";
+            value = catSumExistingCreditA3.getDescription();
         } else {
-            list.add("Сумма просроченной задолженности");
-            list.add(catSumOverdueCreditD2.getDescription());
+            name = "Сумма просроченной задолженности";
+            value = catSumOverdueCreditD2.getDescription();
         }
-        mapResultRating.put("box2Header2", list);
+        mapResultRating.put("box2HeaderName2", name);
+        mapResultRating.put("box2HeaderValue2", value);
     }
 
     private void calculateHeaders3Box2(Map<String, Object> mapResultRating, String d1, CatCurrentDebtLoad catCurrentDebtLoadA4, CatDelayPeriod catDelayPeriodD1) {
-        List<String> list = new ArrayList<>();
+        String name;
+        String value;
         if (d1.equals("0") || d1.equals("1")) {
-            list.add("Остаток долга по активным кредитам");
-            list.add(catCurrentDebtLoadA4.getDescription());
+            name = "Остаток долга по активным кредитам";
+            value = catCurrentDebtLoadA4.getDescription();
         } else {
-            list.add("Срок активной просрочки");
-            list.add(catDelayPeriodD1.getDescription());
+            name = "Срок активной просрочки";
+            value = catDelayPeriodD1.getDescription();
         }
-        mapResultRating.put("box2Header3", list);
+        mapResultRating.put("box2HeaderName3", name);
+        mapResultRating.put("box2HeaderValue3", value);
     }
 }

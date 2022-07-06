@@ -1,6 +1,5 @@
 package ru.myrating.application.service;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -173,6 +172,7 @@ public class UserService {
         user.setResetDate(Instant.now());
         user.setActivated(true);
         user.setCreatedDate(userDTO.getCreatedDate());
+        user.setApiKey(userDTO.getApiKey() == null ? UUID.randomUUID().toString() : userDTO.getApiKey());
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO
                     .getAuthorities()
@@ -215,6 +215,9 @@ public class UserService {
                     user.setImageUrl(userDTO.getImageUrl());
                     user.setActivated(userDTO.isActivated());
                     user.setLangKey(userDTO.getLangKey());
+                    if (userDTO.getApiKey() != null) {
+                        user.setApiKey(userDTO.getApiKey());
+                    }
                     Set<Authority> managedAuthorities = user.getAuthorities();
                     managedAuthorities.clear();
                     userDTO
@@ -335,5 +338,9 @@ public class UserService {
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
+    }
+
+    public User getUserByApiKey(String apiKey) {
+        return userRepository.findByApiKey(apiKey).orElse(null);
     }
 }

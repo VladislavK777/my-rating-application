@@ -539,4 +539,10 @@
                                  referencedColumnNames="id"
                                  referencedTableName="order_request"/>
     </changeSet>
+
+    <changeSet id="202206300000020" author="jhipster">
+        <createIndex indexName="status_order_request" tableName="order_request">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

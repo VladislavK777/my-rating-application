@@ -1,17 +1,24 @@
 package ru.myrating.application.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.myrating.application.domain.OrderRequest;
-import ru.myrating.application.domain.enumeration.StatusOrderEnum;
+import ru.myrating.application.domain.enumeration.OrderStatusEnum;
 
 import java.time.Instant;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
+@JsonInclude(NON_NULL)
 public class OrderRequestDto {
     private Long id;
+    @JsonIgnore
     private Instant createdDate;
     private String firstName;
     private String linkOnReport;
     private String refLink;
-    private StatusOrderEnum status;
+    @JsonIgnore
+    private OrderStatusEnum status;
     private String email;
     private String login;
 
@@ -66,11 +73,11 @@ public class OrderRequestDto {
         this.refLink = refLink;
     }
 
-    public StatusOrderEnum getStatus() {
+    public OrderStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(StatusOrderEnum status) {
+    public void setStatus(OrderStatusEnum status) {
         this.status = status;
     }
 

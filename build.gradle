@@ -203,6 +203,8 @@ dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     implementation "org.apache.httpcomponents:httpclient:4.5.13"
     implementation "com.vladmihalcea:hibernate-types-52:${hibernateTypesVersion}"
+    implementation "io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}"
+    implementation "commons-io:commons-io:2.11.0"
     xsd2java ("com.sun.xml.bind:jaxb-xjc:${jaxbRuntimeVersion}",
             "com.sun.xml.bind:jaxb-impl:${jaxbRuntimeVersion}",
             "com.sun.xml.bind:jaxb-core:${jaxbRuntimeVersion}",

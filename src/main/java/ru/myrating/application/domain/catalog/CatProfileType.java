@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "cat_profile_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ProfileType implements CatalogForSoftDelete {
+public class CatProfileType implements CatalogForSoftDelete {
     @Id
     @Column(name = "id", updatable = false)
     private Long id;
@@ -61,10 +61,10 @@ public class ProfileType implements CatalogForSoftDelete {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ProfileType)) {
+        if (!(o instanceof CatProfileType)) {
             return false;
         }
-        return id != null && id.equals(((ProfileType) o).id);
+        return id != null && id.equals(((CatProfileType) o).id);
     }
 
     @Override

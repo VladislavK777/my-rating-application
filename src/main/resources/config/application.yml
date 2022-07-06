@@ -103,7 +103,7 @@ spring:
         - dev
         - api-docs
         # Uncomment to activate TLS for the dev profile
-        - tls
+        # - tls
   jmx:
     enabled: false
   data:
@@ -211,3 +211,12 @@ jhipster:
 # ===================================================================
 
 # application:
+
+resilience4j.ratelimiter:
+  instances:
+    orderResource:
+      limitForPeriod: 100
+      limitRefreshPeriod: 10s
+      timeoutDuration: 0
+      registerHealthIndicator: true
+      eventConsumerBufferSize: 100

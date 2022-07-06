@@ -4,13 +4,13 @@ import io.jsonwebtoken.io.IOException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.Marshaller;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,11 +27,12 @@ import javax.net.ssl.SSLContext;
 import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import static jakarta.xml.bind.JAXBContext.newInstance;
@@ -84,41 +85,49 @@ public class IntegrationProviderService {
                 input.setContentType(TEXT_XML_VALUE);
                 postRequest.setEntity(input);
                 try (CloseableHttpResponse response = httpClient.execute(postRequest)) {
-                    String xml = EntityUtils.toString(response.getEntity());
+                    byte[] is = response.getEntity().getContent().readAllBytes();
 
-                    // Проверяем подпись
-                /*CertificateFactory cf = CertificateFactory.getInstance("X.509");
-                for (Certificate certificate : cf.generateCertificates(is)) {
-                    X509Certificate cert509 = (X509Certificate) certificate;
-                    p12.setCertificateEntry("crypto", cert509);
-                    isTrustedCertificate(cert509, p12);
-                }*/
+                    // Проверяем сетрификат
+                    boolean trusted = false;
+                    CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                    for (Certificate certificate : cf.generateCertificates(new ByteArrayInputStream(is))) {
+                        X509Certificate cert509 = (X509Certificate) certificate;
+                        keyStore.setCertificateEntry("crypto", cert509);
+                        trusted = isTrustedCertificate(cert509, keyStore);
+                    }
 
-                    // Распарсим XML, для этого необходимо удалить лишние символы из подписи
-                    String result = xml.substring(
-                            xml.indexOf("<?xml version=\"1.0\" encoding=\"windows-1251\"?>"),
-                            xml.indexOf("</product>") + "</product>".length()
-                    );
-                    ProductType productType = jaxbContext.createUnmarshaller().unmarshal(new StreamSource(new ByteArrayInputStream(result.getBytes(UTF_8))), ProductType.class).getValue();
-                /*if (!productType.getPreply().getErr() != null) {
-                    // Ошибку писать может в бд
-                    return;
-                }*/
-                    OrderResponse orderResponse = orderResponseMapper.dtoToDao(productType.getPreply().getPcr().getReasons());
-                    orderResponse.setOrderRequest(orderRequest);
-                    orderResponseService.save(orderResponse);
-                    return orderResponse;
+                    // Если все ок, парсим
+                    if (trusted) {
+                        String xml = new String(is, UTF_8);
+                        // Распарсим XML, для этого необходимо удалить лишние символы из подписи
+                        String result = xml.substring(
+                                xml.indexOf("<?xml version=\"1.0\" encoding=\"windows-1251\"?>"),
+                                xml.indexOf("</product>") + "</product>".length()
+                        );
+
+                        ProductType productType = jaxbContext.createUnmarshaller().unmarshal(new StreamSource(new ByteArrayInputStream(result.getBytes(UTF_8))), ProductType.class).getValue();
+                       /* if (productType.getPreply().getErr() != null) {
+                            // Ошибку писать может в бд
+                            throw new BadRequestAlertException("Response error", ENTITY_NAME, "responseerror");
+                        }*/
+                        OrderResponse orderResponse = orderResponseMapper.dtoToDao(productType.getPreply().getPcr().getReasons());
+                        orderResponse.setOrderRequest(orderRequest);
+                        orderResponseService.save(orderResponse);
+                        return orderResponse;
+                    }
                 }
             }
         } catch (Exception e) {
-            log.error("Process call integration service failed: {}", e);
-            throw new BadRequestAlertException("Process call integration service failed", ENTITY_NAME, "outcallfailed");
+            log.error("Process call integration service failed: " + e);
+            throw new BadRequestAlertException("Process call integration service failed; cause: " + e.getMessage(), ENTITY_NAME, "outcallfailed");
         }
+        throw new BadRequestAlertException("Certificate validation fault", ENTITY_NAME, "certfalidfault");
     }
 
-    private boolean isTrustedCertificate(X509Certificate cert, KeyStore keyStore) throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
+    private boolean isTrustedCertificate(X509Certificate cert, KeyStore keyStore) throws IOException {
         if (keyStore == null) {
-            return true;
+            log.error("KeyStore is empty");
+            return false;
         }
         boolean trusted = false;
         try {
@@ -129,7 +138,7 @@ public class IntegrationProviderService {
                 }
             }
         } catch (KeyStoreException e) {
-
+            log.error("KeyStoreException: " + e);
         }
         return trusted;
     }

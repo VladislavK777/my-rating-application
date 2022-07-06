@@ -2,6 +2,7 @@ package ru.myrating.application.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrating.application.domain.catalog.*;
@@ -9,6 +10,7 @@ import ru.myrating.application.repository.catalog.*;
 import ru.myrating.application.web.rest.errors.BadRequestAlertException;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 
@@ -17,6 +19,7 @@ import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 public class CatalogService {
     private final Logger log = LoggerFactory.getLogger(CatalogService.class);
 
+    private final CacheManager cacheManager;
     private final CatOldRepository catOldRepository;
     private final CatCurrentDebtLoadRepository catCurrentDebtLoadRepository;
     private final CatSumExistingCreditRepository catSumExistingCreditRepository;
@@ -35,7 +38,8 @@ public class CatalogService {
     private final CatRecommendationBySystemRepository catRecommendationBySystemRepository;
 
 
-    public CatalogService(CatOldRepository catOldRepository, CatCurrentDebtLoadRepository catCurrentDebtLoadRepository, CatSumExistingCreditRepository catSumExistingCreditRepository, CatSumOverdueCreditRepository catSumOverdueCreditRepository, CatYesNoRepository catYesNoRepository, CatSettingRepository catSettingRepository, CatActiveAccountRepository catActiveAccountRepository, CatDelayPeriodRepository catDelayPeriodRepository, CatRequestCreditHistory7DaysRepository catRequestCreditHistory7DaysRepository, CatRequestCreditHistory14DaysRepository catRequestCreditHistory14DaysRepository, CatAdditionalRepository catAdditionalRepository, CatCRepository catCRepository, CatDRepository catDRepository, CatRecommendationByRatingRepository catRecommendationByRatingRepository, CatRecommendationByEmptyHistoryRepository catRecommendationByEmptyHistoryRepository, CatRecommendationBySystemRepository catRecommendationBySystemRepository) {
+    public CatalogService(CacheManager cacheManager, CatOldRepository catOldRepository, CatCurrentDebtLoadRepository catCurrentDebtLoadRepository, CatSumExistingCreditRepository catSumExistingCreditRepository, CatSumOverdueCreditRepository catSumOverdueCreditRepository, CatYesNoRepository catYesNoRepository, CatSettingRepository catSettingRepository, CatActiveAccountRepository catActiveAccountRepository, CatDelayPeriodRepository catDelayPeriodRepository, CatRequestCreditHistory7DaysRepository catRequestCreditHistory7DaysRepository, CatRequestCreditHistory14DaysRepository catRequestCreditHistory14DaysRepository, CatAdditionalRepository catAdditionalRepository, CatCRepository catCRepository, CatDRepository catDRepository, CatRecommendationByRatingRepository catRecommendationByRatingRepository, CatRecommendationByEmptyHistoryRepository catRecommendationByEmptyHistoryRepository, CatRecommendationBySystemRepository catRecommendationBySystemRepository) {
+        this.cacheManager = cacheManager;
         this.catOldRepository = catOldRepository;
         this.catCurrentDebtLoadRepository = catCurrentDebtLoadRepository;
         this.catSumExistingCreditRepository = catSumExistingCreditRepository;
@@ -119,6 +123,25 @@ public class CatalogService {
         if (list.isEmpty())
             throw new BadRequestAlertException("Value in CatDelayPeriod not found", ENTITY_NAME, "valuenotfoundincatalog");
         return list.get(0);
+    }
+
+    public void clearCaches() {
+        Objects.requireNonNull(cacheManager.getCache(CatActiveAccountRepository.CAT_ACTIVE_ACCOUNT_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatAdditionalRepository.CAT_ADDITIONAL_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatCRepository.CAT_С_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatDRepository.CAT_D_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatCurrentDebtLoadRepository.CAT_CURRENT_DEBT_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatDelayPeriodRepository.CAT_DELAY_PERIOD_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatOldRepository.CAT_OLD_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRecommendationByRatingRepository.CAT_RECOMMENTDATION_RATING_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRecommendationBySystemRepository.CAT_RECOMMENTATION_SYSTEM_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRecommendationByEmptyHistoryRepository.CAT_RECOMMENDATION_EMPTY_HISTORY)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRequestCreditHistory7DaysRepository.CAT_HISTORY_7_DAYS_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRequestCreditHistory14DaysRepository.CAT_HISTORY_14_DAYS_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatSettingRepository.CAT_SETTING_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatSumExistingCreditRepository.CAT_SUM_EXISTING_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatSumOverdueCreditRepository.CAT_SUM_OVERDUE_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatYesNoRepository.CAT_YES_NO_CODE)).clear();
     }
 
 }

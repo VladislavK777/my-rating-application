@@ -1,17 +1,14 @@
 package ru.myrating.application.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
-import ru.myrating.application.domain.enumeration.StatusOrderEnum;
+import ru.myrating.application.domain.enumeration.OrderStatusEnum;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -45,7 +42,7 @@ public class OrderRequest implements Serializable {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private StatusOrderEnum status;
+    private OrderStatusEnum status;
 
     @Email
     @Column(name = "email")
@@ -91,11 +88,11 @@ public class OrderRequest implements Serializable {
         this.linkOnReport = linkOnReport;
     }
 
-    public StatusOrderEnum getStatus() {
+    public OrderStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(StatusOrderEnum status) {
+    public void setStatus(OrderStatusEnum status) {
         this.status = status;
     }
 

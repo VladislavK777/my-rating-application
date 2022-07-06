@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.domain.OrderResponse;
-import ru.myrating.application.domain.enumeration.StatusOrderEnum;
 import ru.myrating.application.integration.IntegrationProviderService;
 import ru.myrating.application.web.rest.errors.BadRequestAlertException;
 
@@ -26,17 +25,13 @@ public class RatingService {
         this.integrationProviderService = integrationProviderService;
     }
 
-    public OrderRequest startCalculateRating(OrderRequest orderRequest) {
+    public Map<String, Object> startCalculateRating(OrderRequest orderRequest) {
         try {
             OrderResponse orderResponse = integrationProviderService.callOutService(orderRequest);
-            Map<String, Object> ratingModel = calculateService.calculateRatingModel(orderResponse);
-            System.out.println(ratingModel);
-            OrderRequest orderRequest1 = orderResponse.getOrderRequest();
-            orderRequest1.setStatus(StatusOrderEnum.PAID);
-            return orderRequest1;
+            return calculateService.calculateRatingModel(orderResponse);
         } catch (Exception e) {
-            log.error("Calculate rating failed: {}", e);
-            throw new BadRequestAlertException("Calculate rating failed", ENTITY_NAME, "calculationfailed");
+            log.error("Calculate rating failed: " + e);
+            throw new BadRequestAlertException("Calculate rating failed; cause: " + e.getMessage(), ENTITY_NAME, "calculationfailed");
         }
     }
 }

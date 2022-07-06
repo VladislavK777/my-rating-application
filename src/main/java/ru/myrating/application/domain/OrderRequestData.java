@@ -14,10 +14,6 @@ public class OrderRequestData implements Serializable {
     private String lastName;
     private Long passportSerial;
     private Long passportNumber;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate passportDate;
     private String email;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -70,13 +66,5 @@ public class OrderRequestData implements Serializable {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public LocalDate getPassportDate() {
-        return passportDate;
-    }
-
-    public void setPassportDate(LocalDate passportDate) {
-        this.passportDate = passportDate;
     }
 }

@@ -1,6 +1,6 @@
 package ru.myrating.application.domain.enumeration;
 
-public enum StatusOrderEnum {
+public enum OrderStatusEnum {
     NEW,
     PAID,
     CALCULATED,
