@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="20220624000000" author="jhipster">
+        <createSequence sequenceName="order_request_generator" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="order_response_generator" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <changeSet id="20220630000001" author="jhipster">
+        <createTable tableName="cat_active_account" remarks="Справочник 'Активные счета'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_active_account.csv"
+                separator=";"
+                tableName="cat_active_account"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20220630000002" author="jhipster">
+        <createTable tableName="cat_sum_existing_credit" remarks="Справочник 'Сумма существующих кредитов'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_sum_existing_credit.csv"
+                separator=";"
+                tableName="cat_sum_existing_credit"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20220630000003" author="jhipster">
+        <createTable tableName="cat_current_debt_load" remarks="Справочник 'Текущая долговая нагрузка'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_current_debt_load.csv"
+                separator=";"
+                tableName="cat_current_debt_load"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20220630000004" author="jhipster">
+        <createTable tableName="cat_sum_overdue_credit" remarks="Справочник 'Сумма просрочки кредитов'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_sum_overdue_credit.csv"
+                separator=";"
+                tableName="cat_sum_overdue_credit"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20220630000005" author="jhipster">
+        <createTable tableName="cat_delay_period" remarks="Справочник 'Срок просрочки'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_delay_period.csv"
+                separator=";"
+                tableName="cat_delay_period"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20220630000006" author="jhipster">
+        <createTable tableName="cat_old" remarks="Справочник 'Возраст'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from" remarks="От" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to" remarks="До" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_old.csv"
+                separator=";"
+                tableName="cat_old"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20220630000007" author="jhipster">
+        <createTable tableName="cat_request_credit_history_7_days" remarks="Справочник 'Запросы КИ (7 дней)'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from" remarks="От" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to" remarks="До" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_request_credit_history_7_days.csv"
+                separator=";"
+                tableName="cat_request_credit_history_7_days"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20220630000008" author="jhipster">
+        <createTable tableName="cat_request_credit_history_14_days" remarks="Справочник 'Запросы КИ (14 дней)'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from" remarks="От" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to" remarks="До" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_request_credit_history_14_days.csv"
+                separator=";"
+                tableName="cat_request_credit_history_14_days"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20220630000009" author="jhipster">
+        <createTable tableName="cat_c" remarks="Справочник 'Соотношение остаточной нагрузки к сумме выдачи'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from" remarks="От" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to" remarks="До" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_c.csv"
+                separator=";"
+                tableName="cat_c"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="202206300000010" author="jhipster">
+        <createTable tableName="cat_d" remarks="Справочник 'Соотношение просрочки к остаточной нагрузке'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from" remarks="От" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to" remarks="До" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_d.csv"
+                separator=";"
+                tableName="cat_d"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="202206300000011" author="jhipster">
+        <createTable tableName="cat_additional" remarks="Справочник 'Дополнительный'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="points" remarks="Баллы" type="bigint"/>
+            <column name="weight" remarks="Вес (процент)" type="bigint"/>
+            <column name="calculated_value" remarks="Расчетное значение" type="bigint"/>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_additional.csv"
+                separator=";"
+                tableName="cat_additional"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="202206300000012" author="jhipster">
+        <createTable tableName="cat_yes_no" remarks="Справочник 'Да/Нет'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_yes_no.csv"
+                separator=";"
+                tableName="cat_yes_no"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="202206300000013" author="jhipster">
+        <createTable tableName="cat_setting" remarks="Справочник 'Настройки'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание справочника" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" remarks="Значение" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_setting.csv"
+                separator=";"
+                tableName="cat_setting"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="202206300000014" author="jhipster">
+        <createTable tableName="cat_recommendation_by_rating" remarks="Справочник 'Рекомендации на основании рейтинга'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="from" remarks="От" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to" remarks="До" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rec_box_1" remarks="Рекомендация блока 1" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rec_box_4" remarks="Рекомендация блока 4" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_recommendation_by_rating.csv"
+                separator=";"
+                tableName="cat_recommendation_by_rating"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="202206300000015" author="jhipster">
+        <createTable tableName="cat_recommendation_by_empty_history"
+                     remarks="Справочник 'Рекомендации на основании путой КИ'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="rec_box_1" remarks="Рекомендация блока 1" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rec_box_2" remarks="Рекомендация блока 2" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rec_box_4" remarks="Рекомендация блока 4" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_recommendation_by_empty_history.csv"
+                separator=";"
+                tableName="cat_recommendation_by_empty_history"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="202206300000016" author="jhipster">
+        <createTable tableName="cat_recommendation_by_system"
+                     remarks="Справочник 'Рекомендации на основании ответа системы'">
+            <column name="id" remarks="ID записи" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" remarks="Код правила" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" remarks="Описание правила" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rec_box_2" remarks="Рекомендация блока 2" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rec_box_4" remarks="Рекомендация блока 4" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <loadData
+                file="config/liquibase/data/cat_recommendation_by_system.csv"
+                separator=";"
+                tableName="cat_recommendation_by_system"
+                usePreparedStatements="true">
+        </loadData>
+    </changeSet>
+
+    <changeSet id="202206300000017" author="jhipster">
+        <createIndex indexName="code_cat_active_account" tableName="cat_active_account">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="code_cat_sum_existing_credit" tableName="cat_sum_existing_credit">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="code_cat_current_debt_load" tableName="cat_current_debt_load">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="code_cat_sum_overdue_credit" tableName="cat_sum_overdue_credit">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="code_cat_delay_period" tableName="cat_delay_period">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="code_cat_additional" tableName="cat_additional">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="code_cat_yes_no" tableName="cat_yes_no">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="code_cat_setting" tableName="cat_setting">
+            <column name="code"/>
+        </createIndex>
+        <createIndex indexName="code_cat_recommendation_by_system" tableName="cat_recommendation_by_system">
+            <column name="code"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="202206300000018" author="jhipster">
+        <createTable tableName="order_request" remarks="Заказы">
+            <column name="id" remarks="ID записи" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_date" remarks="Дата создания записи" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" remarks="Фамилия" type="varchar"/>
+            <column name="link_on_report" remarks="Ссылка на отчет" type="varchar"/>
+            <column name="ref_link" remarks="Реферальная ссылка партнера" type="varchar"/>
+            <column name="status" remarks="Статус" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" remarks="Email" type="varchar"/>
+            <column name="login" remarks="Логин" type="varchar"/>
+            <column name="order_data" type="jsonb" remarks="Данные запроса">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202206300000019" author="jhipster">
+        <createTable tableName="order_response_data" remarks="Данные из бюро по заказу">
+            <column name="id" remarks="ID записи" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_request_id" remarks="Ссылка на заказ" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="I1" remarks="Обращения в банки - 7 дней" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="I2" remarks="Обращения в банки - 14 дней" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="I3" remarks="Обращения в банки - 30 дней" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="I4" remarks="Обращения в банки - всего" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A1" remarks="Активные счета" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A2" remarks="Как поручитель" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A3" remarks="Сумма активных кредитов" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A4" remarks="Текущая долговая нагрузка" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A5" remarks="Год и месяц закрытия последнего счета" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A6" remarks="Ипотека (открытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A7" remarks="Ипотека (закрытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A8" remarks="Потреб (открытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A9" remarks="Потреб (закрытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A10" remarks="МФО (открытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A11" remarks="МФО (закрытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A12" remarks="Автокредит (открытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A13" remarks="Автокредит (закрытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A14" remarks="Кредитная карта (открытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A15" remarks="Кредитная карта (закрытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A16" remarks="Другой залоговый кредит (открытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="A17" remarks="Другой залоговый кредит (закрытые)" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="D1" remarks="Максимальный срок просрочки по активным счетам" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="D2" remarks="Сумма просрочки по активным счетам" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="D3" remarks="Максимальный срок просрочки по всем счетам" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="D4" remarks="Безнадежный долг/передано на взыскание" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="order_request_id"
+                                 baseTableName="order_response_data"
+                                 constraintName="fk_order_request_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="order_request"/>
+    </changeSet>
+</databaseChangeLog>
