@@ -49,11 +49,11 @@ public class IntegrationProviderService {
     private final OrderResponseService orderResponseService;
     private final OrderResponseMapper orderResponseMapper;
 
-    @Value("${server.ssl.key-store-type: #{null}}")
+    @Value("${server.ssl.key-store-type: PKCS12}")
     private String keyStoreType;
-    @Value("${server.ssl.key-store-password: #{null}}")
+    @Value("${server.ssl.key-store-password: password}")
     private String keyStorePassword;
-    @Value("${server.ssl.key-store: #{null}}")
+    @Value("${server.ssl.key-store: config/tls/keystore.p12}")
     private String keyStorePath;
     @Value("${application.url}")
     private String url;
@@ -73,10 +73,10 @@ public class IntegrationProviderService {
             jaxbMarshaller.setProperty(JAXB_FORMATTED_OUTPUT, true);
             jaxbMarshaller.marshal(requestBody, sw);
 
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            keyStore.load(new FileInputStream("config/tls/keystore.p12"), "password".toCharArray());
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+            keyStore.load(new FileInputStream(keyStorePath), keyStorePassword.toCharArray());
             SSLContext sslContext = SSLContexts.custom()
-                    .loadKeyMaterial(keyStore, "password".toCharArray())
+                    .loadKeyMaterial(keyStore, keyStorePassword.toCharArray())
                     .build();
 
             try (CloseableHttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build()) {

@@ -47,10 +47,10 @@ public class OrderService {
         if (!String.valueOf(orderRequest.getOrderData().getLastName().charAt(0)).matches("[А-Я]"))
             throw new BadRequestAlertException("Only lowercase [А-Я]", ENTITY_NAME, "lowercase");
         orderRequest.setStatus(OrderStatusEnum.NEW);
-        save(orderRequest);
+        /*save(orderRequest);
         Map<String, Object> map = ratingService.startCalculateRating(orderRequest);
         orderRequest.setStatus(OrderStatusEnum.CALCULATED);
-        save(orderRequest);
+        save(orderRequest);*/
         return save(orderRequest);
     }
 }
