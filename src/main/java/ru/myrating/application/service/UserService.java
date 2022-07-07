@@ -343,6 +343,6 @@ public class UserService {
     }
 
     public User getUserByApiKey(String apiKey) {
-        return userRepository.findByApiKey(apiKey).orElse(null);
+        return userRepository.findByApiKey(fromString(apiKey)).orElse(null);
     }
 }

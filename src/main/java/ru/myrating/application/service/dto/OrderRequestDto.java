@@ -26,7 +26,7 @@ public class OrderRequestDto {
         this.id = orderRequest.getId();
         this.createdDate = orderRequest.getCreatedDate();
         this.firstName = orderRequest.getFirstName();
-        this.linkReport = orderRequest.getLinkReport().getId().toString();
+        this.linkReport = orderRequest.getLinkReport() != null ? orderRequest.getLinkReport().getId().toString() : null;
         this.refLink = orderRequest.getRefLink();
         this.status = orderRequest.getStatus();
         this.email = orderRequest.getEmail();

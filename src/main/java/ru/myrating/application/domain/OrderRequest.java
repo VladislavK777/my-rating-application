@@ -152,7 +152,6 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
         return "OrderRequest{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
-                ", linkReport='" + linkReport.getId() + '\'' +
                 ", refLink='" + refLink + '\'' +
                 ", status=" + status +
                 ", email='" + email + '\'' +

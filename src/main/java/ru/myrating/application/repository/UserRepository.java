@@ -11,6 +11,7 @@ import ru.myrating.application.domain.User;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Spring Data JPA repository for the {@link User} entity.
@@ -41,5 +42,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 
-    Optional<User> findByApiKey(String apiKey);
+    Optional<User> findByApiKey(UUID apiKey);
 }
