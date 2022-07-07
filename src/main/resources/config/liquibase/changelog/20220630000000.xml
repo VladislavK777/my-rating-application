@@ -586,5 +586,8 @@
         <createIndex indexName="payment_order_request" tableName="order_request" unique="true">
             <column name="payment_transaction_id"/>
         </createIndex>
+        <createIndex indexName="ref_link_order_request" tableName="order_request">
+            <column name="ref_link"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>
