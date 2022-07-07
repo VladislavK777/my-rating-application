@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
+import java.util.Map;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -58,6 +59,11 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
 
     @Column(name = "payment_transaction_id")
     private String paymentTransactionId;
+
+    @Type(type = "jsonb")
+    @Column(name = "order_result", columnDefinition = "jsonb")
+    @Basic(fetch = LAZY)
+    private Map<String, Object> orderResult;
 
     public Long getId() {
         return id;
@@ -129,6 +135,14 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
 
     public void setPaymentTransactionId(String paymentTransactionId) {
         this.paymentTransactionId = paymentTransactionId;
+    }
+
+    public Map<String, Object> getOrderResult() {
+        return orderResult;
+    }
+
+    public void setOrderResult(Map<String, Object> orderResult) {
+        this.orderResult = orderResult;
     }
 
     @Override

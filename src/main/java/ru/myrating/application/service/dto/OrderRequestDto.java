@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.domain.enumeration.OrderStatusEnum;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
@@ -13,7 +13,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 public class OrderRequestDto {
     private Long id;
     @JsonIgnore
-    private Instant createdDate;
+    private LocalDateTime createdDate;
     private String firstName;
     private String linkReport;
     private String refLink;
@@ -41,11 +41,11 @@ public class OrderRequestDto {
         this.id = id;
     }
 
-    public Instant getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Instant createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 

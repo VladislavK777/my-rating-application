@@ -40,11 +40,11 @@
             <column name="created_by" remarks="Автор записи" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" remarks="Дата создания записи" type="timestamp">
+            <column name="created_date" remarks="Дата создания записи" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
-            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp"/>
+            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp with time zone"/>
         </createTable>
     </changeSet>
 
@@ -71,11 +71,11 @@
             <column name="created_by" remarks="Автор записи" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" remarks="Дата создания записи" type="timestamp">
+            <column name="created_date" remarks="Дата создания записи" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
-            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp"/>
+            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp with time zone"/>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="requisites_id"

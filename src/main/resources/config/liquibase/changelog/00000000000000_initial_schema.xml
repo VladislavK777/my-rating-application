@@ -36,12 +36,12 @@
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp"/>
-            <column name="reset_date" type="timestamp">
+            <column name="created_date" type="timestamp with time zone"/>
+            <column name="reset_date" type="timestamp with time zone">
                 <constraints nullable="true"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp with time zone"/>
             <column name="api_key" type="uuid"/>
         </createTable>
 
@@ -84,7 +84,7 @@
                 usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="activated" type="boolean"/>
-            <column name="created_date" type="timestamp"/>
+            <column name="created_date" type="timestamp with time zone"/>
         </loadData>
         <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="${datetimeType}"/>
         <loadData
@@ -108,9 +108,9 @@
             <column name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
             </column>
-            <column name="instant" type="timestamp"/>
-            <column name="local_date_time" type="timestamp"/>
-            <column name="offset_date_time" type="timestamp"/>
+            <column name="instant" type="timestamp with time zone"/>
+            <column name="local_date_time" type="timestamp with time zone"/>
+            <column name="offset_date_time" type="timestamp with time zone"/>
             <column name="zoned_date_time" type="timestamp"/>
             <column name="local_time" type="time"/>
             <column name="offset_time" type="time"/>

@@ -4,5 +4,6 @@ public enum OrderStatusEnum {
     NEW,
     PAID,
     CALCULATED,
-    SENT
+    SENT,
+    FAULT
 }

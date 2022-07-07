@@ -5,13 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrating.application.domain.OrderRequest;
-import ru.myrating.application.domain.enumeration.OrderStatusEnum;
 import ru.myrating.application.repository.OrderRepository;
 import ru.myrating.application.web.rest.errors.BadRequestAlertException;
 
-import java.util.Map;
-
 import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
+import static ru.myrating.application.domain.enumeration.OrderStatusEnum.NEW;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.PAID;
 
 @Service
@@ -37,9 +35,17 @@ public class OrderService {
 
     public void updateStatusPaid(Long orderId, String transactionId) {
         OrderRequest orderRequest = getOne(orderId);
-        orderRequest.setStatus(PAID);
-        orderRequest.setPaymentTransactionId(transactionId);
-        save(orderRequest);
+        try {
+            if (!PAID.equals(orderRequest.getStatus())
+                    && NEW.equals(orderRequest.getStatus())) {
+                orderRequest.setStatus(PAID);
+                orderRequest.setPaymentTransactionId(transactionId);
+                save(orderRequest);
+                ratingService.startCalculateRating(orderRequest);
+            }
+        } catch (Exception e) {
+            throw new BadRequestAlertException("Error", ENTITY_NAME, "error");
+        }
     }
 
     public OrderRequest createOrder(OrderRequest orderRequest) {
@@ -47,11 +53,7 @@ public class OrderService {
             throw new BadRequestAlertException("Only lowercase [А-Я]", ENTITY_NAME, "lowercase");
         if (!String.valueOf(orderRequest.getOrderData().getLastName().charAt(0)).matches("[А-Я]"))
             throw new BadRequestAlertException("Only lowercase [А-Я]", ENTITY_NAME, "lowercase");
-        orderRequest.setStatus(OrderStatusEnum.NEW);
-        /*save(orderRequest);
-        Map<String, Object> map = ratingService.startCalculateRating(orderRequest);
-        orderRequest.setStatus(OrderStatusEnum.CALCULATED);
-        save(orderRequest);*/
+        orderRequest.setStatus(NEW);
         return save(orderRequest);
     }
 }

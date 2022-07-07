@@ -7,6 +7,7 @@
     <changeSet id="20220624000000" author="jhipster">
         <createSequence sequenceName="order_request_generator" startValue="1" incrementBy="1"/>
         <createSequence sequenceName="order_response_generator" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="order_fault_queue_generator" startValue="1" incrementBy="1"/>
     </changeSet>
 
     <changeSet id="20220630000001" author="jhipster">
@@ -441,17 +442,17 @@
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="deactivate_date" remarks="Дата деактивации записи" type="timestamp">
+            <column name="deactivate_date" remarks="Дата деактивации записи" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
             <column name="created_by" remarks="Автор записи" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" remarks="Дата создания записи" type="timestamp">
+            <column name="created_date" remarks="Дата создания записи" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
-            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp"/>
+            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp with time zone"/>
         </createTable>
     </changeSet>
 
@@ -472,14 +473,15 @@
                 <constraints nullable="false"/>
             </column>
             <column name="payment_transaction_id" remarks="ID транзакции платежа" type="varchar"/>
+            <column name="order_result" type="jsonb" remarks="Результат запроса"/>
             <column name="created_by" remarks="Автор записи" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" remarks="Дата создания записи" type="timestamp">
+            <column name="created_date" remarks="Дата создания записи" type="timestamp with time zone">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
-            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp"/>
+            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp with time zone"/>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="link_report"
                                  baseTableName="order_request"
@@ -589,5 +591,23 @@
         <createIndex indexName="ref_link_order_request" tableName="order_request">
             <column name="ref_link"/>
         </createIndex>
+    </changeSet>
+
+    <changeSet id="202206300000022" author="jhipster">
+        <createTable tableName="order_fault_queue" remarks="Ошибки заказа">
+            <column name="id" remarks="ID записи" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_request_id" remarks="Ссылка на заказ" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deadline_date" remarks="Дата после которой попытки прекратятся, заказ уйдет в статус FAULT" type="timestamp with time zone"/>
+            <column name="message_error" remarks="Описание ошибки" type="varchar"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="order_request_id"
+                                 baseTableName="order_fault_queue"
+                                 constraintName="fk_order_request_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="order_request"/>
     </changeSet>
 </databaseChangeLog>

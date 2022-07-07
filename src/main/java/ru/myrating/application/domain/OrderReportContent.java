@@ -6,7 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -31,8 +31,8 @@ public class OrderReportContent extends AbstractAuditingEntity implements Serial
     @Column(name = "activated")
     private boolean activated;
 
-    @Column(name = "deactivated_date", updatable = false)
-    private Instant deactivatedDate;
+    @Column(name = "deactivate_date", updatable = false)
+    private LocalDateTime deactivateDate;
 
     public UUID getId() {
         return id;
@@ -66,12 +66,12 @@ public class OrderReportContent extends AbstractAuditingEntity implements Serial
         this.activated = activated;
     }
 
-    public Instant getDeactivatedDate() {
-        return deactivatedDate;
+    public LocalDateTime getDeactivateDate() {
+        return deactivateDate;
     }
 
-    public void setDeactivatedDate(Instant deactivatedDate) {
-        this.deactivatedDate = deactivatedDate;
+    public void setDeactivateDate(LocalDateTime deactivateDate) {
+        this.deactivateDate = deactivateDate;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class OrderReportContent extends AbstractAuditingEntity implements Serial
                 "id=" + id +
                 ", dataContentType='" + dataContentType + '\'' +
                 ", activated=" + activated +
-                ", deactivatedDate=" + deactivatedDate +
+                ", deactivateDate=" + deactivateDate +
                 '}';
     }
 }

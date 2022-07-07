@@ -147,3 +147,6 @@ application:
     user-id: 1501MM000005
     member-code: 1501MM000000
     password: 89Mu7QUs
+  duration-fault-attempts:
+    days: 1
+    cron: 0 0/5 * * * *
