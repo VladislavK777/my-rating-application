@@ -26,6 +26,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -172,7 +174,7 @@ public class UserService {
         user.setResetDate(Instant.now());
         user.setActivated(true);
         user.setCreatedDate(userDTO.getCreatedDate());
-        user.setApiKey(userDTO.getApiKey() == null ? UUID.randomUUID().toString() : userDTO.getApiKey());
+        user.setApiKey(userDTO.getApiKey() == null ? randomUUID() : fromString(userDTO.getApiKey()));
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO
                     .getAuthorities()
@@ -216,7 +218,7 @@ public class UserService {
                     user.setActivated(userDTO.isActivated());
                     user.setLangKey(userDTO.getLangKey());
                     if (userDTO.getApiKey() != null) {
-                        user.setApiKey(userDTO.getApiKey());
+                        user.setApiKey(fromString(userDTO.getApiKey()));
                     }
                     Set<Authority> managedAuthorities = user.getAuthorities();
                     managedAuthorities.clear();

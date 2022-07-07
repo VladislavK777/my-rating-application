@@ -1,16 +1,17 @@
 package ru.myrating.application.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import ru.myrating.application.domain.enumeration.OrderStatusEnum;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
-import java.time.Instant;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -20,7 +21,7 @@ import static javax.persistence.FetchType.LAZY;
 @TypeDefs({
         @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 })
-public class OrderRequest implements Serializable {
+public class OrderRequest extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -28,14 +29,13 @@ public class OrderRequest implements Serializable {
     @SequenceGenerator(name = "order_request_generator", sequenceName = "order_request_generator", allocationSize = 1)
     private Long id;
 
-    @Column(name = "created_date")
-    private Instant createdDate = Instant.now();
-
     @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "link_on_report")
-    private String linkOnReport;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "link_report", unique = true)
+    @JsonIgnore
+    private OrderReportContent linkReport;
 
     @Column(name = "ref_link")
     private String refLink;
@@ -56,20 +56,15 @@ public class OrderRequest implements Serializable {
     @Basic(fetch = LAZY)
     private OrderRequestData orderData;
 
+    @Column(name = "payment_transaction_id")
+    private String paymentTransactionId;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
     }
 
     public String getFirstName() {
@@ -80,12 +75,12 @@ public class OrderRequest implements Serializable {
         this.firstName = firstName;
     }
 
-    public String getLinkOnReport() {
-        return linkOnReport;
+    public OrderReportContent getLinkReport() {
+        return linkReport;
     }
 
-    public void setLinkOnReport(String linkOnReport) {
-        this.linkOnReport = linkOnReport;
+    public void setLinkReport(OrderReportContent linkReport) {
+        this.linkReport = linkReport;
     }
 
     public OrderStatusEnum getStatus() {
@@ -128,6 +123,14 @@ public class OrderRequest implements Serializable {
         this.refLink = refLink;
     }
 
+    public String getPaymentTransactionId() {
+        return paymentTransactionId;
+    }
+
+    public void setPaymentTransactionId(String paymentTransactionId) {
+        this.paymentTransactionId = paymentTransactionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -148,13 +151,13 @@ public class OrderRequest implements Serializable {
     public String toString() {
         return "OrderRequest{" +
                 "id=" + id +
-                ", createdDate=" + createdDate +
                 ", firstName='" + firstName + '\'' +
-                ", linkOnReport='" + linkOnReport + '\'' +
+                ", linkReport='" + linkReport.getId() + '\'' +
                 ", refLink='" + refLink + '\'' +
                 ", status=" + status +
                 ", email='" + email + '\'' +
                 ", login='" + login + '\'' +
+                ", transactionId='" + paymentTransactionId + '\'' +
                 '}';
     }
 }

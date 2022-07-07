@@ -35,9 +35,10 @@ public class OrderService {
         return orderRepository.findById(id).orElseThrow(() -> new BadRequestAlertException("Order not found", ENTITY_NAME, "notfound"));
     }
 
-    public void updateStatusPaid(Long orderId) {
+    public void updateStatusPaid(Long orderId, String transactionId) {
         OrderRequest orderRequest = getOne(orderId);
         orderRequest.setStatus(PAID);
+        orderRequest.setPaymentTransactionId(transactionId);
         save(orderRequest);
     }
 

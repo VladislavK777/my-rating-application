@@ -428,15 +428,40 @@
     </changeSet>
 
     <changeSet id="202206300000018" author="jhipster">
-        <createTable tableName="order_request" remarks="Заказы">
-            <column name="id" remarks="ID записи" type="bigint" autoIncrement="${autoIncrement}">
+        <createTable tableName="order_report_content" remarks="Файлы отчетов">
+            <column name="id" remarks="ID записи" type="uuid">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="data" type="longblob">
+                <constraints nullable="false" />
+            </column>
+            <column name="data_content_type" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="activated" type="boolean" valueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deactivate_date" remarks="Дата деактивации записи" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" remarks="Автор записи" type="varchar">
+                <constraints nullable="false"/>
             </column>
             <column name="created_date" remarks="Дата создания записи" type="timestamp">
                 <constraints nullable="false"/>
             </column>
+            <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
+            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="202206300000019" author="jhipster">
+        <createTable tableName="order_request" remarks="Заказы">
+            <column name="id" remarks="ID записи" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
             <column name="first_name" remarks="Фамилия" type="varchar"/>
-            <column name="link_on_report" remarks="Ссылка на отчет" type="varchar"/>
+            <column name="link_report" remarks="Ссылка на отчет" type="uuid"/>
             <column name="ref_link" remarks="Реферальная ссылка партнера" type="varchar"/>
             <column name="status" remarks="Статус" type="varchar">
                 <constraints nullable="false"/>
@@ -446,10 +471,24 @@
             <column name="order_data" type="jsonb" remarks="Данные запроса">
                 <constraints nullable="false"/>
             </column>
+            <column name="payment_transaction_id" remarks="ID транзакции платежа" type="varchar"/>
+            <column name="created_by" remarks="Автор записи" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" remarks="Дата создания записи" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
+            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp"/>
         </createTable>
+        <addForeignKeyConstraint baseColumnNames="link_report"
+                                 baseTableName="order_request"
+                                 constraintName="fk_order_report_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="order_report_content"/>
     </changeSet>
 
-    <changeSet id="202206300000019" author="jhipster">
+    <changeSet id="202206300000020" author="jhipster">
         <createTable tableName="order_response_data" remarks="Данные из бюро по заказу">
             <column name="id" remarks="ID записи" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -540,9 +579,12 @@
                                  referencedTableName="order_request"/>
     </changeSet>
 
-    <changeSet id="202206300000020" author="jhipster">
+    <changeSet id="202206300000021" author="jhipster">
         <createIndex indexName="status_order_request" tableName="order_request">
             <column name="status"/>
+        </createIndex>
+        <createIndex indexName="payment_order_request" tableName="order_request" unique="true">
+            <column name="payment_transaction_id"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>

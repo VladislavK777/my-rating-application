@@ -15,7 +15,7 @@ public class OrderRequestDto {
     @JsonIgnore
     private Instant createdDate;
     private String firstName;
-    private String linkOnReport;
+    private String linkReport;
     private String refLink;
     @JsonIgnore
     private OrderStatusEnum status;
@@ -26,7 +26,7 @@ public class OrderRequestDto {
         this.id = orderRequest.getId();
         this.createdDate = orderRequest.getCreatedDate();
         this.firstName = orderRequest.getFirstName();
-        this.linkOnReport = orderRequest.getLinkOnReport();
+        this.linkReport = orderRequest.getLinkReport().getId().toString();
         this.refLink = orderRequest.getRefLink();
         this.status = orderRequest.getStatus();
         this.email = orderRequest.getEmail();
@@ -57,12 +57,12 @@ public class OrderRequestDto {
         this.firstName = firstName;
     }
 
-    public String getLinkOnReport() {
-        return linkOnReport;
+    public String getLinkReport() {
+        return linkReport;
     }
 
-    public void setLinkOnReport(String linkOnReport) {
-        this.linkOnReport = linkOnReport;
+    public void setLinkReport(String linkReport) {
+        this.linkReport = linkReport;
     }
 
     public String getRefLink() {

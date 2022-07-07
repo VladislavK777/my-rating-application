@@ -29,9 +29,11 @@ public class OrderResource {
     }
 
     @PutMapping("/paid/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestHeader(value = "X-API-Key", required = false) String key) {
+    public ResponseEntity<?> update(@RequestHeader(value = "X-API-Key", required = false) String key,
+                                    @PathVariable Long id,
+                                    @RequestParam String transactionId) {
         if (validationService.validationApiKey(key)) {
-            orderService.updateStatusPaid(id);
+            orderService.updateStatusPaid(id, transactionId);
             return new ResponseEntity<>(OK);
         }
         return new ResponseEntity<>("Access denied!", FORBIDDEN);
