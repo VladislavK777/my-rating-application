@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.myrating.application.config.ApplicationProperties;
 
 import javax.net.ssl.SSLContext;
 import java.io.ByteArrayInputStream;
@@ -30,28 +31,37 @@ public class HttpClientComponent {
     @Value("${server.ssl.key-store: #{null}}")
     private String keyStorePath;
     private KeyStore keyStore;
+    private final ApplicationProperties applicationProperties;
 
-    public void init() throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
+    public HttpClientComponent(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
+    }
+
+    private void init() throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException {
         keyStore = getInstance(keyStoreType);
         keyStore.load(new FileInputStream(keyStorePath), keyStorePassword.toCharArray());
     }
 
-    public SSLContext getSslContext() throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, CertificateException, IOException {
+    private SSLContext getSslContext() throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, CertificateException, IOException {
         init();
         return SSLContexts.custom()
                 .loadKeyMaterial(keyStore, keyStorePassword.toCharArray())
                 .build();
     }
 
-    public CloseableHttpClient getHttpClientWithSsl() throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, CertificateException, IOException {
+    public CloseableHttpClient getHttpClient() throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, CertificateException, IOException {
+        return applicationProperties.getIntegrationParams().isNeedSslCert() ? getHttpClientWithSsl() : getHttpClientWithOutSsl();
+    }
+
+    private CloseableHttpClient getHttpClientWithSsl() throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, CertificateException, IOException {
         return custom().setSSLContext(getSslContext()).build();
     }
 
-    public CloseableHttpClient getHttpClientWithOutSsl() {
+    private CloseableHttpClient getHttpClientWithOutSsl() {
         return custom().build();
     }
 
-    public boolean isTrustedCertificate(byte[] stream) throws CertificateException, KeyStoreException {
+    public boolean isTrustedCertificate(byte[] stream) throws CertificateException {
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         for (Certificate certificate : cf.generateCertificates(new ByteArrayInputStream(stream))) {
             X509Certificate cert509 = (X509Certificate) certificate;

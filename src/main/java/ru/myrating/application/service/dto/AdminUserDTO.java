@@ -72,7 +72,7 @@ public class AdminUserDTO {
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
-        this.apiKey = user.getApiKey().toString();
+        this.apiKey = user.getApiKey() != null ? user.getApiKey().toString() : null;
     }
 
     public Long getId() {

@@ -4,7 +4,7 @@ import jakarta.xml.bind.JAXBElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.myrating.application.config.IntegrationConfigurationParams;
+import ru.myrating.application.config.ApplicationProperties;
 import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.out.*;
 
@@ -19,10 +19,10 @@ import java.util.List;
 @Component
 public class RequestPrepareComponent {
     private final Logger log = LoggerFactory.getLogger(RequestPrepareComponent.class);
-    private final IntegrationConfigurationParams integrationConfigurationParams;
+    private final ApplicationProperties applicationProperties;
 
-    public RequestPrepareComponent(IntegrationConfigurationParams integrationConfigurationParams) {
-        this.integrationConfigurationParams = integrationConfigurationParams;
+    public RequestPrepareComponent(ApplicationProperties applicationProperties) {
+        this.applicationProperties = applicationProperties;
     }
 
     protected JAXBElement<ProductType> createRequestModel(OrderRequest orderRequest) throws DatatypeConfigurationException {
@@ -47,7 +47,7 @@ public class RequestPrepareComponent {
         creditReportRequest.getAddressReq().addAll(addressList);
 
         Id id = objectFactory.createId();
-        id.setIdType(integrationConfigurationParams.getIdType());
+        id.setIdType(applicationProperties.getIntegrationParams().getIdType());
         id.setIdNum(orderRequest.getOrderData().getPassportNumber().toString());
         id.setSeriesNumber(orderRequest.getOrderData().getPassportSerial().toString());
         id.setIssueCountry("Неизвестно");
@@ -66,32 +66,32 @@ public class RequestPrepareComponent {
         creditReportRequest.getPersonReq().add(person);
 
         Inquiry inquiry = objectFactory.createInquiry();
-        inquiry.setInqPurpose(integrationConfigurationParams.getInqPurpose());
+        inquiry.setInqPurpose(applicationProperties.getIntegrationParams().getInqPurpose());
         inquiry.setInqAmount(BigInteger.ZERO);
-        inquiry.setCurrencyCode(integrationConfigurationParams.getCurrencyCode());
+        inquiry.setCurrencyCode(applicationProperties.getIntegrationParams().getCurrencyCode());
 
         Consent consent = objectFactory.createConsent();
-        consent.setConsentFlag(integrationConfigurationParams.getConsentFlag());
+        consent.setConsentFlag(applicationProperties.getIntegrationParams().getConsentFlag());
         consent.setConsentPurpose(BigInteger.ONE);
         consent.setConsentDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDateTime.now().minusHours(6).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
         consent.setConsentExpireDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(LocalDateTime.now().plusDays(30).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))));
-        consent.setReportUser(integrationConfigurationParams.getReportUser());
-        consent.setLiability(integrationConfigurationParams.getLiability());
+        consent.setReportUser(applicationProperties.getIntegrationParams().getReportUser());
+        consent.setLiability(applicationProperties.getIntegrationParams().getLiability());
         inquiry.setConsentReq(consent);
         creditReportRequest.setInquiryReq(inquiry);
 
         Requestor requestor = objectFactory.createRequestor();
-        requestor.setUserID(integrationConfigurationParams.getUserId());
-        requestor.setMemberCode(integrationConfigurationParams.getMemberCode());
-        requestor.setPassword(integrationConfigurationParams.getPassword());
+        requestor.setUserID(applicationProperties.getIntegrationParams().getUserId());
+        requestor.setMemberCode(applicationProperties.getIntegrationParams().getMemberCode());
+        requestor.setPassword(applicationProperties.getIntegrationParams().getPassword());
         creditReportRequest.setRequestorReq(requestor);
 
         Reference reference = objectFactory.createReference();
-        reference.setProduct(integrationConfigurationParams.getProduct());
+        reference.setProduct(applicationProperties.getIntegrationParams().getProduct());
         creditReportRequest.setRefReq(reference);
-        creditReportRequest.setIOType(integrationConfigurationParams.getIOType());
-        creditReportRequest.setOutputFormat(integrationConfigurationParams.getOutputFormat());
-        creditReportRequest.setLang(integrationConfigurationParams.getLang());
+        creditReportRequest.setIOType(applicationProperties.getIntegrationParams().getIOType());
+        creditReportRequest.setOutputFormat(applicationProperties.getIntegrationParams().getOutputFormat());
+        creditReportRequest.setLang(applicationProperties.getIntegrationParams().getLang());
         productRequest.setReq(creditReportRequest);
 
         ProductType productType = objectFactory.createProductType();

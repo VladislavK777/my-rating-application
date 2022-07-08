@@ -7,8 +7,8 @@ import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.service.OrderService;
 import ru.myrating.application.service.ValidationService;
 import ru.myrating.application.service.dto.OrderRequestDto;
+import ru.myrating.application.web.rest.errors.AccessDeniedAlertException;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @RateLimiter(name = "orderResource")
@@ -29,13 +29,12 @@ public class OrderResource {
     }
 
     @PutMapping("/paid/{id}")
-    public ResponseEntity<?> update(@RequestHeader(value = "X-API-Key", required = false) String key,
-                                    @PathVariable Long id,
-                                    @RequestParam String transactionId) {
+    public ResponseEntity<String> update(@RequestHeader(value = "X-API-Key", required = false) String key,
+                                         @PathVariable Long id,
+                                         @RequestParam String transactionId) {
         if (validationService.validationApiKey(key)) {
-            orderService.updateStatusPaid(id, transactionId);
-            return new ResponseEntity<>(OK);
+            return new ResponseEntity<>(orderService.updateStatusPaid(id, transactionId), OK);
         }
-        return new ResponseEntity<>("Access denied!", FORBIDDEN);
+        throw new AccessDeniedAlertException("Access denied!", "Validation", "validationerror");
     }
 }

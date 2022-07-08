@@ -2,23 +2,21 @@ package ru.myrating.application.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import ru.myrating.application.config.ApplicationProperties;
 import ru.myrating.application.domain.OrderFaultQueue;
 import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.domain.OrderResponse;
 import ru.myrating.application.integration.IntegrationProviderService;
 import ru.myrating.application.out.ProductType;
 import ru.myrating.application.service.mapper.OrderResponseMapper;
-import ru.myrating.application.web.rest.errors.BadRequestAlertException;
+import ru.myrating.application.web.rest.errors.InternalServerErrorAlertException;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 import static java.time.LocalDateTime.now;
-import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.CALCULATED;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.FAULT;
 
@@ -26,6 +24,7 @@ import static ru.myrating.application.domain.enumeration.OrderStatusEnum.FAULT;
 @Service
 public class RatingService {
     private final Logger log = LoggerFactory.getLogger(RatingService.class);
+    private final ApplicationProperties applicationProperties;
     private final CalculateService calculateService;
     private final IntegrationProviderService integrationProviderService;
     private final OrderResponseService orderResponseService;
@@ -34,10 +33,8 @@ public class RatingService {
     @Lazy
     private final OrderService orderService;
 
-    @Value("${application.duration-fault-attempts.days}")
-    private int durationFaultAttemptsDays;
-
-    public RatingService(CalculateService calculateService, IntegrationProviderService integrationProviderService, OrderResponseService orderResponseService, OrderFaultService orderFaultService, OrderResponseMapper orderResponseMapper, @Lazy OrderService orderService) {
+    public RatingService(ApplicationProperties applicationProperties, CalculateService calculateService, IntegrationProviderService integrationProviderService, OrderResponseService orderResponseService, OrderFaultService orderFaultService, OrderResponseMapper orderResponseMapper, @Lazy OrderService orderService) {
+        this.applicationProperties = applicationProperties;
         this.calculateService = calculateService;
         this.integrationProviderService = integrationProviderService;
         this.orderResponseService = orderResponseService;
@@ -51,10 +48,10 @@ public class RatingService {
             ProductType productType;
             try {
                 productType = integrationProviderService.callOutService(orderRequest);
-            } catch (BadRequestAlertException e) {
+            } catch (Exception e) {
                 log.error("Get fault from integration service: " + e);
                 saveError(orderRequest, e.getMessage());
-                throw new BadRequestAlertException("Get fault from integration service; cause: " + e.getMessage(), ENTITY_NAME, "integrationfailed");
+                throw new InternalServerErrorAlertException("Get fault from integration service; cause: " + e.getMessage(), "RatingService", "integrationfailed");
             }
             OrderResponse orderResponse = orderResponseMapper.dtoToDao(productType.getPreply().getPcr().getReasons());
             orderResponse.setOrderRequest(orderRequest);
@@ -65,14 +62,14 @@ public class RatingService {
             orderService.save(orderRequest);
         } catch (Exception e) {
             log.error("Calculate rating failed: " + e);
-            throw new BadRequestAlertException("Calculate rating failed; cause: " + e.getMessage(), ENTITY_NAME, "calculationfailed");
+            throw new InternalServerErrorAlertException("Calculate rating failed; cause: " + e.getMessage(), "RatingService", "calculationfailed");
         }
     }
 
     private void saveError(OrderRequest orderRequest, String message) {
         OrderFaultQueue orderFaultQueue = orderFaultService.getByOrderRequest(orderRequest);
         if (orderFaultQueue == null) {
-            orderFaultQueue = new OrderFaultQueue(orderRequest, now().plusDays(durationFaultAttemptsDays), message);
+            orderFaultQueue = new OrderFaultQueue(orderRequest, now().plusDays(applicationProperties.getDurationFaultAttempts().getDays()), message);
         } else {
             if (!message.equals(orderFaultQueue.getMessageError()))
                 orderFaultQueue.setMessageError(message);

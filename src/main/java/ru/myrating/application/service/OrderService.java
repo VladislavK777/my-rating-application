@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.repository.OrderRepository;
 import ru.myrating.application.web.rest.errors.BadRequestAlertException;
+import ru.myrating.application.web.rest.errors.NotFoundAlertException;
 
-import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.NEW;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.PAID;
 
@@ -30,29 +30,31 @@ public class OrderService {
     }
 
     public OrderRequest getOne(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new BadRequestAlertException("Order not found", ENTITY_NAME, "notfound"));
+        return orderRepository.findById(id).orElseThrow(() -> new NotFoundAlertException("Order not found", "OrderRequest", "notfound"));
     }
 
-    public void updateStatusPaid(Long orderId, String transactionId) {
-        OrderRequest orderRequest = getOne(orderId);
+    public String updateStatusPaid(Long orderId, String transactionId) {
         try {
+            OrderRequest orderRequest = getOne(orderId);
             if (!PAID.equals(orderRequest.getStatus())
                     && NEW.equals(orderRequest.getStatus())) {
                 orderRequest.setStatus(PAID);
                 orderRequest.setPaymentTransactionId(transactionId);
                 save(orderRequest);
                 ratingService.startCalculateRating(orderRequest);
+                return "Link on report";
             }
         } catch (Exception e) {
-            throw new BadRequestAlertException("Error", ENTITY_NAME, "error");
+            throw new BadRequestAlertException("Error call function", "OrderService", "error");
         }
+        throw new BadRequestAlertException("Error call function", "OrderService", "error");
     }
 
     public OrderRequest createOrder(OrderRequest orderRequest) {
         if (!String.valueOf(orderRequest.getOrderData().getFirstName().charAt(0)).matches("[А-Я]"))
-            throw new BadRequestAlertException("Only lowercase [А-Я]", ENTITY_NAME, "lowercase");
+            throw new BadRequestAlertException("Only lowercase [А-Я]", "OrderService", "lowercase");
         if (!String.valueOf(orderRequest.getOrderData().getLastName().charAt(0)).matches("[А-Я]"))
-            throw new BadRequestAlertException("Only lowercase [А-Я]", ENTITY_NAME, "lowercase");
+            throw new BadRequestAlertException("Only lowercase [А-Я]", "OrderService", "lowercase");
         orderRequest.setStatus(NEW);
         return save(orderRequest);
     }

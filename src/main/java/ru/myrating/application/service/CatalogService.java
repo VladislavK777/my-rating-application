@@ -7,12 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrating.application.domain.catalog.*;
 import ru.myrating.application.repository.catalog.*;
-import ru.myrating.application.web.rest.errors.BadRequestAlertException;
+import ru.myrating.application.web.rest.errors.NotFoundAlertException;
 
 import java.util.List;
 import java.util.Objects;
-
-import static org.hibernate.id.IdentifierGenerator.ENTITY_NAME;
 
 @Service
 @Transactional(readOnly = true)
@@ -59,69 +57,69 @@ public class CatalogService {
     }
 
     public CatOld getCatOld(Long value) {
-        return catOldRepository.findByBetweenValue(value).orElseThrow(() -> new BadRequestAlertException("Value in CatOld not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catOldRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatOld not found", "CatOld", "valuenotfoundincatalog"));
     }
 
     public CatRequestCreditHistory14Days getCatRequestCreditHistory14Days(Long value) {
-        return catRequestCreditHistory14DaysRepository.findByBetweenValue(value).orElseThrow(() -> new BadRequestAlertException("Value in CatRequestCreditHistory14Days not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catRequestCreditHistory14DaysRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatRequestCreditHistory14Days not found", "CatRequestCreditHistory14Days", "valuenotfoundincatalog"));
     }
 
     public CatRequestCreditHistory7Days getCatRequestCreditHistory7Days(Long value) {
-        return catRequestCreditHistory7DaysRepository.findByBetweenValue(value).orElseThrow(() -> new BadRequestAlertException("Value in CatRequestCreditHistory7Days not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catRequestCreditHistory7DaysRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatRequestCreditHistory7Days not found", "CatRequestCreditHistory7Days", "valuenotfoundincatalog"));
     }
 
     public CatC getCatC(Long value) {
-        return catCRepository.findByBetweenValue(value).orElseThrow(() -> new BadRequestAlertException("Value in CatC not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catCRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatC not found", "CatC", "valuenotfoundincatalog"));
     }
 
     public CatD getCatD(Long value) {
-        return catDRepository.findByBetweenValue(value).orElseThrow(() -> new BadRequestAlertException("Value in CatD not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catDRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatD not found", "CatD", "valuenotfoundincatalog"));
     }
 
     public CatRecommendationByRating getCatRecommendationByRating(Long value) {
-        return catRecommendationByRatingRepository.findByBetweenValue(value).orElseThrow(() -> new BadRequestAlertException("Value in CatRecommendationByRating not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catRecommendationByRatingRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatRecommendationByRating not found", "CatRecommendationByRating", "valuenotfoundincatalog"));
     }
 
     public CatCurrentDebtLoad getCatCurrentDebtLoad(String value) {
-        return catCurrentDebtLoadRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatCurrentDebtLoad not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catCurrentDebtLoadRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatCurrentDebtLoad not found", "CatCurrentDebtLoad", "valuenotfoundincatalog"));
     }
 
     public CatSumExistingCredit getCatSumExistingCredit(String value) {
-        return catSumExistingCreditRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatSumExistingCredit not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catSumExistingCreditRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatSumExistingCredit not found", "CatSumExistingCredit", "valuenotfoundincatalog"));
     }
 
     public CatSumOverdueCredit getCatSumOverdueCreditRepository(String value) {
-        return catSumOverdueCreditRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatSumOverdueCreditRepository not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catSumOverdueCreditRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatSumOverdueCreditRepository not found", "CatSumOverdueCreditRepository", "valuenotfoundincatalog"));
     }
 
     public CatYesNo getCatYesNo(String value) {
-        return catYesNoRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatYesNo not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catYesNoRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatYesNo not found", "CatYesNo", "valuenotfoundincatalog"));
     }
 
     public CatSetting getCatSetting(String value) {
-        return catSettingRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatSetting not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catSettingRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatSetting not found", "CatSetting", "valuenotfoundincatalog"));
     }
 
     public CatActiveAccount getCatActiveAccount(String value) {
-        return catActiveAccountRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatActiveAccount not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catActiveAccountRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatActiveAccount not found", "CatActiveAccount", "valuenotfoundincatalog"));
     }
 
     public CatDelayPeriod getDelayPeriod(String value) {
-        return catDelayPeriodRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatDelayPeriod not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catDelayPeriodRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatDelayPeriod not found", "CatDelayPeriod", "valuenotfoundincatalog"));
     }
 
     public CatAdditional getCatAdditional(String value) {
-        return catAdditionalRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatAdditional not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catAdditionalRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatAdditional not found", "CatAdditional", "valuenotfoundincatalog"));
     }
 
     public CatRecommendationBySystem getCatRecommendationBySystem(String value) {
-        return catRecommendationBySystemRepository.findByCode(value).orElseThrow(() -> new BadRequestAlertException("Value in CatRecommendationBySystem not found", ENTITY_NAME, "valuenotfoundincatalog"));
+        return catRecommendationBySystemRepository.findByCode(value).orElseThrow(() -> new NotFoundAlertException("Value in CatRecommendationBySystem not found", "CatRecommendationBySystem", "valuenotfoundincatalog"));
     }
 
     public CatRecommendationByEmptyHistory getRecommendationByEmptyHistory() {
         List<CatRecommendationByEmptyHistory> list = catRecommendationByEmptyHistoryRepository.findAll();
         if (list.isEmpty())
-            throw new BadRequestAlertException("Value in CatDelayPeriod not found", ENTITY_NAME, "valuenotfoundincatalog");
+            throw new NotFoundAlertException("Value in CatRecommendationByEmptyHistory not found", "CatRecommendationByEmptyHistory", "valuenotfoundincatalog");
         return list.get(0);
     }
 

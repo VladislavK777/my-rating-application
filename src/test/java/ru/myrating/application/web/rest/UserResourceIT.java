@@ -1,15 +1,5 @@
 package ru.myrating.application.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.time.Instant;
-import java.util.*;
-import java.util.function.Consumer;
-import javax.persistence.EntityManager;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,9 +16,21 @@ import ru.myrating.application.domain.User;
 import ru.myrating.application.repository.UserRepository;
 import ru.myrating.application.security.AuthoritiesConstants;
 import ru.myrating.application.service.dto.AdminUserDTO;
-import ru.myrating.application.service.dto.UserDTO;
 import ru.myrating.application.service.mapper.UserMapper;
 import ru.myrating.application.web.rest.vm.ManagedUserVM;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link UserResource} REST controller.
@@ -530,9 +532,9 @@ class UserResourceIT {
     void testUserToUserDTO() {
         user.setId(DEFAULT_ID);
         user.setCreatedBy(DEFAULT_LOGIN);
-        user.setCreatedDate(Instant.now());
+        user.setCreatedDate(LocalDateTime.now());
         user.setLastModifiedBy(DEFAULT_LOGIN);
-        user.setLastModifiedDate(Instant.now());
+        user.setLastModifiedDate(LocalDateTime.now());
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.USER);

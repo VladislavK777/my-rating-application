@@ -1,12 +1,5 @@
 package ru.myrating.application.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static ru.myrating.application.web.rest.AccountResourceIT.TEST_USER_LOGIN;
-
-import java.time.Instant;
-import java.util.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +18,20 @@ import ru.myrating.application.security.AuthoritiesConstants;
 import ru.myrating.application.service.UserService;
 import ru.myrating.application.service.dto.AdminUserDTO;
 import ru.myrating.application.service.dto.PasswordChangeDTO;
-import ru.myrating.application.service.dto.UserDTO;
 import ru.myrating.application.web.rest.vm.KeyAndPasswordVM;
 import ru.myrating.application.web.rest.vm.ManagedUserVM;
+
+import java.time.Instant;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.myrating.application.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 
 /**
  * Integration tests for the {@link AccountResource} REST controller.
@@ -83,7 +87,7 @@ class AccountResourceIT {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
 
-        AdminUserDTO user = new AdminUserDTO();
+        ManagedUserVM user = new ManagedUserVM();
         user.setLogin(TEST_USER_LOGIN);
         user.setFirstName("john");
         user.setLastName("doe");

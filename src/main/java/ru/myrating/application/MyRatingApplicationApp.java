@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
-import ru.myrating.application.config.IntegrationConfigurationParams;
+import ru.myrating.application.config.ApplicationProperties;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @SpringBootApplication
-@EnableConfigurationProperties({LiquibaseProperties.class, IntegrationConfigurationParams.class})
+@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 public class MyRatingApplicationApp {
 
     private static final Logger log = LoggerFactory.getLogger(MyRatingApplicationApp.class);

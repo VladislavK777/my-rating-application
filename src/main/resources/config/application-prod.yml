@@ -132,8 +132,8 @@ jhipster:
 # ===================================================================
 
 application:
-  url: http://icrs.demo.nbki.ru/products/B2BRequestServlet
-  request-custom-params:
+  integration-params:
+    url: http://icrs.demo.nbki.ru/products/B2BRequestServlet
     id-type: 21
     inq-purpose: 50
     currency-code: RUB
@@ -147,6 +147,8 @@ application:
     user-id: 1501MM000005
     member-code: 1501MM000000
     password: 89Mu7QUs
+    need-trust-cert: true
+    need-ssl-cert: true
   duration-fault-attempts:
     days: 1
     cron: 0 0/5 * * * *
