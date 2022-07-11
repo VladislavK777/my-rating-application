@@ -80,22 +80,15 @@ export default {
         console.log(4, msg)
       }) */
     const sock = new SockJS('http://localhost:8080/websocket/order')
-    sock.onopen = function() {
-      console.log('open');
-      sock.send('test');
+    const stompClient = Stomp.over(sock);
+    stompClient.connect({}, function(frame) {
+      console.log('Connected: ' + frame);
+      stompClient.subscribe('/topic/result', function(messageOutput) {
+        console.log(JSON.parse(messageOutput.body));
+      });
+    });
+    stompClient.send("/app/test", JSON.stringify({'from': 'TEST', 'text': 'IT WORKS'}));
 
-      sock.onmessage = function(e) {
-        console.log('message', e.data);
-      };
-
-      const stomp = Stomp.over(sock)
-      stomp.subscribe('/', msg => {
-        console.log(msg)
-      })
-      stomp.subscribe('/order', msg => {
-        console.log(msg)
-      })
-    };
     if (this.$route.query.orderId && this.$route.query.status && this.$route.query.uid) {
       if (this.$route.query.status === 'successful') {
         this.paymentNotification.text = 'Оплата прошла успешно. Вы можете оставаться на странице, чтобы автоматически перейти на страницу отчета в момент его готовности'
