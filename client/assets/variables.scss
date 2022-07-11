@@ -1,0 +1,20 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+@import '~vuetify/src/styles/settings/variables';
+
+// The variables you want to modify
+// $font-size-root: 20px; 'Montserrat', sans-serif;
+$container-max-widths: (
+  'md': map-get($grid-breakpoints, 'md') * 0.6777,
+  'lg': map-get($grid-breakpoints, 'lg') * 0.6777,
+  'xl': map-get($grid-breakpoints, 'xl') * 0.6777
+);
+
+$body-font-family: 'Montserrat', sans-serif;
+$font-size-root: 18px;
+
+$border-radius-root: 8px;
+$progress-circular-underlay-stroke: var(--v-light-grey-base);
+
+$material-light: ( text: ( primary: var(--v-black-base) )  )

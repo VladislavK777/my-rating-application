@@ -1,0 +1,36 @@
+<template>
+  <div class="btn-back">
+    <svg width="32" height="15" viewBox="0 0 32 15" xmlns="http://www.w3.org/2000/svg">
+      <path class="icon" d="M31 8.5C31.5523 8.5 32 8.05228 32 7.5C32 6.94772 31.5523 6.5 31 6.5L31 8.5ZM0.292891 6.79289C-0.0976333 7.18341 -0.0976334 7.81658 0.29289 8.2071L6.65685 14.5711C7.04738 14.9616 7.68054 14.9616 8.07107 14.5711C8.46159 14.1805 8.46159 13.5474 8.07107 13.1569L2.41421 7.5L8.07107 1.84314C8.46159 1.45262 8.46159 0.819455 8.07107 0.42893C7.68054 0.0384058 7.04738 0.0384057 6.65685 0.42893L0.292891 6.79289ZM31 6.5L0.999998 6.5L0.999998 8.5L31 8.5L31 6.5Z" fill="#272727"/>
+    </svg>
+    <span>Назад</span>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ButtonBack',
+}
+</script>
+
+<style scoped lang="scss">
+.btn-back {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  gap: 15px;
+
+  & .icon {
+    fill: var(--v-black-base);
+  }
+
+  &:hover {
+    cursor: pointer;
+    color: var(--v-primary-base);
+
+    & .icon {
+      fill: var(--v-primary-base);
+    }
+  }
+}
+</style>
