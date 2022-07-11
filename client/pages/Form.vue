@@ -86,8 +86,8 @@ export default {
       stompClient.subscribe('/topic/result', function(messageOutput) {
         console.log(JSON.parse(messageOutput.body));
       });
+      stompClient.send("/app/test", JSON.stringify({'from': 'TEST', 'text': 'IT WORKS'}));
     });
-    stompClient.send("/app/test", JSON.stringify({'from': 'TEST', 'text': 'IT WORKS'}));
 
     if (this.$route.query.orderId && this.$route.query.status && this.$route.query.uid) {
       if (this.$route.query.status === 'successful') {
