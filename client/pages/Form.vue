@@ -84,7 +84,14 @@ export default {
       console.log('open');
       sock.send('test');
 
+      sock.onmessage = function(e) {
+        console.log('message', e.data);
+      };
+
       const stomp = Stomp.over(sock)
+      stomp.subscribe('/', msg => {
+        console.log(msg)
+      })
       stomp.subscribe('/order', msg => {
         console.log(msg)
       })

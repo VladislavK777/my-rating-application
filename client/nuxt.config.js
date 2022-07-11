@@ -60,7 +60,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    'nuxt-socket-io',
+    // 'nuxt-socket-io',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -69,14 +69,14 @@ export default {
     baseURL: 'http://localhost:8080/public/api',
   },
 
-  io: {
+  /* io: {
     sockets: [
       {
         name: 'main',
         url: 'http://localhost:8080/websocket/tracker',
       },
     ],
-  },
+  }, */
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
