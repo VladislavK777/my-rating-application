@@ -35,6 +35,9 @@
 </template>
 
 <script>
+import SockJS from 'sockjs-client'
+import Stomp from 'webstomp-client'
+
 import ButtonBack from '~/components/base/ButtonBack'
 import FormBlock from '~/components/form/FormBlock'
 import FormInfo from '~/components/form/FormInfo'
@@ -76,6 +79,16 @@ export default {
       .on('orderId', (msg, cb) => {
         console.log(4, msg)
       }) */
+    const sock = new SockJS('http://localhost:8080/websocket/order')
+    sock.onopen = function() {
+      console.log('open');
+      sock.send('test');
+
+      const stomp = Stomp.over(sock)
+      stomp.subscribe('/order', msg => {
+        console.log(msg)
+      })
+    };
     if (this.$route.query.orderId && this.$route.query.status && this.$route.query.uid) {
       if (this.$route.query.status === 'successful') {
         this.paymentNotification.text = 'Оплата прошла успешно. Вы можете оставаться на странице, чтобы автоматически перейти на страницу отчета в момент его готовности'
