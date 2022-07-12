@@ -14,5 +14,5 @@ public interface OrderFaultQueueRepository extends JpaRepository<OrderFaultQueue
     @Query("from OrderFaultQueue orderFault where orderFault.deadLineDate > :dateNow and orderFault.orderRequest.status = 'FAULT'")
     List<OrderFaultQueue> findAllByDeadLineDateAfter(@Param("dateNow") LocalDateTime dateNow);
 
-    Optional<OrderFaultQueue> findByOrderRequest(OrderRequest orderRequest);
+    Optional<OrderFaultQueue> findByOrderRequestAndDeadLineDateAfter(OrderRequest orderRequest, LocalDateTime dateNow);
 }

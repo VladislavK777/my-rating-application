@@ -8,6 +8,7 @@
         <createSequence sequenceName="order_request_generator" startValue="1" incrementBy="1"/>
         <createSequence sequenceName="order_response_generator" startValue="1" incrementBy="1"/>
         <createSequence sequenceName="order_fault_queue_generator" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="order_report_content_generator" startValue="1" incrementBy="1"/>
     </changeSet>
 
     <changeSet id="20220630000001" author="jhipster">
@@ -309,7 +310,7 @@
             <column name="description" remarks="Описание справочника" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="value" remarks="Значение" type="varchar">
+            <column name="value" remarks="Значение" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -429,15 +430,15 @@
     </changeSet>
 
     <changeSet id="202206300000018" author="jhipster">
-        <createTable tableName="order_report_content" remarks="Файлы отчетов">
-            <column name="id" remarks="ID записи" type="uuid">
+        <createTable tableName="order_report_content" remarks="Результат запроса">
+            <column name="id" remarks="ID записи" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="data" type="longblob">
-                <constraints nullable="false" />
+            <column name="order_result_link" type="uuid" remarks="Уникальный номер ссылки">
+                <constraints nullable="false"/>
             </column>
-            <column name="data_content_type" type="varchar(255)">
-                <constraints nullable="false" />
+            <column name="order_result_content" type="jsonb" remarks="Результат запроса">
+                <constraints nullable="false"/>
             </column>
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false"/>
@@ -454,6 +455,9 @@
             <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
             <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp with time zone"/>
         </createTable>
+        <createIndex indexName="order_result_link" tableName="order_report_content" unique="true">
+                <column name="order_result_link"/>
+        </createIndex>
     </changeSet>
 
     <changeSet id="202206300000019" author="jhipster">
@@ -462,7 +466,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="first_name" remarks="Фамилия" type="varchar"/>
-            <column name="link_report" remarks="Ссылка на отчет" type="uuid"/>
+            <column name="order_report_content" remarks="Ссылка на результат запроса" type="bigint"/>
             <column name="ref_link" remarks="Реферальная ссылка партнера" type="varchar"/>
             <column name="status" remarks="Статус" type="varchar">
                 <constraints nullable="false"/>
@@ -483,9 +487,9 @@
             <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
             <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp with time zone"/>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="link_report"
+        <addForeignKeyConstraint baseColumnNames="order_report_content"
                                  baseTableName="order_request"
-                                 constraintName="fk_order_report_id"
+                                 constraintName="fk_order_request_order_report_id"
                                  referencedColumnNames="id"
                                  referencedTableName="order_report_content"/>
     </changeSet>
@@ -576,7 +580,7 @@
         </createTable>
         <addForeignKeyConstraint baseColumnNames="order_request_id"
                                  baseTableName="order_response_data"
-                                 constraintName="fk_order_request_id"
+                                 constraintName="fk_order_response_data_order_request_id"
                                  referencedColumnNames="id"
                                  referencedTableName="order_request"/>
     </changeSet>
@@ -606,7 +610,7 @@
         </createTable>
         <addForeignKeyConstraint baseColumnNames="order_request_id"
                                  baseTableName="order_fault_queue"
-                                 constraintName="fk_order_request_id"
+                                 constraintName="fk_order_fault_queue_ order_request_id"
                                  referencedColumnNames="id"
                                  referencedTableName="order_request"/>
     </changeSet>

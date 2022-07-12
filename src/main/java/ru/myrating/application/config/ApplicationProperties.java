@@ -12,6 +12,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApplicationProperties {
     private IntegrationParams integrationParams;
     private DurationFaultAttempts durationFaultAttempts;
+    private String deactivateResultCrone;
+
+    private int lifeTimeResultDays;
 
     public IntegrationParams getIntegrationParams() {
         return integrationParams;
@@ -27,6 +30,22 @@ public class ApplicationProperties {
 
     public void setDurationFaultAttempts(DurationFaultAttempts durationFaultAttempts) {
         this.durationFaultAttempts = durationFaultAttempts;
+    }
+
+    public String getDeactivateResultCrone() {
+        return deactivateResultCrone;
+    }
+
+    public void setDeactivateResultCrone(String deactivateResultCrone) {
+        this.deactivateResultCrone = deactivateResultCrone;
+    }
+
+    public int getLifeTimeResultDays() {
+        return lifeTimeResultDays;
+    }
+
+    public void setLifeTimeResultDays(int lifeTimeResultDays) {
+        this.lifeTimeResultDays = lifeTimeResultDays;
     }
 
     public static class IntegrationParams {

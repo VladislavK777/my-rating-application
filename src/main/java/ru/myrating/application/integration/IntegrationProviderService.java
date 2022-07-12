@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrating.application.config.ApplicationProperties;
 import ru.myrating.application.domain.OrderRequest;
+import ru.myrating.application.out.CodeText;
+import ru.myrating.application.out.Error;
 import ru.myrating.application.out.ProductType;
 import ru.myrating.application.web.rest.errors.InternalServerErrorAlertException;
 
@@ -63,11 +65,11 @@ public class IntegrationProviderService {
                         // Распарсим XML, для этого необходимо удалить лишние символы из подписи
                         String result = xml.substring(
                                 xml.indexOf("<?xml version=\"1.0\" encoding=\"windows-1251\"?>"),
-                                xml.indexOf("</product>") + "</product>".length()
+                                xml.indexOf("</preply>\n</product>") + "</preply>\n</product>".length()
                         );
 
-                        ProductType productType = jaxbContext.createUnmarshaller().unmarshal(new StreamSource(new ByteArrayInputStream(result.getBytes(UTF_8))), ProductType.class).getValue();
-                        /*if (productType.getPreply().getErr() != null) {
+                        ProductType productType = jaxbContext.createUnmarshaller().unmarshal(new StreamSource(new ByteArrayInputStream(result.getBytes())), ProductType.class).getValue();
+                        if (productType.getPreply().getErr() != null) {
                             Error error = productType.getPreply().getErr();
                             StringBuilder errorText = new StringBuilder();
                             for (CodeText codeText : error.getCtErr()) {
@@ -80,7 +82,7 @@ public class IntegrationProviderService {
                                         .append("; ");
                             }
                             throw new InternalServerErrorAlertException("Response error: " + errorText, "IntegrationProvider", "responseerror");
-                        }*/
+                        }
                         return productType;
                     }
                 }

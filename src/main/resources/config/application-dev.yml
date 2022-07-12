@@ -133,4 +133,6 @@ application:
   duration-fault-attempts:
     days: 1
     cron: 0 0/5 * * * *
+  life-time-result-days: 1
+  deactivate-result-crone: 0 0 0/1 1/1 * ? # Каждый час
 

@@ -2,31 +2,34 @@ package ru.myrating.application.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "order_report_content")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONE)
 public class OrderReportContent extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_report_content_generator")
+    @SequenceGenerator(name = "order_report_content_generator", sequenceName = "order_report_content_generator", allocationSize = 1)
+    private Long id;
 
-    @Lob
-    @Column(name = "data", nullable = false)
-    private byte[] data;
+    @Column(name = "order_result_link")
+    private UUID orderResultLink;
 
-    @Column(name = "data_content_type", nullable = false)
-    private String dataContentType;
+    @Type(type = "jsonb")
+    @Column(name = "order_result_content", columnDefinition = "jsonb")
+    @Basic(fetch = LAZY)
+    private Map<String, Object> orderResult;
 
     @Column(name = "activated")
     private boolean activated;
@@ -34,28 +37,41 @@ public class OrderReportContent extends AbstractAuditingEntity implements Serial
     @Column(name = "deactivate_date", updatable = false)
     private LocalDateTime deactivateDate;
 
-    public UUID getId() {
+    @OneToOne(mappedBy = "orderReportContent")
+    private OrderRequest orderRequest;
+
+    public OrderReportContent() {
+    }
+
+    public OrderReportContent(UUID orderResultLink, Map<String, Object> orderResult, boolean activated, LocalDateTime deactivateDate) {
+        this.orderResultLink = orderResultLink;
+        this.orderResult = orderResult;
+        this.activated = activated;
+        this.deactivateDate = deactivateDate;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public byte[] getData() {
-        return data;
+    public UUID getOrderResultLink() {
+        return orderResultLink;
     }
 
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setOrderResultLink(UUID orderResultLink) {
+        this.orderResultLink = orderResultLink;
     }
 
-    public String getDataContentType() {
-        return dataContentType;
+    public Map<String, Object> getOrderResult() {
+        return orderResult;
     }
 
-    public void setDataContentType(String dataContentType) {
-        this.dataContentType = dataContentType;
+    public void setOrderResult(Map<String, Object> orderResult) {
+        this.orderResult = orderResult;
     }
 
     public boolean isActivated() {
@@ -72,6 +88,14 @@ public class OrderReportContent extends AbstractAuditingEntity implements Serial
 
     public void setDeactivateDate(LocalDateTime deactivateDate) {
         this.deactivateDate = deactivateDate;
+    }
+
+    public OrderRequest getOrderRequest() {
+        return orderRequest;
+    }
+
+    public void setOrderRequest(OrderRequest orderRequest) {
+        this.orderRequest = orderRequest;
     }
 
     @Override
@@ -94,7 +118,7 @@ public class OrderReportContent extends AbstractAuditingEntity implements Serial
     public String toString() {
         return "OrderReportContent{" +
                 "id=" + id +
-                ", dataContentType='" + dataContentType + '\'' +
+                ", orderResult='" + orderResult + '\'' +
                 ", activated=" + activated +
                 ", deactivateDate=" + deactivateDate +
                 '}';
