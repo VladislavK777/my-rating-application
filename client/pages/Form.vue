@@ -59,7 +59,7 @@ export default {
     this.sock = new SockJS('http://localhost:8080/websocket/order')
     const stompClient = Stomp.over(this.sock)
     stompClient.connect({}, function(frame) {
-      stompClient.subscribe('/topic/result', function(messageOutput) {
+      stompClient.subscribe('/topic/result', messageOutput => {
         const data = JSON.parse(messageOutput.body)
         this.$router.push({ path: '/report', params: { id: data.reportLink } })
       })
