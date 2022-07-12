@@ -56,13 +56,14 @@ export default {
     }
   },
   created() {
-    const sock = new SockJS('http://localhost:8080/websocket/order')
-    const stompClient = Stomp.over(sock);
+    this.sock = new SockJS('http://localhost:8080/websocket/order')
+    const stompClient = Stomp.over(this.sock)
     stompClient.connect({}, function(frame) {
       stompClient.subscribe('/topic/result', function(messageOutput) {
-        console.log(JSON.parse(messageOutput.body));
-      });
-    });
+        const data = JSON.parse(messageOutput.body)
+        this.$router.push({ path: '/report', params: { id: data.reportLink } })
+      })
+    })
   },
   mounted() {
     if (this.$route.query.orderId && this.$route.query.status && this.$route.query.uid) {
@@ -81,6 +82,9 @@ export default {
         this.paymentNotification.open = true
       }
     }
+  },
+  beforeDestroy() {
+    this.sock.close()
   },
   methods: {
     async submitForm({ firstName, lastName, passport, email, birthDate }) {
