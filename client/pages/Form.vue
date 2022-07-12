@@ -58,10 +58,10 @@ export default {
   mounted() {
     this.sock = new SockJS('http://localhost:8080/websocket/order')
     const stompClient = Stomp.over(this.sock)
-    stompClient.connect({}, function(frame) {
+    stompClient.connect({}, () => {
       stompClient.subscribe('/topic/result', messageOutput => {
         const data = JSON.parse(messageOutput.body)
-        this.$router.push({ path: '/report', params: { id: data.reportLink } })
+        this.$router.push({ path: `/report/${data.reportLink}` })
       })
     })
     if (this.$route.query.orderId && this.$route.query.status && this.$route.query.uid) {

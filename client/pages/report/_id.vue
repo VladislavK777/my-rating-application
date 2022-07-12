@@ -21,7 +21,7 @@ import CreditTypes from '@/components/report/CreditTypes'
 export default {
   name: 'ReportPage',
   components: { CreditTypes, CreditOffers, CreditRecommendations, CreditLoad, CreditRating },
-  async asyncData({ params, $axios, redirect }) {
+  async asyncData({ params, $axios }) {
     const reportData = await $axios.$get(`order/result/${params.id}`, {
       headers: {
         'X-API-Key': '4d7a8b90-7520-4b19-9c3e-36b8f253225d',

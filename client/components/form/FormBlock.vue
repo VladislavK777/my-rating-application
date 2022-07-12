@@ -103,7 +103,6 @@ export default {
       if (this.$refs.form.validate()) {
         this.$emit('submit', this.form)
       }
-      this.$emit('submit', this.form)
     },
     isCyrillic(e) {
       const char = String.fromCharCode(e.keyCode)
