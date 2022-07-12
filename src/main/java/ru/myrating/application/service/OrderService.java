@@ -4,13 +4,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.myrating.application.domain.OrderReportContent;
 import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.repository.OrderRepository;
 import ru.myrating.application.web.rest.errors.BadRequestAlertException;
 import ru.myrating.application.web.rest.errors.NotFoundAlertException;
 
+import java.util.Map;
+
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static ru.myrating.application.config.Constants.EMAIL_REGEX;
+import static ru.myrating.application.config.Constants.UPPER_CYRILLIC_LITTERS;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.NEW;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.PAID;
 
@@ -20,10 +24,12 @@ public class OrderService {
     private final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
+    private final OrderReportContentService orderReportContentService;
     private final RatingService ratingService;
 
-    public OrderService(OrderRepository orderRepository, RatingService ratingService) {
+    public OrderService(OrderRepository orderRepository, OrderReportContentService orderReportContentService, RatingService ratingService) {
         this.orderRepository = orderRepository;
+        this.orderReportContentService = orderReportContentService;
         this.ratingService = ratingService;
     }
 
@@ -32,10 +38,17 @@ public class OrderService {
     }
 
     public OrderRequest getOne(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new NotFoundAlertException("Order not found", "OrderRequest", "notfound"));
+        return orderRepository.findById(id).orElseThrow(() -> new NotFoundAlertException("Order not found", "OrderService", "notfound"));
     }
 
-    public String updateStatusPaid(Long orderId, String transactionId) {
+    public Map<String, Object> getResultMapOrder(String linkId) {
+        OrderReportContent orderReportContent = orderReportContentService.findByOrderResultLink(linkId);
+        if (orderReportContent.isActivated())
+            return orderReportContent.getOrderResult();
+        throw new NotFoundAlertException("Order result not found", "OrderService", "notfound");
+    }
+
+    public void updateStatusPaid(Long orderId, String transactionId) {
         try {
             OrderRequest orderRequest = getOne(orderId);
             if (!PAID.equals(orderRequest.getStatus())
@@ -43,13 +56,17 @@ public class OrderService {
                 orderRequest.setStatus(PAID);
                 orderRequest.setPaymentTransactionId(transactionId);
                 save(orderRequest);
-                ratingService.startCalculateRating(orderRequest);
-                return "Link on report";
+                ratingService.calculateRating(orderRequest);
             }
         } catch (Exception e) {
             throw new BadRequestAlertException("Error call function", "OrderService", "error");
         }
-        throw new BadRequestAlertException("Error call function", "OrderService", "error");
+    }
+
+    public void deletePersonDate(OrderRequest orderRequest) {
+        orderRequest.getOrderData().setPassportNumber(null);
+        orderRequest.getOrderData().setPassportSerial(null);
+        save(orderRequest);
     }
 
     public OrderRequest createOrder(OrderRequest orderRequest) {
@@ -60,14 +77,14 @@ public class OrderService {
 
     private void validationRequest(OrderRequest orderRequest) {
         if (isNotEmpty(orderRequest.getOrderData().getFirstName())) {
-            if (!String.valueOf(orderRequest.getOrderData().getFirstName().toUpperCase().charAt(0)).matches("[А-Я]")) {
+            if (!orderRequest.getOrderData().getFirstName().matches(UPPER_CYRILLIC_LITTERS)) {
                 throw new BadRequestAlertException("FirstName must contains only Cyrillic upper letters", "OrderService", "validationrequest");
             }
         } else {
             throw new BadRequestAlertException("FirstName must not be empty", "OrderService", "validationrequest");
         }
         if (isNotEmpty(orderRequest.getOrderData().getLastName())) {
-            if (!String.valueOf(orderRequest.getOrderData().getLastName().toUpperCase().charAt(0)).matches("[А-Я]")) {
+            if (!orderRequest.getOrderData().getLastName().matches(UPPER_CYRILLIC_LITTERS)) {
                 throw new BadRequestAlertException("LastName must contains only Cyrillic upper letters", "OrderService", "validationrequest");
             }
         } else {

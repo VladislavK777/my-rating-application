@@ -177,11 +177,13 @@ dependencies {
         exclude module: "spring-boot-starter-tomcat"
     }
     implementation "org.springframework.boot:spring-boot-starter-undertow"
+    implementation "org.springframework.boot:spring-boot-starter-websocket"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "org.zalando:problem-spring-web"
     implementation "org.springframework.security:spring-security-config"
     implementation "org.springframework.security:spring-security-data"
     implementation "org.springframework.security:spring-security-web"
+    implementation "org.springframework:spring-messaging"
     implementation "io.jsonwebtoken:jjwt-api"
     implementation "io.jsonwebtoken:jjwt-impl"
     implementation "io.jsonwebtoken:jjwt-jackson"

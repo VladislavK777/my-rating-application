@@ -5,11 +5,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.myrating.application.domain.OrderResponse;
 import ru.myrating.application.domain.catalog.*;
+import ru.myrating.application.service.dto.OpenCloseDto;
+import ru.myrating.application.service.dto.TitleValueDto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static java.util.List.of;
 
 @Service
 public class CalculateService {
@@ -27,32 +34,31 @@ public class CalculateService {
 
         Long e1 = calculateE1(orderResponse);
         Long e2 = calculateE2(orderResponse);
+        String name = orderResponse.getOrderRequest().getOrderData().getLastName() + " " + orderResponse.getOrderRequest().getOrderData().getFirstName().charAt(0) + ".";
 
         // Если кредитная история пустая, нет необходимости высчитывать рейтинг
         if (e1 == 1L && e2 == 1L) {
             log.info("credit history is empty");
             CatRecommendationByEmptyHistory catRecommendationByEmptyHistory = catalogService.getRecommendationByEmptyHistory();
-            mapResultRating.put("recBox1", catRecommendationByEmptyHistory.getRecBox1());
-            mapResultRating.put("recBox2EmptyHistory", catRecommendationByEmptyHistory.getRecBox2());
-            mapResultRating.put("recBox4EmptyHistory", catRecommendationByEmptyHistory.getRecBox4());
-            mapResultRating.put("activeIpoteca", "Нет");
-            mapResultRating.put("closeIpoteca", "Нет");
-            mapResultRating.put("activePotrebCredit", "Нет");
-            mapResultRating.put("closePotrebCredit", "Нет");
-            mapResultRating.put("activeMFOCredit", "Нет");
-            mapResultRating.put("closeMFOCredit", "Нет");
-            mapResultRating.put("activeAutoCredit", "Нет");
-            mapResultRating.put("closeAutoCredit", "Нет");
-            mapResultRating.put("activeCreditCard", "Нет");
-            mapResultRating.put("closeCreditCard", "Нет");
-            mapResultRating.put("activeOtherCredit", "Нет");
-            mapResultRating.put("closeOtherCredit", "Нет");
-            mapResultRating.put("box2HeaderName1", "Количество активных кредитов");
-            mapResultRating.put("box2HeaderValue1", "Нет");
-            mapResultRating.put("box2HeaderName2", "Сумма всех активных кредитов");
-            mapResultRating.put("box2HeaderValue2", "Нет");
-            mapResultRating.put("box2HeaderName3", "Остаток долга по активным кредитам");
-            mapResultRating.put("box2HeaderValue3", "Нет");
+            mapResultRating.put("box1", of(
+                    new TitleValueDto("clientName", name),
+                    new TitleValueDto("ratingVale", null),
+                    new TitleValueDto("ratingText", null),
+                    new TitleValueDto("ratingComment", catRecommendationByEmptyHistory.getRecBox1())));
+            mapResultRating.put("box2", new Box2Object(
+                    new TitleValueDto("Количество активных кредитов", "Нет"),
+                    new TitleValueDto("Сумма всех активных кредитов", "Нет"),
+                    new TitleValueDto("Остаток долга по активным кредитам", "Нет"),
+                    of(new TitleValueDto("emptyHistory", catRecommendationByEmptyHistory.getRecBox2()))));
+            mapResultRating.put("box3", new Box3Object(
+                    new OpenCloseDto(false, false),
+                    new OpenCloseDto(false, false),
+                    new OpenCloseDto(false, false),
+                    new OpenCloseDto(false, false),
+                    new OpenCloseDto(false, false),
+                    new OpenCloseDto(false, false)));
+            mapResultRating.put("box4", of(
+                    new TitleValueDto("emptyHistory", catRecommendationByEmptyHistory.getRecBox4())));
             return mapResultRating;
         }
 
@@ -93,7 +99,7 @@ public class CalculateService {
             mapCalculatePoints.put("a11", calculateValue(catAdditionalA11.getPoints(), catAdditionalA11.getWeight()));
         mapCalculatePoints.put("d1", calculateValue(catDelayPeriodD1.getPoints(), catDelayPeriodD1.getWeight()));
         mapCalculatePoints.put("d2", calculateValue(catSumOverdueCreditD2.getPoints(), catSumOverdueCreditD2.getWeight()));
-        mapCalculatePoints.put("d3", calculateValue(catDelayPeriodD3.getPoints(), catDelayPeriodD3.getWeight()));
+        mapCalculatePoints.put("d3", (long) (((float) calculateValue(catDelayPeriodD3.getPoints(), catDelayPeriodD3.getWeight())) * 0.8));
         if (catAdditionalAD4 != null)
             mapCalculatePoints.put("d4", calculateValue(catAdditionalAD4.getPoints(), catAdditionalAD4.getWeight()));
         mapCalculatePoints.put("c", calculateValue(catC.getPoints(), catC.getWeight()));
@@ -107,18 +113,23 @@ public class CalculateService {
         }
         CatSetting catSetting = catalogService.getCatSetting("basic_rate");
         Long resultRating = catSetting.getValue() + result;
-        mapResultRating.put("rating", calculateRatingText(resultRating));
 
         // Ищем рекомендации по рейтингу
         CatRecommendationByRating catRecommendationByRating = catalogService.getCatRecommendationByRating(resultRating);
-        mapResultRating.put("recBox1", catRecommendationByRating.getRecBox1());
-        mapResultRating.put("recBox4Rating", catRecommendationByRating.getRecBox4());
+        mapResultRating.put("box1", of(
+                new TitleValueDto("clientName", name),
+                new TitleValueDto("ratingVale", resultRating),
+                new TitleValueDto("ratingText", calculateRatingText(resultRating)),
+                new TitleValueDto("ratingComment", catRecommendationByRating.getRecBox1())));
+        mapResultRating.put("box2", new Box2Object());
+        mapResultRating.put("box4", new ArrayList<TitleValueDto>());
+        mapResultRating.put("box4", setCommentToBox4(mapResultRating, new TitleValueDto("ratingComment", catRecommendationByRating.getRecBox4())));
 
         // Ищем рекомендации на основе данных из бюро
         calculateRecommendationActiveDebt(mapResultRating, orderResponse.getD1(), e1);
         calculateRecommendationCloseDebt(mapResultRating, d3, e2);
         calculateRecommendationBadDebt(mapResultRating, orderResponse.getD4());
-        calculateRecommendationCategoryLoans(mapResultRating, orderResponse.getA10());
+        calculateRecommendationMfoCredit(mapResultRating, orderResponse.getA10());
         calculateRecommendationRequestCredit(mapResultRating, orderResponse.getI1(), orderResponse.getI2());
         calculateRecommendationCreditLoad(mapResultRating, orderResponse.getA1(), orderResponse.getA2());
 
@@ -162,10 +173,12 @@ public class CalculateService {
     }
 
     private Long calculateC(Long a4CalculateValue, Long a3CalculateValue) {
+        if (a3CalculateValue == 0L) return 0L;
         return (long) (((float) a4CalculateValue / a3CalculateValue) * 100);
     }
 
     private Long calculateD(Long d2CalculateValue, Long a4CalculateValue) {
+        if (a4CalculateValue == 0L) return 0L;
         return (long) (((float) d2CalculateValue / a4CalculateValue) * 100);
     }
 
@@ -185,8 +198,8 @@ public class CalculateService {
         if ((d1.equals("5") || d1.equals("9")) && e1 == 0L)
             catRecommendationBySystem = catalogService.getCatRecommendationBySystem("4");
         if (catRecommendationBySystem != null) {
-            mapResultRating.put("recBox2ActiveDebt", catRecommendationBySystem.getRecBox2());
-            mapResultRating.put("recBox4ActiveDebt", catRecommendationBySystem.getRecBox4());
+            mapResultRating.put("box2", setCommentToBox2(mapResultRating, new TitleValueDto("activeDebt", catRecommendationBySystem.getRecBox2())));
+            mapResultRating.put("box4", setCommentToBox4(mapResultRating, new TitleValueDto("activeDebt", catRecommendationBySystem.getRecBox4())));
         }
     }
 
@@ -200,7 +213,7 @@ public class CalculateService {
         if ((d3.equals("4") || d3.equals("5") || d3.equals("9")) && e2 == 0L)
             catRecommendationBySystem = catalogService.getCatRecommendationBySystem("7");
         if (catRecommendationBySystem != null) {
-            mapResultRating.put("recBox2CloseDebt", catRecommendationBySystem.getRecBox2());
+            mapResultRating.put("box2", setCommentToBox2(mapResultRating, new TitleValueDto("closeDebt", catRecommendationBySystem.getRecBox2())));
         }
     }
 
@@ -209,17 +222,17 @@ public class CalculateService {
         CatRecommendationBySystem catRecommendationBySystem;
         if (d4.equals(1L)) {
             catRecommendationBySystem = catalogService.getCatRecommendationBySystem("8");
-            mapResultRating.put("recBox2BadDebt", catRecommendationBySystem.getRecBox2());
+            mapResultRating.put("box2", setCommentToBox2(mapResultRating, new TitleValueDto("badDebt", catRecommendationBySystem.getRecBox2())));
         }
     }
 
-    // Рекомендации безнадежного долга
-    private void calculateRecommendationCategoryLoans(Map<String, Object> mapResultRating, Long a10) {
+    // Рекомендации займов МФО
+    private void calculateRecommendationMfoCredit(Map<String, Object> mapResultRating, Long a10) {
         CatRecommendationBySystem catRecommendationBySystem;
         if (a10.equals(1L)) {
             catRecommendationBySystem = catalogService.getCatRecommendationBySystem("9");
-            mapResultRating.put("recBox2CategoryLoans", catRecommendationBySystem.getRecBox2());
-            mapResultRating.put("recBox4CategoryLoans", catRecommendationBySystem.getRecBox4());
+            mapResultRating.put("box2", setCommentToBox2(mapResultRating, new TitleValueDto("mfoCredit", catRecommendationBySystem.getRecBox2())));
+            mapResultRating.put("box4", setCommentToBox4(mapResultRating, new TitleValueDto("mfoCredit", catRecommendationBySystem.getRecBox4())));
         }
     }
 
@@ -228,120 +241,197 @@ public class CalculateService {
         CatRecommendationBySystem catRecommendationBySystem;
         if (i1 > 10L || i2 > 10L) {
             catRecommendationBySystem = catalogService.getCatRecommendationBySystem("10");
-            mapResultRating.put("recBox2RequestCredit", catRecommendationBySystem.getRecBox2());
-            mapResultRating.put("recBox4RequestCredit", catRecommendationBySystem.getRecBox4());
+            mapResultRating.put("box2", setCommentToBox2(mapResultRating, new TitleValueDto("requestCredit", catRecommendationBySystem.getRecBox2())));
+            mapResultRating.put("box4", setCommentToBox4(mapResultRating, new TitleValueDto("requestCredit", catRecommendationBySystem.getRecBox4())));
         }
     }
 
-    // Рекомендации по кредитной нагрузки  Если ("А1">= 4) активные кредиты  ИЛИ ("А1">= 3 И "А2">= 3) активные кредиты и поручительство
+    // Рекомендации по кредитной нагрузки
     private void calculateRecommendationCreditLoad(Map<String, Object> mapResultRating, Long a1, Long a2) {
         CatRecommendationBySystem catRecommendationBySystem;
         if (a1 >= 4L || (a1 >= 3L && a2 >= 3L)) {
             catRecommendationBySystem = catalogService.getCatRecommendationBySystem("11");
-            mapResultRating.put("recBox2RequestCredit", catRecommendationBySystem.getRecBox2());
-            mapResultRating.put("recBox4RequestCredit", catRecommendationBySystem.getRecBox4());
+            mapResultRating.put("box2", setCommentToBox2(mapResultRating, new TitleValueDto("creditLoad", catRecommendationBySystem.getRecBox2())));
+            mapResultRating.put("box4", setCommentToBox4(mapResultRating, new TitleValueDto("creditLoad", catRecommendationBySystem.getRecBox4())));
         }
     }
 
     // Расчет блока 3
     private void calculateBox3(Map<String, Object> mapResultRating, OrderResponse orderResponse) {
-        // Ипотека
-        if (orderResponse.getA6().equals(1L))
-            mapResultRating.put("activeIpoteca", "Да");
-        else
-            mapResultRating.put("activeIpoteca", "Нет");
-        if (orderResponse.getA7().equals(1L))
-            mapResultRating.put("closeIpoteca", "Да");
-        else
-            mapResultRating.put("closeIpoteca", "Нет");
-
-        // Потреб кредит
-        if (orderResponse.getA8().equals(1L))
-            mapResultRating.put("activePotrebCredit", "Да");
-        else
-            mapResultRating.put("activePotrebCredit", "Нет");
-
-        if (orderResponse.getA9().equals(1L))
-            mapResultRating.put("closePotrebCredit", "Да");
-        else
-            mapResultRating.put("closePotrebCredit", "Нет");
-
-        // МФО
-        if (orderResponse.getA10().equals(1L))
-            mapResultRating.put("activeMFOCredit", "Да");
-        else
-            mapResultRating.put("activeMFOCredit", "Нет");
-
-        if (orderResponse.getA11().equals(1L))
-            mapResultRating.put("closeMFOCredit", "Да");
-        else
-            mapResultRating.put("closeMFOCredit", "Нет");
-
-        // Автокредит
-        if (orderResponse.getA12().equals(1L))
-            mapResultRating.put("activeAutoCredit", "Да");
-        else
-            mapResultRating.put("activeAutoCredit", "Нет");
-
-        if (orderResponse.getA13().equals(1L))
-            mapResultRating.put("closeAutoCredit", "Да");
-        else
-            mapResultRating.put("closeAutoCredit", "Нет");
-
-        // Кредит карта
-        if (orderResponse.getA14().equals(1L))
-            mapResultRating.put("activeCreditCard", "Да");
-        else
-            mapResultRating.put("activeCreditCard", "Нет");
-
-        if (orderResponse.getA15().equals(1L))
-            mapResultRating.put("closeCreditCard", "Да");
-        else
-            mapResultRating.put("closeCreditCard", "Нет");
-
-        // Другие
-        if (orderResponse.getA16().equals(1L))
-            mapResultRating.put("activeOtherCredit", "Да");
-        else
-            mapResultRating.put("activeOtherCredit", "Нет");
-
-        if (orderResponse.getA17().equals(1L))
-            mapResultRating.put("closeOtherCredit", "Да");
-        else
-            mapResultRating.put("closeOtherCredit", "Нет");
+        Box3Object box3Object = new Box3Object();
+        box3Object.setIpotecaCredit(new OpenCloseDto(orderResponse.getA6().equals(1L), orderResponse.getA7().equals(1L)));
+        box3Object.setPotrebCredit(new OpenCloseDto(orderResponse.getA8().equals(1L), orderResponse.getA9().equals(1L)));
+        box3Object.setMfoCredit(new OpenCloseDto(orderResponse.getA10().equals(1L), orderResponse.getA11().equals(1L)));
+        box3Object.setAutoCredit(new OpenCloseDto(orderResponse.getA12().equals(1L), orderResponse.getA13().equals(1L)));
+        box3Object.setCreditCard(new OpenCloseDto(orderResponse.getA14().equals(1L), orderResponse.getA15().equals(1L)));
+        box3Object.setOtherCredit(new OpenCloseDto(orderResponse.getA16().equals(1L), orderResponse.getA17().equals(1L)));
+        mapResultRating.put("box3", box3Object);
     }
 
     // Расчет заголовков и значений в Блоке 2
     private void calculateHeaders1Box2(Map<String, Object> mapResultRating, CatActiveAccount catActiveAccountA1) {
-        mapResultRating.put("box2HeaderName1", "Количество активных кредитов");
-        mapResultRating.put("box2HeaderValue1", catActiveAccountA1.getDescription());
+        Box2Object box2Object = (Box2Object) mapResultRating.get("box2");
+        box2Object.setLoad1(new TitleValueDto("Количество активных кредитов", catActiveAccountA1.getDescription()));
+        mapResultRating.put("box2", box2Object);
     }
 
     private void calculateHeaders2Box2(Map<String, Object> mapResultRating, String d1, CatSumExistingCredit catSumExistingCreditA3, CatSumOverdueCredit catSumOverdueCreditD2) {
-        String name;
-        String value;
+        TitleValueDto titleValueDto = new TitleValueDto();
         if (d1.equals("0") || d1.equals("1")) {
-            name = "Сумма всех активных кредитов";
-            value = catSumExistingCreditA3.getDescription();
+            titleValueDto.setTitle("Сумма всех активных кредитов");
+            titleValueDto.setText(catSumExistingCreditA3.getDescription());
         } else {
-            name = "Сумма просроченной задолженности";
-            value = catSumOverdueCreditD2.getDescription();
+            titleValueDto.setTitle("Сумма просроченной задолженности");
+            titleValueDto.setText(catSumOverdueCreditD2.getDescription());
         }
-        mapResultRating.put("box2HeaderName2", name);
-        mapResultRating.put("box2HeaderValue2", value);
+        Box2Object box2Object = (Box2Object) mapResultRating.get("box2");
+        box2Object.setLoad2(titleValueDto);
+        mapResultRating.put("box2", box2Object);
     }
 
     private void calculateHeaders3Box2(Map<String, Object> mapResultRating, String d1, CatCurrentDebtLoad catCurrentDebtLoadA4, CatDelayPeriod catDelayPeriodD1) {
-        String name;
-        String value;
+        TitleValueDto titleValueDto = new TitleValueDto();
         if (d1.equals("0") || d1.equals("1")) {
-            name = "Остаток долга по активным кредитам";
-            value = catCurrentDebtLoadA4.getDescription();
+            titleValueDto.setTitle("Остаток долга по активным кредитам");
+            titleValueDto.setText(catCurrentDebtLoadA4.getDescription());
         } else {
-            name = "Срок активной просрочки";
-            value = catDelayPeriodD1.getDescription();
+            titleValueDto.setTitle("Срок активной просрочки");
+            titleValueDto.setText(catDelayPeriodD1.getDescription());
         }
-        mapResultRating.put("box2HeaderName3", name);
-        mapResultRating.put("box2HeaderValue3", value);
+        Box2Object box2Object = (Box2Object) mapResultRating.get("box2");
+        box2Object.setLoad3(titleValueDto);
+        mapResultRating.put("box2", box2Object);
+    }
+
+    private Box2Object setCommentToBox2(Map<String, Object> mapResultRating, TitleValueDto value) {
+        Box2Object box2Object = (Box2Object) mapResultRating.get("box2");
+        List<TitleValueDto> titleValueDtoList = box2Object.getComments();
+        titleValueDtoList.add(value);
+        box2Object.setComments(titleValueDtoList);
+        return box2Object;
+    }
+
+    private List<TitleValueDto> setCommentToBox4(Map<String, Object> mapResultRating, TitleValueDto value) {
+        List<TitleValueDto> titleValueDtoList = (List<TitleValueDto>) mapResultRating.get("box4");
+        titleValueDtoList.add(value);
+        return titleValueDtoList;
+    }
+
+    public static class Box2Object implements Serializable {
+        private TitleValueDto load1;
+        private TitleValueDto load2;
+        private TitleValueDto load3;
+        private List<TitleValueDto> comments = new ArrayList<>();
+
+        public Box2Object() {
+        }
+
+        public Box2Object(TitleValueDto load1, TitleValueDto load2, TitleValueDto load3, List<TitleValueDto> comments) {
+            this.load1 = load1;
+            this.load2 = load2;
+            this.load3 = load3;
+            this.comments = comments;
+        }
+
+        public TitleValueDto getLoad1() {
+            return load1;
+        }
+
+        public void setLoad1(TitleValueDto load1) {
+            this.load1 = load1;
+        }
+
+        public TitleValueDto getLoad2() {
+            return load2;
+        }
+
+        public void setLoad2(TitleValueDto load2) {
+            this.load2 = load2;
+        }
+
+        public TitleValueDto getLoad3() {
+            return load3;
+        }
+
+        public void setLoad3(TitleValueDto load3) {
+            this.load3 = load3;
+        }
+
+        public List<TitleValueDto> getComments() {
+            return comments;
+        }
+
+        public void setComments(List<TitleValueDto> comments) {
+            this.comments = comments;
+        }
+    }
+
+    public static class Box3Object implements Serializable {
+        private OpenCloseDto ipotecaCredit;
+        private OpenCloseDto potrebCredit;
+        private OpenCloseDto mfoCredit;
+        private OpenCloseDto autoCredit;
+        private OpenCloseDto creditCard;
+        private OpenCloseDto otherCredit;
+
+        public Box3Object() {
+        }
+
+        public Box3Object(OpenCloseDto ipotecaCredit, OpenCloseDto potrebCredit, OpenCloseDto mfoCredit, OpenCloseDto autoCredit, OpenCloseDto creditCard, OpenCloseDto otherCredit) {
+            this.ipotecaCredit = ipotecaCredit;
+            this.potrebCredit = potrebCredit;
+            this.mfoCredit = mfoCredit;
+            this.autoCredit = autoCredit;
+            this.creditCard = creditCard;
+            this.otherCredit = otherCredit;
+        }
+
+        public OpenCloseDto getIpotecaCredit() {
+            return ipotecaCredit;
+        }
+
+        public void setIpotecaCredit(OpenCloseDto ipotecaCredit) {
+            this.ipotecaCredit = ipotecaCredit;
+        }
+
+        public OpenCloseDto getPotrebCredit() {
+            return potrebCredit;
+        }
+
+        public void setPotrebCredit(OpenCloseDto potrebCredit) {
+            this.potrebCredit = potrebCredit;
+        }
+
+        public OpenCloseDto getMfoCredit() {
+            return mfoCredit;
+        }
+
+        public void setMfoCredit(OpenCloseDto mfoCredit) {
+            this.mfoCredit = mfoCredit;
+        }
+
+        public OpenCloseDto getAutoCredit() {
+            return autoCredit;
+        }
+
+        public void setAutoCredit(OpenCloseDto autoCredit) {
+            this.autoCredit = autoCredit;
+        }
+
+        public OpenCloseDto getCreditCard() {
+            return creditCard;
+        }
+
+        public void setCreditCard(OpenCloseDto creditCard) {
+            this.creditCard = creditCard;
+        }
+
+        public OpenCloseDto getOtherCredit() {
+            return otherCredit;
+        }
+
+        public void setOtherCredit(OpenCloseDto otherCredit) {
+            this.otherCredit = otherCredit;
+        }
     }
 }

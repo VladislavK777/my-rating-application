@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "order_response_data")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONE)
 public class OrderResponse {
     private static final long serialVersionUID = 1L;
 
@@ -94,6 +94,38 @@ public class OrderResponse {
 
     @Column(name = "d4")
     private Long d4;
+
+    // ---------УБРАТЬ------- //
+    public OrderResponse() {
+    }
+
+    public OrderResponse(Long i1, Long i2, Long i3, Long i4, Long a1, Long a2, Long a3, Long a4, Long a5, Long a6, Long a7, Long a8, Long a9, Long a10, Long a11, Long a12, Long a13, Long a14, Long a15, Long a16, Long a17, String d1, Long d2, String d3, Long d4) {
+        this.i1 = i1;
+        this.i2 = i2;
+        this.i3 = i3;
+        this.i4 = i4;
+        this.a1 = a1;
+        this.a2 = a2;
+        this.a3 = a3;
+        this.a4 = a4;
+        this.a5 = a5;
+        this.a6 = a6;
+        this.a7 = a7;
+        this.a8 = a8;
+        this.a9 = a9;
+        this.a10 = a10;
+        this.a11 = a11;
+        this.a12 = a12;
+        this.a13 = a13;
+        this.a14 = a14;
+        this.a15 = a15;
+        this.a16 = a16;
+        this.a17 = a17;
+        this.d1 = d1;
+        this.d2 = d2;
+        this.d3 = d3;
+        this.d4 = d4;
+    }
 
     public Long getId() {
         return id;

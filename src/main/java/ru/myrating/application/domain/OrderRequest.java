@@ -1,6 +1,5 @@
 package ru.myrating.application.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
@@ -12,13 +11,12 @@ import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
-import java.util.Map;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "order_request")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONE)
 @TypeDefs({
         @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 })
@@ -32,11 +30,6 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
 
     @Column(name = "first_name")
     private String firstName;
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "link_report", unique = true)
-    @JsonIgnore
-    private OrderReportContent linkReport;
 
     @Column(name = "ref_link")
     private String refLink;
@@ -60,10 +53,9 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
     @Column(name = "payment_transaction_id")
     private String paymentTransactionId;
 
-    @Type(type = "jsonb")
-    @Column(name = "order_result", columnDefinition = "jsonb")
-    @Basic(fetch = LAZY)
-    private Map<String, Object> orderResult;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_report_content", unique = true)
+    private OrderReportContent orderReportContent;
 
     public Long getId() {
         return id;
@@ -79,14 +71,6 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public OrderReportContent getLinkReport() {
-        return linkReport;
-    }
-
-    public void setLinkReport(OrderReportContent linkReport) {
-        this.linkReport = linkReport;
     }
 
     public OrderStatusEnum getStatus() {
@@ -137,12 +121,12 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
         this.paymentTransactionId = paymentTransactionId;
     }
 
-    public Map<String, Object> getOrderResult() {
-        return orderResult;
+    public OrderReportContent getOrderReportContent() {
+        return orderReportContent;
     }
 
-    public void setOrderResult(Map<String, Object> orderResult) {
-        this.orderResult = orderResult;
+    public void setOrderReportContent(OrderReportContent orderReportContent) {
+        this.orderReportContent = orderReportContent;
     }
 
     @Override

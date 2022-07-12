@@ -20,8 +20,8 @@ public class OrderFaultService {
         this.orderFaultQueueRepository = orderFaultQueueRepository;
     }
 
-    public OrderFaultQueue getByOrderRequest(OrderRequest orderRequest) {
-        return orderFaultQueueRepository.findByOrderRequest(orderRequest).orElse(null);
+    public OrderFaultQueue getByOrderRequest(OrderRequest orderRequest, LocalDateTime now) {
+        return orderFaultQueueRepository.findByOrderRequestAndDeadLineDateAfter(orderRequest, now).orElse(null);
     }
 
     public OrderFaultQueue save(OrderFaultQueue orderFaultQueue) {
