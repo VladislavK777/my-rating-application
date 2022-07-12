@@ -55,7 +55,7 @@ export default {
       },
     }
   },
-  created() {
+  mounted() {
     this.sock = new SockJS('http://localhost:8080/websocket/order')
     const stompClient = Stomp.over(this.sock)
     stompClient.connect({}, function(frame) {
@@ -64,8 +64,6 @@ export default {
         this.$router.push({ path: '/report', params: { id: data.reportLink } })
       })
     })
-  },
-  mounted() {
     if (this.$route.query.orderId && this.$route.query.status && this.$route.query.uid) {
       if (this.$route.query.status === 'successful') {
         this.paymentNotification.text = 'Оплата прошла успешно. Вы можете оставаться на странице, чтобы автоматически перейти на страницу отчета в момент его готовности'
