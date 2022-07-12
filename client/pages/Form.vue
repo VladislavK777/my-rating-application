@@ -55,49 +55,27 @@ export default {
       },
     }
   },
-  mounted() {
-    /* this.socket = this.$nuxtSocket({
-      channel: '/order',
-    })
-    this.socket
-      .on('order', (msg, cb) => {
-        console.log(1, msg)
-      })
-    this.socket
-      .on('orderId', (msg, cb) => {
-        console.log(2, msg)
-      }) */
-
-    /* this.socket2 = this.$nuxtSocket({
-      channel: '/',
-    })
-    this.socket2
-      .on('order', (msg, cb) => {
-        console.log(3, msg)
-      })
-    this.socket2
-      .on('orderId', (msg, cb) => {
-        console.log(4, msg)
-      }) */
+  created() {
     const sock = new SockJS('http://localhost:8080/websocket/order')
     const stompClient = Stomp.over(sock);
     stompClient.connect({}, function(frame) {
-      console.log('Connected: ' + frame);
       stompClient.subscribe('/topic/result', function(messageOutput) {
         console.log(JSON.parse(messageOutput.body));
       });
-      stompClient.send("/app/test", JSON.stringify({'from': 'TEST', 'text': 'IT WORKS'}));
     });
-
+  },
+  mounted() {
     if (this.$route.query.orderId && this.$route.query.status && this.$route.query.uid) {
       if (this.$route.query.status === 'successful') {
         this.paymentNotification.text = 'Оплата прошла успешно. Вы можете оставаться на странице, чтобы автоматически перейти на страницу отчета в момент его готовности'
         this.paymentNotification.open = true
-        this.$axios.$put(`/order/paid/${this.$route.query.orderId}?transactionId=${this.$route.query.uid}`, {}, {
-          headers: {
-            'X-API-Key': '4d7a8b90-7520-4b19-9c3e-36b8f253225d',
-          },
-        })
+        setTimeout(() => {
+          this.$axios.$put(`/order/paid/${this.$route.query.orderId}?transactionId=${this.$route.query.uid}`, {}, {
+            headers: {
+              'X-API-Key': '4d7a8b90-7520-4b19-9c3e-36b8f253225d',
+            },
+          })
+        }, 3000)
       } else {
         this.paymentNotification.text = 'Оплата не была завершена'
         this.paymentNotification.open = true
@@ -135,12 +113,12 @@ export default {
         },
       )
       if (data.id) {
-        this.submitPayment(data.id, firstName, lastName)
+        this.submitPayment(data.id, 'mail@mail.asd', 'ИВАН', 'ИВАНОВ')
       } else {
         this.loading = false
       }
     },
-    async submitPayment(orderId, firstName, lastName) {
+    async submitPayment(orderId, email, firstName, lastName) {
       const checkout = {
         test: true,
         transaction_type: 'payment',
@@ -150,7 +128,7 @@ export default {
           description: 'Покупка отчета по кредитному рейтингу',
         },
         customer: {
-          email: 'test@test.com',
+          email,
           first_name: firstName,
           last_name: lastName,
         },
@@ -158,6 +136,7 @@ export default {
           success_url: `http://localhost:9000/form?orderId=${orderId}`,
           decline_url: `http://localhost:9000/form?orderId=${orderId}`,
           fail_url: `http://localhost:9000/form?orderId=${orderId}`,
+          language: 'ru',
         },
       }
       const data = await this.$axios.$post(
