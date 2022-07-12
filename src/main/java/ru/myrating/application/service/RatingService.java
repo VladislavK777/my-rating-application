@@ -68,7 +68,7 @@ public class RatingService {
         mapResponse.put("1", new OrderResponse(0L, 0L, 0L, 98L, 2L, 1L, 7L, 15L, 0L, 0L, 0L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 1L, 0L, 0L, "5", 9L, "5", 1L));
         mapResponse.put("2", new OrderResponse(0L, 0L, 0L, 137L, 5L, 1L, 9L, 16L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, "2", 6L, "2", 0L));
         mapResponse.put("3", new OrderResponse(0L, 0L, 0L, 137L, 5L, 1L, 9L, 16L, 0L, 0L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, "2", 6L, "2", 0L));
-        mapResponse.put("4", new OrderResponse(0L, 0L, 0L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, "0", 0L, "4", 0L));
+        mapResponse.put("4", new OrderResponse(0L, 0L, 0L, 1L, 1L, 1L, 1L, 1L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, "0", 1L, "4", 0L));
         mapResponse.put("5", new OrderResponse(0L, 0L, 1L, 46L, 3L, 1L, 5L, 12L, 0L, 0L, 0L, 1L, 1L, 1L, 1L, 0L, 0L, 1L, 1L, 0L, 0L, "5", 7L, "5", 1L));
         mapResponse.put("6", new OrderResponse(0L, 0L, 0L, 77L, 1L, 1L, 5L, 2L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, "1", 1L, "5", 0L));
         mapResponse.put("7", new OrderResponse(0L, 0L, 0L, 7L, 1L, 1L, 1L, 2L, 0L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, "5", 4L, "5", 0L));
