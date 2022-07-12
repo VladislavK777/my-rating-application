@@ -100,9 +100,9 @@ export default {
   },
   methods: {
     validateForm() {
-      /* if (this.$refs.form.validate()) {
+      if (this.$refs.form.validate()) {
         this.$emit('submit', this.form)
-      } */
+      }
       this.$emit('submit', this.form)
     },
     isCyrillic(e) {

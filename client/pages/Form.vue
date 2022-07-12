@@ -88,27 +88,26 @@ export default {
   },
   methods: {
     async submitForm({ firstName, lastName, passport, email, birthDate }) {
-      const orderData = {
+      /* const orderData = {
         firstName: 'ИВАН',
         lastName: 'ИВАНОВ',
         passportSerial: '1234',
         passportNumber: '123456',
         email: 'mail@mail.asd',
         birthDate: '01.01.1999',
-      }
+      } */
       this.loading = true
       const data = await this.$axios.$post(
         '/order',
         {
-          /* orderData: {
+          orderData: {
             firstName,
             lastName,
             passportSerial: passport.slice(0, 4),
             passportNumber: passport.slice(5, 11),
             email,
             birthDate,
-          }, */
-          orderData,
+          },
         },
         {
           headers: {
@@ -117,7 +116,7 @@ export default {
         },
       )
       if (data.id) {
-        this.submitPayment(data.id, 'mail@mail.asd', 'ИВАН', 'ИВАНОВ')
+        this.submitPayment(data.id, email, firstName, lastName)
       } else {
         this.loading = false
       }
