@@ -35,9 +35,6 @@
 </template>
 
 <script>
-import SockJS from 'sockjs-client'
-import Stomp from 'webstomp-client'
-
 import ButtonBack from '~/components/base/ButtonBack'
 import FormBlock from '~/components/form/FormBlock'
 import FormInfo from '~/components/form/FormInfo'
@@ -54,35 +51,6 @@ export default {
         text: '',
       },
     }
-  },
-  mounted() {
-    this.sock = new SockJS('http://localhost:8080/websocket/order')
-    const stompClient = Stomp.over(this.sock)
-    stompClient.connect({}, () => {
-      stompClient.subscribe('/topic/result', messageOutput => {
-        const data = JSON.parse(messageOutput.body)
-        this.$router.push({ path: `/report/${data.reportLink}` })
-      })
-    })
-    if (this.$route.query.orderId && this.$route.query.status && this.$route.query.uid) {
-      if (this.$route.query.status === 'successful') {
-        this.paymentNotification.text = 'Оплата прошла успешно. Вы можете оставаться на странице, чтобы автоматически перейти на страницу отчета в момент его готовности'
-        this.paymentNotification.open = true
-        setTimeout(() => {
-          this.$axios.$put(`/order/paid/${this.$route.query.orderId}?transactionId=${this.$route.query.uid}`, {}, {
-            headers: {
-              'X-API-Key': '4d7a8b90-7520-4b19-9c3e-36b8f253225d',
-            },
-          })
-        }, 3000)
-      } else {
-        this.paymentNotification.text = 'Оплата не была завершена'
-        this.paymentNotification.open = true
-      }
-    }
-  },
-  beforeDestroy() {
-    this.sock.close()
   },
   methods: {
     async submitForm({ firstName, lastName, passport, email, birthDate }) {
@@ -134,9 +102,9 @@ export default {
           last_name: lastName,
         },
         settings: {
-          success_url: `http://localhost:9000/form?orderId=${orderId}`,
-          decline_url: `http://localhost:9000/form?orderId=${orderId}`,
-          fail_url: `http://localhost:9000/form?orderId=${orderId}`,
+          success_url: `http://localhost:9000/payment/success?orderId=${orderId}`,
+          decline_url: `http://localhost:9000/payment/failure?orderId=${orderId}`,
+          fail_url: `http://localhost:9000/payment/failure?orderId=${orderId}`,
           language: 'ru',
         },
       }

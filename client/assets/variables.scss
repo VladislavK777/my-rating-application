@@ -17,4 +17,7 @@ $font-size-root: 18px;
 $border-radius-root: 8px;
 $progress-circular-underlay-stroke: var(--v-light-grey-base);
 
-$material-light: ( text: ( primary: var(--v-black-base) )  )
+$material-light: ( text: ( primary: var(--v-black-base) )  );
+
+$progress-circular-rotate-animation: progress-circular-rotate 2.2s linear infinite;
+$progress-circular-rotate-dash: progress-circular-dash 2.2s ease-in-out infinite
