@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.List.of;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 public class CalculateService {
@@ -115,7 +116,7 @@ public class CalculateService {
         Long resultRating = catSetting.getValue() + result;
 
         // Ищем рекомендации по рейтингу
-        CatRecommendationByRating catRecommendationByRating = catalogService.getCatRecommendationByRating(resultRating);
+        CatRecommendationByRating catRecommendationByRating = catalogService.getCatRecommendationByRating(resultRating < 0 ? 0L : resultRating);
         mapResultRating.put("box1", of(
                 new TitleValueDto("clientName", name),
                 new TitleValueDto("ratingVale", resultRating),
@@ -199,7 +200,9 @@ public class CalculateService {
             catRecommendationBySystem = catalogService.getCatRecommendationBySystem("4");
         if (catRecommendationBySystem != null) {
             mapResultRating.put("box2", setCommentToBox2(mapResultRating, new TitleValueDto("activeDebt", catRecommendationBySystem.getRecBox2())));
-            mapResultRating.put("box4", setCommentToBox4(mapResultRating, new TitleValueDto("activeDebt", catRecommendationBySystem.getRecBox4())));
+            if (isNotEmpty(catRecommendationBySystem.getRecBox4())) {
+                mapResultRating.put("box4", setCommentToBox4(mapResultRating, new TitleValueDto("activeDebt", catRecommendationBySystem.getRecBox4())));
+            }
         }
     }
 
