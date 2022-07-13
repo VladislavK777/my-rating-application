@@ -50,10 +50,10 @@ spring:
       hibernate.generate_statistics: false
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev, faker
+    contexts: dev
   mail:
-    host: localhost
-    port: 25
+    host: 0.0.0.0
+    port: 1025
     username:
     password:
   messages:
@@ -137,4 +137,5 @@ application:
   deactivate-result-cron: 0 0 0/1 1/1 * ? # Каждый час
   person-data-delete-days: 3 # Через сколько удалять персональные данные
   person-data-delete-cron: 0 0 0 * * ? # Каждый день в 00-00
+  link-report: http://localhost:9000/report/
 

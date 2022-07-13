@@ -3,7 +3,6 @@ package ru.myrating.application.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,8 +29,7 @@ import java.util.UUID;
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static ru.myrating.application.config.Constants.WEBSOCKET_QUEUE;
-import static ru.myrating.application.domain.enumeration.OrderStatusEnum.CALCULATED;
-import static ru.myrating.application.domain.enumeration.OrderStatusEnum.FAULT;
+import static ru.myrating.application.domain.enumeration.OrderStatusEnum.*;
 
 @Async("taskExecutor")
 @Service
@@ -45,10 +43,11 @@ public class RatingService {
     private final OrderFaultService orderFaultService;
     private final OrderResponseMapper orderResponseMapper;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final MailService mailService;
     @Lazy
     private final OrderService orderService;
 
-    public RatingService(Environment env, ApplicationProperties applicationProperties, CalculateService calculateService, IntegrationProviderService integrationProviderService, OrderResponseService orderResponseService, OrderFaultService orderFaultService, OrderResponseMapper orderResponseMapper, SimpMessagingTemplate simpMessagingTemplate, @Lazy OrderService orderService) {
+    public RatingService(Environment env, ApplicationProperties applicationProperties, CalculateService calculateService, IntegrationProviderService integrationProviderService, OrderResponseService orderResponseService, OrderFaultService orderFaultService, OrderResponseMapper orderResponseMapper, SimpMessagingTemplate simpMessagingTemplate, MailService mailService, @Lazy OrderService orderService) {
         this.env = env;
         this.applicationProperties = applicationProperties;
         this.calculateService = calculateService;
@@ -57,6 +56,7 @@ public class RatingService {
         this.orderFaultService = orderFaultService;
         this.orderResponseMapper = orderResponseMapper;
         this.simpMessagingTemplate = simpMessagingTemplate;
+        this.mailService = mailService;
         this.orderService = orderService;
     }
 
@@ -103,12 +103,12 @@ public class RatingService {
             orderResponse.setOrderRequest(orderRequest);
             orderResponseService.save(orderResponse);
             Map<String, Object> map = calculateService.calculateRatingModel(orderResponse);
-            orderRequest.setStatus(CALCULATED);
             UUID linkId = randomUUID();
             orderRequest.setOrderReportContent(new OrderReportContent(linkId, map, true, now().plusDays(applicationProperties.getLifeTimeResultDays())));
-            orderService.save(orderRequest);
             simpMessagingTemplate.convertAndSend(WEBSOCKET_QUEUE, new ReportDTO(orderRequest.getId(), linkId.toString()));
-            // send email;
+            mailService.sendEmail(orderRequest.getOrderData().getEmail(), "Ваш отчет по рейтингу готов", applicationProperties.getLinkReport() + linkId, false, false);
+            orderRequest.setStatus(SENT);
+            orderService.save(orderRequest);
         } catch (Exception e) {
             log.error("Calculate rating failed: " + e);
             saveError(orderRequest, e.getMessage());

@@ -13,12 +13,10 @@ public class ApplicationProperties {
     private IntegrationParams integrationParams;
     private DurationFaultAttempts durationFaultAttempts;
     private String deactivateResultCron;
-
     private int personDataDeleteDays;
-
     private String personDataDeleteCron;
-
     private int lifeTimeResultDays;
+    private String linkReport;
 
     public IntegrationParams getIntegrationParams() {
         return integrationParams;
@@ -66,6 +64,14 @@ public class ApplicationProperties {
 
     public void setLifeTimeResultDays(int lifeTimeResultDays) {
         this.lifeTimeResultDays = lifeTimeResultDays;
+    }
+
+    public String getLinkReport() {
+        return linkReport;
+    }
+
+    public void setLinkReport(String linkReport) {
+        this.linkReport = linkReport;
     }
 
     public static class IntegrationParams {

@@ -156,3 +156,4 @@ application:
   deactivate-result-cron: 0 0 0/1 1/1 * ? # Каждый час
   person-data-delete-days: 3 # Через сколько удалять персональные данные
   person-data-delete-cron: 0 0 0 * * ? # Каждый день в 00-00
+  link-report: https://localhost:9000/report/

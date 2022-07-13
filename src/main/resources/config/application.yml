@@ -186,7 +186,7 @@ jhipster:
   #   allow-credentials: true
   #   max-age: 1800
   mail:
-    from: myRatingApplication@localhost
+    from: report@moyreitng.ru
   api-docs:
     default-include-pattern: ${server.servlet.context-path:}/api/**
     management-include-pattern: ${server.servlet.context-path:}/management/**
