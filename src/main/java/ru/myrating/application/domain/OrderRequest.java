@@ -57,6 +57,9 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
     @JoinColumn(name = "order_report_content", unique = true)
     private OrderReportContent orderReportContent;
 
+    @Column(name = "person_data_deleted")
+    private boolean personDataIsDeleted;
+
     public Long getId() {
         return id;
     }
@@ -127,6 +130,14 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
 
     public void setOrderReportContent(OrderReportContent orderReportContent) {
         this.orderReportContent = orderReportContent;
+    }
+
+    public boolean isPersonDataIsDeleted() {
+        return personDataIsDeleted;
+    }
+
+    public void setPersonDataIsDeleted(boolean personDateIsDeleted) {
+        this.personDataIsDeleted = personDateIsDeleted;
     }
 
     @Override

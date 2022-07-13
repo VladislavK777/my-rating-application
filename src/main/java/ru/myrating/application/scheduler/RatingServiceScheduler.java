@@ -36,15 +36,12 @@ public class RatingServiceScheduler {
         }
     }
 
-    @Scheduled(cron = "${application.deactivate-result-crone}")
+    @Scheduled(cron = "${application.deactivate-result-cron}")
     public void deactivateResultRequests() {
         log.info("Start scheduler deactivate result order");
         List<OrderReportContent> list = orderReportContentService.findAllByDeactivateDateAfter(now());
         if (!list.isEmpty()) {
-            list.forEach(content -> {
-                orderReportContentService.deactivateContent(content);
-                ratingService.deletePersonDateByOrder(content.getOrderRequest());
-            });
+            list.forEach(orderReportContentService::deactivateContent);
         }
     }
 }

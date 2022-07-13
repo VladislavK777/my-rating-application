@@ -12,7 +12,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ApplicationProperties {
     private IntegrationParams integrationParams;
     private DurationFaultAttempts durationFaultAttempts;
-    private String deactivateResultCrone;
+    private String deactivateResultCron;
+
+    private int personDataDeleteDays;
+
+    private String personDataDeleteCron;
 
     private int lifeTimeResultDays;
 
@@ -32,12 +36,28 @@ public class ApplicationProperties {
         this.durationFaultAttempts = durationFaultAttempts;
     }
 
-    public String getDeactivateResultCrone() {
-        return deactivateResultCrone;
+    public String getDeactivateResultCron() {
+        return deactivateResultCron;
     }
 
-    public void setDeactivateResultCrone(String deactivateResultCrone) {
-        this.deactivateResultCrone = deactivateResultCrone;
+    public void setDeactivateResultCron(String deactivateResultCron) {
+        this.deactivateResultCron = deactivateResultCron;
+    }
+
+    public int getPersonDataDeleteDays() {
+        return personDataDeleteDays;
+    }
+
+    public void setPersonDataDeleteDays(int personDataDeleteDays) {
+        this.personDataDeleteDays = personDataDeleteDays;
+    }
+
+    public String getPersonDataDeleteCron() {
+        return personDataDeleteCron;
+    }
+
+    public void setPersonDataDeleteCron(String personDataDeleteCron) {
+        this.personDataDeleteCron = personDataDeleteCron;
     }
 
     public int getLifeTimeResultDays() {

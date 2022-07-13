@@ -47,7 +47,6 @@ public class RatingService {
     private final SimpMessagingTemplate simpMessagingTemplate;
     @Lazy
     private final OrderService orderService;
-    private final Map<String, OrderResponse> mapResponse = new HashMap<>();
 
     public RatingService(Environment env, ApplicationProperties applicationProperties, CalculateService calculateService, IntegrationProviderService integrationProviderService, OrderResponseService orderResponseService, OrderFaultService orderFaultService, OrderResponseMapper orderResponseMapper, SimpMessagingTemplate simpMessagingTemplate, @Lazy OrderService orderService) {
         this.env = env;
@@ -62,6 +61,8 @@ public class RatingService {
     }
 
     //  ------ ДЛЯ ДЕМО ------ //
+    private final Map<String, OrderResponse> mapResponse = new HashMap<>();
+
     @PostConstruct
     public void init() {
         mapResponse.put("0", new OrderResponse(2L, 2L, 0L, 9L, 1L, 1L, 8L, 16L, 0L, 0L, 0L, 1L, 1L, 0L, 0L, 0L, 0L, 1L, 0L, 0L, 0L, "0", 1L, "1", 0L));
@@ -113,10 +114,6 @@ public class RatingService {
             saveError(orderRequest, e.getMessage());
             throw new InternalServerErrorAlertException("Calculate rating failed; cause: " + e.getMessage(), "RatingService", "calculationfailed");
         }
-    }
-
-    public void deletePersonDateByOrder(OrderRequest orderRequest) {
-        orderService.deletePersonDate(orderRequest);
     }
 
     private void saveError(OrderRequest orderRequest, String message) {

@@ -134,5 +134,7 @@ application:
     days: 1
     cron: 0 0/5 * * * *
   life-time-result-days: 1
-  deactivate-result-crone: 0 0 0/1 1/1 * ? # Каждый час
+  deactivate-result-cron: 0 0 0/1 1/1 * ? # Каждый час
+  person-data-delete-days: 3 # Через сколько удалять персональные данные
+  person-data-delete-cron: 0 0 0 * * ? # Каждый день в 00-00
 

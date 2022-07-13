@@ -10,6 +10,8 @@ import ru.myrating.application.repository.OrderRepository;
 import ru.myrating.application.web.rest.errors.BadRequestAlertException;
 import ru.myrating.application.web.rest.errors.NotFoundAlertException;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -63,9 +65,14 @@ public class OrderService {
         }
     }
 
-    public void deletePersonDate(OrderRequest orderRequest) {
+    public List<OrderRequest> findAllByCreatedDateBeforeAndPersonDataIsDeletedFalse(LocalDateTime dateNow) {
+        return orderRepository.findAllByCreatedDateBeforeAndPersonDataIsDeletedFalse(dateNow);
+    }
+
+    public void deletePersonData(OrderRequest orderRequest) {
         orderRequest.getOrderData().setPassportNumber(null);
         orderRequest.getOrderData().setPassportSerial(null);
+        orderRequest.setPersonDataIsDeleted(true);
         save(orderRequest);
     }
 
