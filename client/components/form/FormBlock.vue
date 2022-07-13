@@ -4,6 +4,7 @@
     <v-form
       ref="form"
       v-model="valid"
+      :disabled="disabled"
     >
       <v-text-field
         :value="form.lastName.toUpperCase()"
@@ -56,8 +57,8 @@
           <template #label>
           <span>
             Я согласен (-на) на обработку
-            <NuxtLink to="/asd">персональных данных</NuxtLink> и с
-            <NuxtLink to="/asd">договором-офертой</NuxtLink>
+            <NuxtLink to="/">персональных данных</NuxtLink> и с
+            <NuxtLink to="/">договором-офертой</NuxtLink>
           </span>
           </template>
         </v-checkbox>
