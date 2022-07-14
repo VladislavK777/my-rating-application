@@ -91,6 +91,7 @@ export default {
       const checkout = {
         test: true,
         transaction_type: 'payment',
+        attempts: 2,
         order: {
           amount: 39900,
           currency: 'RUB',
