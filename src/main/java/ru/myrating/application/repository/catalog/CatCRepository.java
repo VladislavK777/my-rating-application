@@ -11,8 +11,13 @@ import java.util.Optional;
 
 public interface CatCRepository extends JpaRepository<CatC, Long> {
     String CAT_С_BETWEEN = "catCBetween";
+    String CAT_С_EQUALS = "catCEquals";
 
     @Cacheable(cacheNames = CAT_С_BETWEEN)
-    @Query("from CatC c where c.from <= :value and c.to > :value")
+    @Query("from CatC c where c.from < :value and c.to >= :value")
     Optional<CatC> findByBetweenValue(@Param("value") Long value);
+
+    @Cacheable(cacheNames = CAT_С_EQUALS)
+    @Query("from CatC c where c.from = :value and c.to = :value")
+    Optional<CatC> findByEqualsValue(@Param("value") Long value);
 }

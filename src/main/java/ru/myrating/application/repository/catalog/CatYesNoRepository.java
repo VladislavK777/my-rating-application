@@ -7,7 +7,7 @@ import ru.myrating.application.domain.catalog.CatYesNo;
 import java.util.Optional;
 
 public interface CatYesNoRepository extends JpaRepository<CatYesNo, Long> {
-    String CAT_YES_NO_CODE = "catYesNo";
+    String CAT_YES_NO_CODE = "catYesNoCode";
 
     @Cacheable(cacheNames = CAT_YES_NO_CODE)
     Optional<CatYesNo> findByCode(String code);

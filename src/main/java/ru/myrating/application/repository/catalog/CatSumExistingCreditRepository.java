@@ -7,7 +7,7 @@ import ru.myrating.application.domain.catalog.CatSumExistingCredit;
 import java.util.Optional;
 
 public interface CatSumExistingCreditRepository extends JpaRepository<CatSumExistingCredit, Long> {
-    String CAT_SUM_EXISTING_CODE = "catSumExistingCredit";
+    String CAT_SUM_EXISTING_CODE = "catSumExistingCreditCode";
 
     @Cacheable(cacheNames = CAT_SUM_EXISTING_CODE)
     Optional<CatSumExistingCredit> findByCode(String code);

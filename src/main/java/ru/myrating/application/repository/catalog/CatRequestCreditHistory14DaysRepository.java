@@ -9,9 +9,14 @@ import ru.myrating.application.domain.catalog.CatRequestCreditHistory14Days;
 import java.util.Optional;
 
 public interface CatRequestCreditHistory14DaysRepository extends JpaRepository<CatRequestCreditHistory14Days, Long> {
-    String CAT_HISTORY_14_DAYS_BETWEEN = "catRequestCreditHistory14Days";
+    String CAT_HISTORY_14_DAYS_BETWEEN = "catRequestCreditHistory14DaysBetween";
+    String CAT_HISTORY_14_DAYS_EQUALS = "catRequestCreditHistory14DaysEquals";
 
     @Cacheable(cacheNames = CAT_HISTORY_14_DAYS_BETWEEN)
-    @Query("from CatRequestCreditHistory14Days c where c.from <= :value and c.to > :value")
+    @Query("from CatRequestCreditHistory14Days c where c.from < :value and c.to >= :value")
     Optional<CatRequestCreditHistory14Days> findByBetweenValue(@Param("value") Long value);
+
+    @Cacheable(cacheNames = CAT_HISTORY_14_DAYS_EQUALS)
+    @Query("from CatRequestCreditHistory14Days c where c.from = :value and c.to = :value")
+    Optional<CatRequestCreditHistory14Days> findByEqualsValue(@Param("value") Long value);
 }

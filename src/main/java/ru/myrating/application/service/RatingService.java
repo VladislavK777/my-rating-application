@@ -31,7 +31,7 @@ import static java.util.UUID.randomUUID;
 import static ru.myrating.application.config.Constants.WEBSOCKET_QUEUE;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.*;
 
-@Async("taskExecutor")
+@Async
 @Service
 public class RatingService {
     private final Logger log = LoggerFactory.getLogger(RatingService.class);
@@ -107,7 +107,7 @@ public class RatingService {
             orderRequest.setOrderReportContent(new OrderReportContent(linkId, map, true, now().plusDays(applicationProperties.getLifeTimeResultDays())));
             simpMessagingTemplate.convertAndSend(WEBSOCKET_QUEUE, new ReportDTO(orderRequest.getId(), linkId.toString()));
             mailService.sendEmail(orderRequest.getOrderData().getEmail(), "Ваш отчет по рейтингу готов", applicationProperties.getLinkReport() + linkId, false, false);
-            orderRequest.setStatus(SENT);
+            orderRequest.setStatus(CALCULATED);
             orderService.save(orderRequest);
         } catch (Exception e) {
             log.error("Calculate rating failed: " + e);
