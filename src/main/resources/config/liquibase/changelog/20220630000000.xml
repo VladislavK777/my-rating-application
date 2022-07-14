@@ -477,7 +477,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="payment_transaction_id" remarks="ID транзакции платежа" type="varchar"/>
-            <column name="order_result" type="jsonb" remarks="Результат запроса"/>
             <column name="person_data_deleted" type="boolean" valueBoolean="false" remarks="Удалены ли персональные данные из запроса">
                 <constraints nullable="false"/>
             </column>

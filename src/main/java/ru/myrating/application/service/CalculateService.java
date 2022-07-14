@@ -116,7 +116,7 @@ public class CalculateService {
         Long resultRating = catSetting.getValue() + result;
 
         // Ищем рекомендации по рейтингу
-        CatRecommendationByRating catRecommendationByRating = catalogService.getCatRecommendationByRating(resultRating < 0 ? 0L : resultRating);
+        CatRecommendationByRating catRecommendationByRating = catalogService.getCatRecommendationByRating(resultRating <= 0 ? 0L : resultRating);
         mapResultRating.put("box1", of(
                 new TitleValueDto("clientName", name),
                 new TitleValueDto("ratingVale", resultRating),
