@@ -61,18 +61,26 @@ public class CatalogService {
     }
 
     public CatRequestCreditHistory14Days getCatRequestCreditHistory14Days(Long value) {
+        if (value == 0L)
+            return catRequestCreditHistory14DaysRepository.findByEqualsValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatRequestCreditHistory14Days not found", "CatRequestCreditHistory14Days", "valuenotfoundincatalog"));
         return catRequestCreditHistory14DaysRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatRequestCreditHistory14Days not found", "CatRequestCreditHistory14Days", "valuenotfoundincatalog"));
     }
 
     public CatRequestCreditHistory7Days getCatRequestCreditHistory7Days(Long value) {
+        if (value == 0L)
+            return catRequestCreditHistory7DaysRepository.findByEqualsValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatRequestCreditHistory7Days not found", "CatRequestCreditHistory7Days", "valuenotfoundincatalog"));
         return catRequestCreditHistory7DaysRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatRequestCreditHistory7Days not found", "CatRequestCreditHistory7Days", "valuenotfoundincatalog"));
     }
 
     public CatC getCatC(Long value) {
+        if (value == 0L || value == 100L)
+            return catCRepository.findByEqualsValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatC not found", "CatC", "valuenotfoundincatalog"));
         return catCRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatC not found", "CatC", "valuenotfoundincatalog"));
     }
 
     public CatD getCatD(Long value) {
+        if (value == 0L || value == 100L)
+            return catDRepository.findByEqualsValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatD not found", "CatD", "valuenotfoundincatalog"));
         return catDRepository.findByBetweenValue(value).orElseThrow(() -> new NotFoundAlertException("Value in CatD not found", "CatD", "valuenotfoundincatalog"));
     }
 
@@ -127,15 +135,21 @@ public class CatalogService {
         Objects.requireNonNull(cacheManager.getCache(CatActiveAccountRepository.CAT_ACTIVE_ACCOUNT_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatAdditionalRepository.CAT_ADDITIONAL_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatCRepository.CAT_С_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatCRepository.CAT_С_EQUALS)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatDRepository.CAT_D_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatDRepository.CAT_D_EQUALS)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatCurrentDebtLoadRepository.CAT_CURRENT_DEBT_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatDelayPeriodRepository.CAT_DELAY_PERIOD_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatOldRepository.CAT_OLD_BETWEEN)).clear();
-        Objects.requireNonNull(cacheManager.getCache(CatRecommendationByRatingRepository.CAT_RECOMMENTDATION_RATING_BETWEEN)).clear();
-        Objects.requireNonNull(cacheManager.getCache(CatRecommendationBySystemRepository.CAT_RECOMMENTATION_SYSTEM_CODE)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatOldRepository.CAT_OLD_EQUALS)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRecommendationByRatingRepository.CAT_RECOMMENDATION_RATING_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRecommendationByRatingRepository.CAT_RECOMMENDATION_RATING_EQUALS)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRecommendationBySystemRepository.CAT_RECOMMENDATION_SYSTEM_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatRecommendationByEmptyHistoryRepository.CAT_RECOMMENDATION_EMPTY_HISTORY)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatRequestCreditHistory7DaysRepository.CAT_HISTORY_7_DAYS_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRequestCreditHistory7DaysRepository.CAT_HISTORY_7_DAYS_EQUALS)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatRequestCreditHistory14DaysRepository.CAT_HISTORY_14_DAYS_BETWEEN)).clear();
+        Objects.requireNonNull(cacheManager.getCache(CatRequestCreditHistory14DaysRepository.CAT_HISTORY_14_DAYS_EQUALS)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatSettingRepository.CAT_SETTING_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatSumExistingCreditRepository.CAT_SUM_EXISTING_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatSumOverdueCreditRepository.CAT_SUM_OVERDUE_CODE)).clear();

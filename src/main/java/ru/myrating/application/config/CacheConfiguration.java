@@ -62,9 +62,11 @@ public class CacheConfiguration {
 
             createCache(cm, ru.myrating.application.domain.catalog.CatC.class.getName());
             createCache(cm, CatCRepository.CAT_С_BETWEEN);
+            createCache(cm, CatCRepository.CAT_С_EQUALS);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatD.class.getName());
             createCache(cm, CatDRepository.CAT_D_BETWEEN);
+            createCache(cm, CatDRepository.CAT_D_EQUALS);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatCurrentDebtLoad.class.getName());
             createCache(cm, CatCurrentDebtLoadRepository.CAT_CURRENT_DEBT_CODE);
@@ -74,21 +76,25 @@ public class CacheConfiguration {
 
             createCache(cm, ru.myrating.application.domain.catalog.CatOld.class.getName());
             createCache(cm, CatOldRepository.CAT_OLD_BETWEEN);
+            createCache(cm, CatOldRepository.CAT_OLD_EQUALS);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatRecommendationByRating.class.getName());
-            createCache(cm, CatRecommendationByRatingRepository.CAT_RECOMMENTDATION_RATING_BETWEEN);
+            createCache(cm, CatRecommendationByRatingRepository.CAT_RECOMMENDATION_RATING_BETWEEN);
+            createCache(cm, CatRecommendationByRatingRepository.CAT_RECOMMENDATION_RATING_EQUALS);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatRecommendationBySystem.class.getName());
-            createCache(cm, CatRecommendationBySystemRepository.CAT_RECOMMENTATION_SYSTEM_CODE);
+            createCache(cm, CatRecommendationBySystemRepository.CAT_RECOMMENDATION_SYSTEM_CODE);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatRecommendationByEmptyHistory.class.getName());
             createCache(cm, CatRecommendationByEmptyHistoryRepository.CAT_RECOMMENDATION_EMPTY_HISTORY);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatRequestCreditHistory7Days.class.getName());
             createCache(cm, CatRequestCreditHistory7DaysRepository.CAT_HISTORY_7_DAYS_BETWEEN);
+            createCache(cm, CatRequestCreditHistory7DaysRepository.CAT_HISTORY_7_DAYS_EQUALS);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatRequestCreditHistory14Days.class.getName());
             createCache(cm, CatRequestCreditHistory14DaysRepository.CAT_HISTORY_14_DAYS_BETWEEN);
+            createCache(cm, CatRequestCreditHistory14DaysRepository.CAT_HISTORY_14_DAYS_EQUALS);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatSetting.class.getName());
             createCache(cm, CatSettingRepository.CAT_SETTING_CODE);
