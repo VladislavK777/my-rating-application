@@ -80,20 +80,12 @@ project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/"
 liquibase {
     activities {
         main {
-            driver "org.postgresql.Driver"
-            url "jdbc:postgresql://127.0.0.1:5432/my_rating_local"
-            username "postgres"
-            password "postgres"
             changeLogFile "src/main/resources/config/liquibase/master.xml"
             defaultSchemaName ""
             logLevel "debug"
             classpath "src/main/resources/"
         }
         diffLog {
-            driver "org.postgresql.Driver"
-            url "jdbc:postgresql://127.0.0.1:5432/my_rating_local"
-            username "postgres"
-            password "postgres"
             changeLogFile project.ext.diffChangelogFile
             referenceUrl "hibernate:spring:ru.rtkit.portal.domain?dialect=org.hibernate.dialect.PostgreSQL95Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
             defaultSchemaName ""
