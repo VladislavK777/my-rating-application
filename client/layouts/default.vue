@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container class="app-container">
+      <v-container class="pt-3 pb-10">
         <Nuxt />
       </v-container>
     </v-main>
@@ -41,7 +41,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.app-container {
-  padding: 50px 0 160px 0;
-}
 </style>

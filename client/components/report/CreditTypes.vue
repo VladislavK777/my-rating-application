@@ -18,56 +18,56 @@
         </thead>
         <tbody>
         <tr>
-          <td>Ипотека</td>
-          <td :class="{ 'table__bold': typesData.ipotecaCredit.open }">
+          <td class="table__cell">Ипотека</td>
+          <td class="table__cell" :class="{ 'table__bold': typesData.ipotecaCredit.open }">
             {{ typesData.ipotecaCredit.open ? 'Да' : 'Нет' }}
           </td>
-          <td :class="{ 'table__bold': typesData.ipotecaCredit.close }">
+          <td class="table__cell" :class="{ 'table__bold': typesData.ipotecaCredit.close }">
             {{ typesData.ipotecaCredit.close ? 'Да' : 'Нет' }}
           </td>
         </tr>
         <tr>
-          <td>Потребительский кредит</td>
-          <td :class="{ 'table__bold': typesData.potrebCredit.open }">
+          <td class="table__cell">Потребительский кредит</td>
+          <td class="table__cell" :class="{ 'table__bold': typesData.potrebCredit.open }">
             {{ typesData.potrebCredit.open ? 'Да' : 'Нет' }}
           </td>
-          <td :class="{ 'table__bold': typesData.potrebCredit.close }">
+          <td class="table__cell" :class="{ 'table__bold': typesData.potrebCredit.close }">
             {{ typesData.potrebCredit.close ? 'Да' : 'Нет' }}
           </td>
         </tr>
         <tr>
-          <td>МФО</td>
-          <td :class="{ 'table__bold': typesData.mfoCredit.open }">
+          <td class="table__cell">МФО</td>
+          <td class="table__cell" :class="{ 'table__bold': typesData.mfoCredit.open }">
             {{ typesData.mfoCredit.open ? 'Да' : 'Нет' }}
           </td>
-          <td :class="{ 'table__bold': typesData.mfoCredit.close }">
+          <td class="table__cell" :class="{ 'table__bold': typesData.mfoCredit.close }">
             {{ typesData.mfoCredit.close ? 'Да' : 'Нет' }}
           </td>
         </tr>
         <tr>
-          <td>Автокредит</td>
-          <td :class="{ 'table__bold': typesData.autoCredit.open }">
+          <td class="table__cell">Автокредит</td>
+          <td class="table__cell" :class="{ 'table__bold': typesData.autoCredit.open }">
             {{ typesData.autoCredit.open ? 'Да' : 'Нет' }}
           </td>
-          <td :class="{ 'table__bold': typesData.autoCredit.close }">
+          <td class="table__cell" :class="{ 'table__bold': typesData.autoCredit.close }">
             {{ typesData.autoCredit.close ? 'Да' : 'Нет' }}
           </td>
         </tr>
         <tr>
-          <td>Кредитная карта</td>
-          <td :class="{ 'table__bold': typesData.creditCard.open }">
+          <td class="table__cell">Кредитная карта</td>
+          <td class="table__cell" :class="{ 'table__bold': typesData.creditCard.open }">
             {{ typesData.creditCard.open ? 'Да' : 'Нет' }}
           </td>
-          <td :class="{ 'table__bold': typesData.creditCard.close }">
+          <td class="table__cell" :class="{ 'table__bold': typesData.creditCard.close }">
             {{ typesData.creditCard.close ? 'Да' : 'Нет' }}
           </td>
         </tr>
         <tr>
-          <td>Кредит под залог</td>
-          <td :class="{ 'table__bold': typesData.otherCredit.open }">
+          <td class="table__cell">Кредит под залог</td>
+          <td class="table__cell" :class="{ 'table__bold': typesData.otherCredit.open }">
             {{ typesData.otherCredit.open ? 'Да' : 'Нет' }}
           </td>
-          <td :class="{ 'table__bold': typesData.otherCredit.close }">
+          <td class="table__cell" :class="{ 'table__bold': typesData.otherCredit.close }">
             {{ typesData.otherCredit.close ? 'Да' : 'Нет' }}
           </td>
         </tr>
@@ -98,6 +98,19 @@ export default {
     color: var(--v-black-base) !important;
     font-weight: 500 !important;
     font-size: 16px !important;
+
+    @media only screen and (max-width: 599px) {
+      font-size: 14px !important;
+    }
+  }
+
+  &__cell {
+    color: var(--v-black-base) !important;
+    font-size: 16px !important;
+
+    @media only screen and (max-width: 599px) {
+      font-size: 14px !important;
+    }
   }
 
   &__bold {

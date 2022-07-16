@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2 class="heading">Кредитная нагрузка</h2>
-    <div class="main-container">
+    <div v-if="!$vuetify.breakpoint.xs" class="main-container">
       <div class="load-container">
         <span class="load__title">{{ loadData.load1.title }}</span>
         <div class="load">
@@ -24,6 +24,29 @@
         </div>
       </div>
     </div>
+    <v-row v-else class="main-container">
+      <v-col cols="12" class="load-container">
+        <span class="load__title">{{ loadData.load1.title }}</span>
+        <div class="load">
+          <v-img :src="require(`~/assets/load/load_green.svg`)" max-width="230" max-height="230" contain />
+          <span class="load__value">{{ loadData.load1.text }}</span>
+        </div>
+      </v-col>
+      <v-col cols="12" class="load-container load-container--center">
+        <span class="load__title">{{ loadData.load2.title }}</span>
+        <div class="load">
+          <v-img :src="require(`~/assets/load/load_grey.svg`)" max-width="280" max-height="280" contain />
+          <span class="load__value">{{ loadData.load2.text }}</span>
+        </div>
+      </v-col>
+      <v-col cols="12" class="load-container">
+        <span class="load__title">{{ loadData.load3.title }}</span>
+        <div class="load">
+          <v-img :src="require(`~/assets/load/load_red.svg`)" max-width="230" max-height="230" contain />
+          <span class="load__value">{{ loadData.load3.text }}</span>
+        </div>
+      </v-col>
+    </v-row>
     <CreditLoadComment
       v-for="comment in loadData.comments"
       :title="comment.title"
@@ -45,6 +68,11 @@ export default {
       required: true,
     },
   },
+  computed: {
+    isMobile() {
+      return this.$vuetify.breakpoint.mobile
+    }
+  }
 }
 </script>
 
@@ -68,7 +96,7 @@ export default {
     z-index: 99;
 
     &--center {
-      margin: 0 -65px;
+      margin: 0 -50px;
       z-index: 90;
     }
   }
@@ -76,7 +104,6 @@ export default {
   &__title {
     width: 60%;
     font-weight: 600;
-    font-size: 18px;
     text-align: center;
   }
 

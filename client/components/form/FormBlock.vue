@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container">
+  <div class="form-block-container">
     <h3 class="form__heading">Узнать свой кредитный рейтинг</h3>
     <v-form
       ref="form"
@@ -115,7 +115,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.form-container {
+.form-block-container {
   display: flex;
   flex-direction: column;
   padding: 55px 45px;
@@ -129,6 +129,15 @@ export default {
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 30px;
+    text-align: center;
+
+    @media only screen and (max-width: 959px) {
+      font-size: 20px;
+    }
+
+    @media only screen and (max-width: 599px) {
+      font-size: 18px;
+    }
   }
 
   &__checkbox {

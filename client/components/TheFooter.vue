@@ -1,16 +1,16 @@
 <template>
   <v-container class="footer">
-    <v-row justify="space-around" align-content="end">
-      <v-col cols="4" class="footer-container footer-container--left">
+    <v-row justify-md="space-around" align-content="end">
+      <v-col md="4" class="footer-container" :class="{ 'footer-container--mobile': isMobile, 'footer-container--left': !isMobile  }">
         <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг" class="footer__logo">
         <span>Наши реквизиты</span>
         <span>Мой рейтинг © 2011–2022</span>
       </v-col>
-      <v-col cols="4" class="footer-container footer-container--center">
+      <v-col md="4" class="footer-container" :class="{ 'footer-container--mobile': isMobile, 'footer-container--center': !isMobile  }">
         <span>Политика конфиденциальности</span>
         <span>Способ оплаты и условия возврата</span>
       </v-col>
-      <v-col cols="4" class="footer-container footer-container--right">
+      <v-col md="4" class="footer-container" :class="{ 'footer-container--mobile': isMobile, 'footer-container--right': !isMobile  }">
         <span class="font-weight-medium">Поддержка</span>
         <span>WhatsApp</span>
         <span>support@moyreyting.ru</span>
@@ -22,6 +22,11 @@
 <script>
 export default {
   name: 'TheFooter',
+  computed: {
+    isMobile() {
+      return this.$vuetify.breakpoint.mobile
+    }
+  }
 }
 </script>
 
@@ -32,6 +37,11 @@ export default {
   flex-grow: 0;
   justify-content: flex-end;
   gap: 10px;
+
+  &--mobile {
+    padding: 10px 24px;
+    flex-grow: 1;
+  }
 
   &--left {
     text-align: left;
@@ -49,7 +59,6 @@ export default {
 .footer {
   margin-top: 100px;
   margin-bottom: 100px;
-  padding: 0;
 
   &__logo {
     align-self: start;

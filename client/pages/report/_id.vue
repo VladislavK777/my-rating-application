@@ -1,7 +1,7 @@
 <template>
   <div>
     <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг" class="logo">
-    <div class="flex-container">
+    <div class="report-container">
       <CreditRating :rating-data="reportData.box1" />
       <CreditLoad :load-data="reportData.box2" />
       <CreditTypes :types-data="reportData.box3" />
@@ -43,24 +43,40 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 40px;
-
   padding: 70px;
   background: var(--v-light-grey-base);
   border-radius: 32px;
 
+  @media only screen and (max-width: 959px) {
+    padding: 20px;
+  }
+
   ::v-deep &--white {
-    padding: 30px 40px;
+    padding: 30px ;
+    height: 100%;
     background: var(--v-white-base);
     border-radius: 32px;
+
+    @media only screen and (max-width: 599px) {
+      padding: 20px;
+    }
   }
 }
 
-.heading {
+::v-deep .heading {
   font-weight: 700;
   font-size: 40px;
+
+  @media only screen and (max-width: 959px) {
+    font-size: 30px;
+  }
+
+  @media only screen and (max-width: 599px) {
+    font-size: 20px !important;
+  }
 }
 
-.flex-container {
+.report-container {
   display: flex;
   flex-direction: column;
   gap: 70px;

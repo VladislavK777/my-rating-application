@@ -49,16 +49,28 @@ export default {
     &-range {
       font-weight: 500;
       font-size: 20px;
+
+      @media only screen and (max-width: 599px) {
+        font-size: 17px;
+      }
     }
 
     &-title {
       font-size: 20px;
+
+      @media only screen and (max-width: 599px) {
+        font-size: 17px;
+      }
     }
   }
 
   &__text {
     font-size: 16px;
     opacity: 0.5;
+
+    @media only screen and (max-width: 599px) {
+      font-size: 15px;
+    }
   }
 }
 </style>

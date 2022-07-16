@@ -2,25 +2,26 @@
   <v-app>
     <v-container>
       <v-row>
-        <v-col class="error__header">
+        <v-col cols="12" sm="6">
           <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг">
-          <v-spacer />
+        </v-col>
+        <v-col cols="12" sm="6">
           <span class="error__credit">Проверить кредитный рейтинг</span>
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-col v-if="error.statusCode === 500 && error.message.includes('404')" cols="6" class="error-container">
+        <v-col v-if="error.statusCode === 500 && error.message.includes('404')" class="error-container">
           <h2 class="error__title">Данный отчет более недоступен или была использована неправильная ссылка</h2>
           <span class="error__hint">Нажмите на кнопку ниже, чтобы перейти на главную страницу</span>
           <v-btn color="primary" height="73" width="260" to="/">На главную</v-btn>
         </v-col>
-        <v-col v-else-if="error.statusCode === 404" cols="6" class="error-container">
-          <img src="~/assets/404.svg" alt="404" height="268" />
+        <v-col v-else-if="error.statusCode === 404" class="error-container">
+          <v-img :src="require(`~/assets/404.svg`)" alt="404" max-height="268" />
           <h2 class="error__title">К сожалению, такой страницы не существует</h2>
           <span class="error__hint">Нажмите на кнопку ниже, чтобы перейти на главную страницу</span>
           <v-btn color="primary" height="73" width="260" to="/">На главную</v-btn>
         </v-col>
-        <v-col v-else cols="6" class="error-container">
+        <v-col v-else class="error-container">
           <h2 class="error__title">Произошла ошибка, попробуйте позже</h2>
           <span class="error__hint">Нажмите на кнопку ниже, чтобы перейти на главную страницу</span>
           <v-btn color="primary" height="73" width="260" to="/">На главную</v-btn>
@@ -92,7 +93,6 @@ export default {
   }
 
   &__hint {
-    width: 66%;
     margin-bottom: 40px;
     font-size: 20px;
   }

@@ -43,12 +43,20 @@ export default {
     margin-bottom: 10px;
     font-weight: 500;
     font-size: 20px;
+
+    @media only screen and (max-width: 599px) {
+      font-size: 15px;
+    }
   }
 
   &__text {
     margin: 0;
     font-size: 20px;
     white-space: pre-line;
+
+    @media only screen and (max-width: 599px) {
+      font-size: 15px;
+    }
   }
 }
 </style>

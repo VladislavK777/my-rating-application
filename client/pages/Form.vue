@@ -1,15 +1,16 @@
 <template>
-  <v-container>
+  <div>
     <v-row>
       <v-col>
+        <img v-if="$vuetify.breakpoint.mobile" src="~/assets/logo.svg" height="16" alt="Мой рейтинг" class="mt-5 mb-5">
         <ButtonBack />
       </v-col>
     </v-row>
-    <v-row justify="space-around" align="center" class="form-container">
-      <v-col cols="4">
+    <v-row justify="space-around" align="center" class="form-container" :class="{ 'form-container--mobile': $vuetify.breakpoint.mobile }">
+      <v-col cols="12" sm="8" md="4" :order="$vuetify.breakpoint.mobile ? 2 : 0">
         <FormInfo />
       </v-col>
-      <v-col cols="5">
+      <v-col cols="12" sm="8" md="5">
         <FormBlock :loading="loading" :disabled="disabled" @submit="submitForm" />
       </v-col>
     </v-row>
@@ -31,7 +32,7 @@
         </v-btn>
       </template>
     </v-snackbar>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -142,5 +143,9 @@ export default {
 <style scoped lang="scss">
 .form-container {
   margin-top: 85px !important;
+
+  &--mobile {
+    margin-top: 10px !important;
+  }
 }
 </style>

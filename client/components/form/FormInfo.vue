@@ -1,9 +1,8 @@
 <template>
-  <div class="info-container">
+  <div class="info-container" :class="{ 'mt-8': $vuetify.breakpoint.mobile, 'info-container--mobile': $vuetify.breakpoint.mobile }">
     <div>
-      <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг" class="info__logo">
+      <img v-if="!$vuetify.breakpoint.mobile" src="~/assets/logo.svg" height="16" alt="Мой рейтинг" class="info__logo">
       <p class="info__text">Вы будете перенаправлены на страницу оплаты на сайт платёжной системы FREEPAYMENT.
-
         Сразу после оплаты на вашу электронную почту будет отправлена ссылка на отчёт.</p>
     </div>
     <div class="info-container--sub">
@@ -30,6 +29,10 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 100px;
+
+    &--mobile {
+      gap: 40px;
+    }
 
     &--sub {
       display: flex;

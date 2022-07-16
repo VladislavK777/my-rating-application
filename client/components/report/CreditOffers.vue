@@ -3,17 +3,31 @@
     <h2 class="heading">Лучшие кредитные предложения</h2>
     <v-simple-table class="table">
       <template v-slot:default>
-        <tbody>
+        <tbody v-if="!$vuetify.breakpoint.xs">
         <tr
           v-for="offer in creditOffers"
           :key="offer.name"
         >
           <td><img :src="require(`~/assets/logos/${offer.icon}`)" :alt="offer.name" class="table__cell"/></td>
-          <td>{{ offer.name }}</td>
+          <td v-if="$vuetify.breakpoint.mdAndUp">{{ offer.name }}</td>
           <td>{{ offer.rate }}</td>
           <td>{{ offer.max }}</td>
           <td>{{ offer.duration }}</td>
           <td class="table__link"><a :href="offer.link" class="link">Онлайн-заявка</a></td>
+        </tr>
+        </tbody>
+        <tbody v-else style="text-align: center">
+        <tr>
+          <td v-for="icon in icons" :key="icon"><img :src="require(`~/assets/logos/${icon}`)" alt="offer" class="table__cell"/></td>
+        </tr>
+        <tr>
+          <td v-for="(max, i) in maxs" :key="i">{{ max }}</td>
+        </tr>
+        <tr>
+          <td v-for="(duration, i) in durations" :key="i">{{ duration }}</td>
+        </tr>
+        <tr>
+          <td v-for="(link, i) in links" :key="i" class="table__link"><a :href="link" class="link">Онлайн-заявка</a></td>
         </tr>
         </tbody>
       </template>
@@ -70,6 +84,20 @@ export default {
       ],
     }
   },
+  computed: {
+    icons() {
+      return Array.from(this.creditOffers, offer => offer.icon)
+    },
+    maxs() {
+      return Array.from(this.creditOffers, offer => offer.max)
+    },
+    durations() {
+      return Array.from(this.creditOffers, offer => offer.duration)
+    },
+    links() {
+      return Array.from(this.creditOffers, offer => offer.link)
+    }
+  }
 }
 </script>
 

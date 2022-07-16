@@ -2,36 +2,45 @@
   <div class="container">
     <h2 class="heading">Кредитный рейтинг</h2>
     <v-row>
-      <v-col cols="12" md="5" class="flex-container flex-container--main">
-        <div class="container--white">
-          <span class="person__name">{{ clientName }}</span>
-          <span class="person__date">на {{ date }}</span>
-        </div>
-        <div class="rating-container container--white">
-          <div class="chart-diagram-container">
-            <v-progress-circular
-              :value="chartData.value"
-              :size="progressWidth"
-              :width="progressWidth / 10"
-              :color="chartData.color"
-            ></v-progress-circular>
-            <div class="chart-inner-text">
+      <v-col cols="12" md="5">
+        <v-row>
+          <v-col cols="12" sm="6" md="12" class="flex-container flex-container--main">
+            <div class="container--white">
+              <span class="person__name">{{ clientName }}</span>
+              <span class="person__date">на {{ date }}</span>
+            </div>
+            <div class="rating-container container--white">
+              <div class="chart-diagram-container">
+                <v-progress-circular
+                  :value="chartData.value"
+                  :size="progressWidth"
+                  :width="progressWidth / 10"
+                  :color="chartData.color"
+                ></v-progress-circular>
+                <div class="chart-inner-text">
               <span class="chart-inner-text--main">
                 {{ ratingValue }}
               </span>
-              <span class="chart-inner-text--sub">
+                  <span class="chart-inner-text--sub">
                 {{ currentText }}
               </span>
+                </div>
+              </div>
+              <span class="rating__title">{{ chartData.title }}</span>
             </div>
-          </div>
-          <span class="rating__title">{{ chartData.title }}</span>
-        </div>
+          </v-col>
+          <v-col v-if="$vuetify.breakpoint.mobile" cols="12" sm="6">
+            <div class="container--white">
+              <span class="rating__comment">{{ ratingComment }}</span>
+            </div>
+          </v-col>
+        </v-row>
       </v-col>
       <v-col cols="12" md="7" class="flex-container">
         <CreditRatingInfo v-for="info in creditRatingInfos" v-bind="info" :key="info.color" />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="!$vuetify.breakpoint.mobile">
       <v-col>
         <div class="container--white">
           <span>{{ ratingComment }}</span>
@@ -100,7 +109,8 @@ export default {
   },
   computed: {
     progressWidth() {
-      return this.window.width * 0.151 || 100
+      /* return this.window.width * 0.151 || 100 */
+      return this.$vuetify.breakpoint.mobile ? 160 : 290
     },
     chartData() {
       return {
@@ -155,10 +165,26 @@ export default {
     margin-bottom: 10px;
     font-weight: 600;
     font-size: 24px;
+
+    @media only screen and (max-width: 959px) {
+      font-size: 20px;
+    }
+
+    @media only screen and (max-width: 599px) {
+      font-size: 18px;
+    }
   }
 
   &__date {
     font-size: 20px;
+
+    @media only screen and (max-width: 959px) {
+      font-size: 16px;
+    }
+
+    @media only screen and (max-width: 599px) {
+      font-size: 15px;
+    }
   }
 }
 
@@ -169,6 +195,14 @@ export default {
     justify-content: center;
     align-items: center;
     padding: 46px 110px !important;
+
+    @media only screen and (max-width: 959px) {
+      padding: 30px 86px !important;
+    }
+
+    @media only screen and (max-width: 599px) {
+      padding: 20px 64px !important;
+    }
   }
 
   &__title {
@@ -176,6 +210,26 @@ export default {
     font-weight: 500;
     font-size: 24px;
     text-align: center;
+
+    @media only screen and (max-width: 959px) {
+      font-size: 16px;
+    }
+
+    @media only screen and (max-width: 599px) {
+      font-size: 16px;
+    }
+  }
+
+  &__comment {
+    font-size: 20px;
+
+    @media only screen and (max-width: 959px) {
+      font-size: 16px;
+    }
+
+    @media only screen and (max-width: 599px) {
+      font-size: 15px;
+    }
   }
 }
 
@@ -207,11 +261,29 @@ export default {
       font-weight: 700;
       font-size: 66px;
       line-height: 80px;
+
+      @media only screen and (max-width: 959px) {
+        font-size: 20px;
+        line-height: 28px;
+      }
+
+      @media only screen and (max-width: 599px) {
+        font-size: 20px;
+        line-height: 28px;
+      }
     }
 
     &--sub {
       font-size: 20px;
       opacity: 0.5;
+
+      @media only screen and (max-width: 959px) {
+        font-size: 15px;
+      }
+
+      @media only screen and (max-width: 599px) {
+        font-size: 15px;
+      }
     }
   }
 }
@@ -220,8 +292,5 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 20px;
-
-  &--main {
-  }
 }
 </style>
