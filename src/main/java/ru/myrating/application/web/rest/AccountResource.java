@@ -1,8 +1,5 @@
 package ru.myrating.application.web.rest;
 
-import java.util.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +15,10 @@ import ru.myrating.application.service.dto.PasswordChangeDTO;
 import ru.myrating.application.web.rest.errors.*;
 import ru.myrating.application.web.rest.vm.KeyAndPasswordVM;
 import ru.myrating.application.web.rest.vm.ManagedUserVM;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.
@@ -51,7 +52,7 @@ public class AccountResource {
      * {@code POST  /register} : register the user.
      *
      * @param managedUserVM the managed user View Model.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
+     * @throws InvalidPasswordException  {@code 400 (Bad Request)} if the password is incorrect.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
      * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
      */
@@ -100,9 +101,9 @@ public class AccountResource {
     @GetMapping("/account")
     public AdminUserDTO getAccount() {
         return userService
-            .getUserWithAuthorities()
-            .map(AdminUserDTO::new)
-            .orElseThrow(() -> new AccountResourceException("User could not be found"));
+                .getUserWithAuthorities()
+                .map(AdminUserDTO::new)
+                .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 
     /**
@@ -110,13 +111,13 @@ public class AccountResource {
      *
      * @param userDTO the current user information.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
+     * @throws RuntimeException          {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
         String userLogin = SecurityUtils
-            .getCurrentUserLogin()
-            .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
@@ -126,11 +127,11 @@ public class AccountResource {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
-            userDTO.getEmail(),
-            userDTO.getLangKey(),
-            userDTO.getImageUrl()
+                userDTO.getFirstName(),
+                userDTO.getLastName(),
+                userDTO.getEmail(),
+                userDTO.getLangKey(),
+                userDTO.getImageUrl()
         );
     }
 
@@ -142,10 +143,11 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/change-password")
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
-        if (isPasswordLengthInvalid(passwordChangeDto.getNewPassword())) {
-            throw new InvalidPasswordException();
+        if (isPasswordLengthInvalid(passwordChangeDto.getNewPassword())
+                || !passwordChangeDto.getNewPassword().equals(passwordChangeDto.getRepeatNewPassword())) {
+            throw new BadRequestAlertException(ErrorConstants.INVALID_PASSWORD_TYPE, "Incorrect password", "userManagement", "invalidpass");
         }
-        userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
+        userService.changePassword(passwordChangeDto);
     }
 
     /**
@@ -170,12 +172,13 @@ public class AccountResource {
      *
      * @param keyAndPassword the generated key and the new password.
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the password could not be reset.
+     * @throws RuntimeException         {@code 500 (Internal Server Error)} if the password could not be reset.
      */
     @PostMapping(path = "/account/reset-password/finish")
     public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
-        if (isPasswordLengthInvalid(keyAndPassword.getNewPassword())) {
-            throw new InvalidPasswordException();
+        if (isPasswordLengthInvalid(keyAndPassword.getNewPassword())
+                || !keyAndPassword.getNewPassword().equals(keyAndPassword.getRepeatNewPassword())) {
+            throw new BadRequestAlertException(ErrorConstants.INVALID_PASSWORD_TYPE, "Incorrect password", "userManagement", "invalidpass");
         }
         Optional<User> user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
@@ -186,9 +189,9 @@ public class AccountResource {
 
     private static boolean isPasswordLengthInvalid(String password) {
         return (
-            StringUtils.isEmpty(password) ||
-            password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
-            password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
+                StringUtils.isEmpty(password) ||
+                        password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
+                        password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
     }
 }

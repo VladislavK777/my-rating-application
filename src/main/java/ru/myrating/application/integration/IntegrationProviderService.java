@@ -81,7 +81,7 @@ public class IntegrationProviderService {
                                         .append(codeText.getText())
                                         .append("; ");
                             }
-                            throw new InternalServerErrorAlertException("Response error: " + errorText, "IntegrationProvider", "responseerror");
+                            throw new InternalServerErrorAlertException("Response error: " + errorText, "integrationProvider", "responseerror");
                         }
                         return productType;
                     }
@@ -89,8 +89,8 @@ public class IntegrationProviderService {
             }
         } catch (Exception e) {
             log.error("Process call integration service failed: " + e);
-            throw new InternalServerErrorAlertException("Process call integration service failed; cause: " + e.getMessage(), "IntegrationProvider", "outcallfailed");
+            throw new InternalServerErrorAlertException("Process call integration service failed; cause: " + e.getMessage(), "integrationProvider", "outcallfailed");
         }
-        throw new InternalServerErrorAlertException("Certificate validation fault", "IntegrationProvider", "certfalidfault");
+        throw new InternalServerErrorAlertException("Certificate validation fault", "integrationProvider", "certfalidfault");
     }
 }

@@ -8,6 +8,7 @@ public class KeyAndPasswordVM {
     private String key;
 
     private String newPassword;
+    private String repeatNewPassword;
 
     public String getKey() {
         return key;
@@ -23,5 +24,13 @@ public class KeyAndPasswordVM {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getRepeatNewPassword() {
+        return repeatNewPassword;
+    }
+
+    public void setRepeatNewPassword(String repeatNewPassword) {
+        this.repeatNewPassword = repeatNewPassword;
     }
 }

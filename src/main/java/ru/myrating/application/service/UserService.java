@@ -17,7 +17,10 @@ import ru.myrating.application.repository.UserRepository;
 import ru.myrating.application.security.AuthoritiesConstants;
 import ru.myrating.application.security.SecurityUtils;
 import ru.myrating.application.service.dto.AdminUserDTO;
+import ru.myrating.application.service.dto.PasswordChangeDTO;
 import ru.myrating.application.service.dto.UserDTO;
+import ru.myrating.application.web.rest.errors.BadRequestAlertException;
+import ru.myrating.application.web.rest.errors.ErrorConstants;
 import ru.myrating.application.web.rest.vm.ManagedUserVM;
 import tech.jhipster.security.RandomUtil;
 
@@ -29,7 +32,6 @@ import java.util.stream.Collectors;
 
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Service class for managing users.
@@ -189,10 +191,10 @@ public class UserService {
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
-        if (isEmpty(userDTO.getProfile().getEmail())) {
+        /*if (isEmpty(userDTO.getProfile().getEmail())) {
             userDTO.getProfile().setEmail(userDTO.getEmail());
-        }
-        userProfileService.save(userDTO.getProfile());
+        }*/
+        //userProfileService.save(userDTO.getProfile());
         return user;
     }
 
@@ -274,16 +276,16 @@ public class UserService {
     }
 
     @Transactional
-    public void changePassword(String currentClearTextPassword, String newPassword) {
+    public void changePassword(PasswordChangeDTO passwordChangeDto) {
         SecurityUtils
                 .getCurrentUserLogin()
                 .flatMap(userRepository::findOneByLogin)
                 .ifPresent(user -> {
                     String currentEncryptedPassword = user.getPassword();
-                    if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
-                        throw new InvalidPasswordException();
+                    if (!passwordEncoder.matches(passwordChangeDto.getCurrentPassword(), currentEncryptedPassword)) {
+                        throw new BadRequestAlertException(ErrorConstants.INVALID_PASSWORD_TYPE, "Incorrect password", "userManagement", "invalidpass");
                     }
-                    String encryptedPassword = passwordEncoder.encode(newPassword);
+                    String encryptedPassword = passwordEncoder.encode(passwordChangeDto.getNewPassword());
                     user.setPassword(encryptedPassword);
                     this.clearUserCaches(user);
                     log.debug("Changed password for User: {}", user);

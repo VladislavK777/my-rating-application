@@ -11,7 +11,7 @@ public final class Constants {
     public static final String UPPER_CYRILLIC_LITTERS = "^[А-Я]*$";
 
     public static final String SYSTEM = "system";
-    public static final String DEFAULT_LANGUAGE = "en";
+    public static final String DEFAULT_LANGUAGE = "ru";
     public static final String WEBSOCKET_QUEUE = "/topic/result";
 
     private Constants() {}

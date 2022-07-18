@@ -12,6 +12,7 @@ import ru.myrating.application.web.rest.errors.AccessDeniedAlertException;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
+import static ru.myrating.application.web.rest.errors.ErrorConstants.ERR_VALIDATION;
 
 @RateLimiter(name = "orderResource")
 @RestController
@@ -31,7 +32,7 @@ public class OrderResource {
         if (validationService.validationApiKey(key)) {
             return new OrderRequestDto(orderService.createOrder(body));
         }
-        throw new AccessDeniedAlertException("Access denied!", "Validation", "validationerror");
+        throw new AccessDeniedAlertException("Access denied!", "validation", ERR_VALIDATION);
     }
 
     @PutMapping("/paid/{id}")
@@ -42,7 +43,7 @@ public class OrderResource {
             orderService.updateStatusPaid(id, transactionId);
             return new ResponseEntity<>(OK);
         }
-        throw new AccessDeniedAlertException("Access denied!", "Validation", "validationerror");
+        throw new AccessDeniedAlertException("Access denied!", "validation", ERR_VALIDATION);
     }
 
     @GetMapping("/result/{linkId}")

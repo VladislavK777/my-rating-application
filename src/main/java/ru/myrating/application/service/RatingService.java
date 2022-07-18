@@ -87,7 +87,7 @@ public class RatingService {
                 } catch (Exception e) {
                     log.error("Get fault from integration service: " + e);
                     saveError(orderRequest, e.getMessage());
-                    throw new InternalServerErrorAlertException("Get fault from integration service; cause: " + e.getMessage(), "RatingService", "integrationfailed");
+                    throw new InternalServerErrorAlertException("Get fault from integration service; cause: " + e.getMessage(), "ratingManagement", "integrationfailed");
                 }
                 orderResponse = orderResponseMapper.dtoToDao(productType.getPreply().getPcr().getReasons());
             }
@@ -98,7 +98,7 @@ public class RatingService {
                 orderResponse = mapResponse.get(String.valueOf(id));
             }
             if (orderResponse == null)
-                throw new BadRequestAlertException("OrderResponse is null", "RatingService", "ordrerresponsenull");
+                throw new BadRequestAlertException("OrderResponse is null", "ratingManagement", "ordrerresponsenull");
 
             orderResponse.setOrderRequest(orderRequest);
             orderResponseService.save(orderResponse);
@@ -112,7 +112,7 @@ public class RatingService {
         } catch (Exception e) {
             log.error("Calculate rating failed: " + e);
             saveError(orderRequest, e.getMessage());
-            throw new InternalServerErrorAlertException("Calculate rating failed; cause: " + e.getMessage(), "RatingService", "calculationfailed");
+            throw new InternalServerErrorAlertException("Calculate rating failed; cause: " + e.getMessage(), "ratingManagement", "calculationfailed");
         }
     }
 

@@ -1,10 +1,9 @@
 package ru.myrating.application.web.rest.vm;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import ru.myrating.application.domain.UserProfile;
 import ru.myrating.application.service.dto.AdminUserDTO;
+
+import javax.validation.constraints.Size;
 
 /**
  * View Model extending the AdminUserDTO, which is meant to be used in the user management UI.
@@ -18,7 +17,7 @@ public class ManagedUserVM extends AdminUserDTO {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
-    @NotNull
+   // @NotNull
     private UserProfile profile;
 
     public ManagedUserVM() {

@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.OK;
 import static ru.myrating.application.security.AuthoritiesConstants.ADMIN;
 
 @RestController
-@RequestMapping("/api/admin/catalog")
+@RequestMapping("/api/admin")
 public class CatalogResource {
     private final CatalogService catalogService;
 
@@ -20,7 +20,7 @@ public class CatalogResource {
     }
 
     @PreAuthorize("hasRole(\"" + ADMIN + "\")")
-    @PostMapping("/clear-cache")
+    @PostMapping("/catalog/clear-cache")
     public ResponseEntity<?> clearCache() {
         catalogService.clearCaches();
         return new ResponseEntity<>(OK);
