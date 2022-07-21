@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container class="pt-3 pb-10">
+      <v-container class="default-container pt-3 pb-10">
         <Nuxt />
       </v-container>
     </v-main>
@@ -18,4 +18,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.default-container {
+  max-width: 67%;
+
+  @media only screen and (max-width: 959px) {
+    max-width: 100%;
+  }
+}
 </style>

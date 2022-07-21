@@ -1,11 +1,24 @@
 export const state = () => ({
   user: {},
+  role: null,
   token: null,
 })
+
+export const getters = {
+  getUserEmail(state) {
+    return state.user.email
+  },
+  getUserRole(state) {
+    return state.role
+  },
+}
 
 export const mutations = {
   setUser(state, user) {
     state.user = user
+  },
+  setRole(state, role) {
+    state.role = role
   },
   setToken(state, token) {
     state.token = token
@@ -24,6 +37,11 @@ export const actions = {
   },
   async getUser({ commit }) {
     const user = await this.$axios.$get('api/account')
+    if(user.authorities.find(role => role === 'ROLE_ADMIN')) {
+      commit('setRole', 'ADMIN')
+    } else {
+      commit('setRole', 'PARTNER')
+    }
     commit('setUser', user)
   },
   async change(_, payload) {

@@ -1,11 +1,13 @@
 <template>
   <v-app>
-    <TheHeader />
+    <TheHeader @show-drawer="drawer = true" />
     <v-main>
       <v-container class="py-10">
+        <DashboardNav v-if="!$vuetify.breakpoint.mobile" />
         <Nuxt />
       </v-container>
     </v-main>
+    <DashboardDrawer v-model="drawer" />
     <v-footer color="light-grey" :absolute="true" app>
       <TheFooter />
     </v-footer>
@@ -14,10 +16,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import DashboardNav from '../components/dashboard/DashboardNav.vue'
+import DashboardDrawer from '../components/dashboard/DashboardDrawer.vue'
 
 export default defineComponent({
   name: 'DashboardLayout',
+  components: { DashboardDrawer, DashboardNav },
   middleware: 'auth',
+  data() {
+    return {
+      drawer: false
+    }
+  },
   created() {
     const token = localStorage.getItem('token')
     this.$store.commit('user/setToken', token)

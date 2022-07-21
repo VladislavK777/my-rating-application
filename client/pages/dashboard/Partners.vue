@@ -1,18 +1,15 @@
 <template>
-  <div></div>
+  <div>
+    Partners
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'DashboardPage',
+  name: 'PartnersPage',
   layout: 'dashboard',
-  middleware: [
-    function({ redirect }) {
-      redirect('/dashboard/partners');
-    },
-  ],
 })
 </script>
 
