@@ -1,0 +1,75 @@
+<template>
+  <v-row justify="center">
+    <v-col cols="12" md="5" class="remember-container">
+      <h3 class="form__heading">Забыли пароль?</h3>
+      <span>Укажите вашу электронную почту и мы отправим ссылку для восстановления пароля</span>
+      <v-form>
+        <v-text-field
+          v-model="email"
+          placeholder="Электронная почта"
+          outlined
+          :rules="required"
+        />
+        <v-btn
+          color="primary"
+          height="70"
+          block
+          @click="submitRemember"
+        >
+          Отправить
+        </v-btn>
+      </v-form>
+    </v-col>
+  </v-row>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'RememberPage',
+  layout: 'auth',
+  data() {
+    return {
+      email: '',
+      required: [v => !!v || 'Это поле необходимо заполнить']
+    }
+  },
+  methods: {
+    submitRemember() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('user/remember', {
+          email: this.email
+        })
+      }
+    }
+  }
+})
+</script>
+
+<style scoped lang="scss">
+.remember-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 70px;
+  box-shadow: 0 0 30px rgba(154, 164, 255, 0.2);
+  border-radius: 16px;
+}
+
+.form {
+  &__heading {
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+
+    @media only screen and (max-width: 959px) {
+      font-size: 20px;
+    }
+
+    @media only screen and (max-width: 599px) {
+      font-size: 18px;
+    }
+  }
+}
+</style>

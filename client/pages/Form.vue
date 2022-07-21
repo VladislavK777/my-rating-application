@@ -6,7 +6,8 @@
         <ButtonBack />
       </v-col>
     </v-row>
-    <v-row justify="space-around" align="center" class="form-container" :class="{ 'form-container--mobile': $vuetify.breakpoint.mobile }">
+    <v-row justify="space-around" align="center" class="form-container"
+           :class="{ 'form-container--mobile': $vuetify.breakpoint.mobile }">
       <v-col cols="12" sm="8" md="4" :order="$vuetify.breakpoint.mobile ? 2 : 0">
         <FormInfo />
       </v-col>
@@ -55,17 +56,9 @@ export default {
   },
   methods: {
     async submitForm({ firstName, lastName, passport, email, birthDate }) {
-      /* const orderData = {
-        firstName: 'ИВАН',
-        lastName: 'ИВАНОВ',
-        passportSerial: '1234',
-        passportNumber: '123456',
-        email: 'mail@mail.asd',
-        birthDate: '01.01.1999',
-      } */
       this.loading = true
       const data = await this.$axios.$post(
-        '/order',
+        'public/api/order',
         {
           orderData: {
             firstName,

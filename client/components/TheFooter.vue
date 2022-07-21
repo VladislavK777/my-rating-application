@@ -1,16 +1,19 @@
 <template>
-  <v-container class="footer">
-    <v-row justify-md="space-around" align-content="end">
-      <v-col md="4" class="footer-container" :class="{ 'footer-container--mobile': isMobile, 'footer-container--left': !isMobile  }">
+  <v-container fluid>
+    <v-row justify-md="space-around" align-content="end" class="footer">
+      <v-col md="4" class="footer-container"
+             :class="{ 'footer-container--mobile': isMobile, 'footer-container--left': !isMobile  }">
         <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг" class="footer__logo">
         <span>Наши реквизиты</span>
         <span>Мой рейтинг © 2011–2022</span>
       </v-col>
-      <v-col md="4" class="footer-container" :class="{ 'footer-container--mobile': isMobile, 'footer-container--center': !isMobile  }">
+      <v-col md="4" class="footer-container"
+             :class="{ 'footer-container--mobile': isMobile, 'footer-container--center': !isMobile  }">
         <span>Политика конфиденциальности</span>
         <span>Способ оплаты и условия возврата</span>
       </v-col>
-      <v-col md="4" class="footer-container" :class="{ 'footer-container--mobile': isMobile, 'footer-container--right': !isMobile  }">
+      <v-col md="4" class="footer-container"
+             :class="{ 'footer-container--mobile': isMobile, 'footer-container--right': !isMobile  }">
         <span class="font-weight-medium">Поддержка</span>
         <span>WhatsApp</span>
         <span>support@moyreyting.ru</span>
@@ -25,8 +28,8 @@ export default {
   computed: {
     isMobile() {
       return this.$vuetify.breakpoint.mobile
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -48,7 +51,7 @@ export default {
   }
 
   &--center {
-    text-align: left;
+    text-align: center;
   }
 
   &--right {
@@ -57,8 +60,7 @@ export default {
 }
 
 .footer {
-  margin-top: 100px;
-  margin-bottom: 100px;
+  padding: 70px 60px;
 
   &__logo {
     align-self: start;

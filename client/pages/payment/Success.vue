@@ -87,7 +87,7 @@ export default {
     }, 200)
     if (this.$route.query.orderId && this.$route.query.status === 'successful' && this.$route.query.uid) {
       setTimeout(() => {
-        this.$axios.$put(`/order/paid/${this.$route.query.orderId}?transactionId=${this.$route.query.uid}`, {}, {
+        this.$axios.$put(`public/api/order/paid/${this.$route.query.orderId}?transactionId=${this.$route.query.uid}`, {}, {
           headers: {
             'X-API-Key': '4d7a8b90-7520-4b19-9c3e-36b8f253225d',
           },
