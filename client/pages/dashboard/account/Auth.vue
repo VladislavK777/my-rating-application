@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col cols="12" md="5" class="auth-container">
+    <v-col cols="11" sm="8" md="10" lg="5" class="auth-container">
       <h3 class="form__heading">Вход в личный кабинет</h3>
       <v-form ref="form">
         <div class="form__input">
@@ -73,6 +73,14 @@ export default defineComponent({
   padding: 70px;
   box-shadow: 0 0 30px rgba(154, 164, 255, 0.2);
   border-radius: 16px;
+
+  @media only screen and (max-width: 959px) {
+    padding: 40px;
+  }
+
+  @media only screen and (max-width: 599px) {
+    padding: 20px;
+  }
 }
 
 .form {
@@ -83,11 +91,11 @@ export default defineComponent({
     text-align: center;
 
     @media only screen and (max-width: 959px) {
-      font-size: 20px;
+      font-size: 18px;
     }
 
     @media only screen and (max-width: 599px) {
-      font-size: 18px;
+      font-size: 16px;
     }
   }
 }
