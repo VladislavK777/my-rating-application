@@ -29,7 +29,8 @@ import java.util.UUID;
 import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static ru.myrating.application.config.Constants.WEBSOCKET_QUEUE;
-import static ru.myrating.application.domain.enumeration.OrderStatusEnum.*;
+import static ru.myrating.application.domain.enumeration.OrderStatusEnum.CALCULATED;
+import static ru.myrating.application.domain.enumeration.OrderStatusEnum.FAULT;
 
 @Async
 @Service
@@ -47,7 +48,18 @@ public class RatingService {
     @Lazy
     private final OrderService orderService;
 
-    public RatingService(Environment env, ApplicationProperties applicationProperties, CalculateService calculateService, IntegrationProviderService integrationProviderService, OrderResponseService orderResponseService, OrderFaultService orderFaultService, OrderResponseMapper orderResponseMapper, SimpMessagingTemplate simpMessagingTemplate, MailService mailService, @Lazy OrderService orderService) {
+    public RatingService(
+            Environment env,
+            ApplicationProperties applicationProperties,
+            CalculateService calculateService,
+            IntegrationProviderService integrationProviderService,
+            OrderResponseService orderResponseService,
+            OrderFaultService orderFaultService,
+            OrderResponseMapper orderResponseMapper,
+            SimpMessagingTemplate simpMessagingTemplate,
+            MailService mailService,
+            @Lazy OrderService orderService
+    ) {
         this.env = env;
         this.applicationProperties = applicationProperties;
         this.calculateService = calculateService;

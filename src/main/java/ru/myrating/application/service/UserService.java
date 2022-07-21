@@ -14,7 +14,6 @@ import ru.myrating.application.domain.Authority;
 import ru.myrating.application.domain.User;
 import ru.myrating.application.repository.AuthorityRepository;
 import ru.myrating.application.repository.UserRepository;
-import ru.myrating.application.security.AuthoritiesConstants;
 import ru.myrating.application.security.SecurityUtils;
 import ru.myrating.application.service.dto.AdminUserDTO;
 import ru.myrating.application.service.dto.PasswordChangeDTO;
@@ -32,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
+import static ru.myrating.application.security.AuthoritiesConstants.USER;
 
 /**
  * Service class for managing users.
@@ -139,7 +139,7 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        authorityRepository.findById(USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
@@ -187,24 +187,27 @@ public class UserService {
                     .map(Optional::get)
                     .collect(Collectors.toSet());
             user.setAuthorities(authorities);
+        } else {
+            Set<Authority> authorities = new HashSet<>();
+            authorityRepository.findById(USER).ifPresent(authority -> {
+                authorities.add(authority);
+                user.setAuthorities(authorities);
+            });
         }
+        user.setProfile(userProfileService.save(userDTO.getProfile()));
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
-        /*if (isEmpty(userDTO.getProfile().getEmail())) {
-            userDTO.getProfile().setEmail(userDTO.getEmail());
-        }*/
-        //userProfileService.save(userDTO.getProfile());
         return user;
     }
 
     /**
-     * Update all information for a specific user, and return the modified user.
+     * Update all information for a specific user, and return user.
      *
      * @param userDTO user to update.
      * @return updated user.
      */
-    public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
+    public Optional<User> updateUser(ManagedUserVM userDTO) {
         return Optional
                 .of(userRepository.findById(userDTO.getId()))
                 .filter(Optional::isPresent)
@@ -223,26 +226,30 @@ public class UserService {
                     if (userDTO.getApiKey() != null) {
                         user.setApiKey(fromString(userDTO.getApiKey()));
                     }
-                    Set<Authority> managedAuthorities = user.getAuthorities();
-                    managedAuthorities.clear();
-                    userDTO
-                            .getAuthorities()
-                            .stream()
-                            .map(authorityRepository::findById)
-                            .filter(Optional::isPresent)
-                            .map(Optional::get)
-                            .forEach(managedAuthorities::add);
+                    if (userDTO.getAuthorities() != null) {
+                        Set<Authority> managedAuthorities = user.getAuthorities();
+                        managedAuthorities.clear();
+                        userDTO
+                                .getAuthorities()
+                                .stream()
+                                .map(authorityRepository::findById)
+                                .filter(Optional::isPresent)
+                                .map(Optional::get)
+                                .forEach(managedAuthorities::add);
+                    }
+                    user.setProfile(userProfileService.save(userDTO.getProfile()));
                     this.clearUserCaches(user);
                     log.debug("Changed Information for User: {}", user);
                     return user;
-                })
-                .map(AdminUserDTO::new);
+                });
     }
 
     public void deleteUser(String login) {
         userRepository
                 .findOneByLogin(login)
                 .ifPresent(user -> {
+                    if (user.getProfile() != null)
+                        userProfileService.deleteProfile(user.getProfile());
                     userRepository.delete(user);
                     this.clearUserCaches(user);
                     log.debug("Deleted User: {}", user);
@@ -293,8 +300,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(AdminUserDTO::new);
+    public Page<User> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

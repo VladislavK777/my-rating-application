@@ -7,12 +7,10 @@ import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.service.OrderService;
 import ru.myrating.application.service.ValidationService;
 import ru.myrating.application.service.dto.OrderRequestDto;
-import ru.myrating.application.web.rest.errors.AccessDeniedAlertException;
 
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
-import static ru.myrating.application.web.rest.errors.ErrorConstants.ERR_VALIDATION;
 
 @RateLimiter(name = "orderResource")
 @RestController
@@ -29,29 +27,24 @@ public class OrderResource {
     @PostMapping
     public OrderRequestDto create(@RequestHeader(value = "X-API-Key", required = false) String key,
                                   @RequestBody OrderRequest body) {
-        if (validationService.validationApiKey(key)) {
-            return new OrderRequestDto(orderService.createOrder(body));
-        }
-        throw new AccessDeniedAlertException("Access denied!", "validation", ERR_VALIDATION);
+        validationService.validationApiKey(key);
+        validationService.validationRequest(body);
+        return new OrderRequestDto(orderService.createOrder(body));
     }
 
     @PutMapping("/paid/{id}")
     public ResponseEntity<?> updatePaid(@RequestHeader(value = "X-API-Key", required = false) String key,
                                         @PathVariable Long id,
                                         @RequestParam String transactionId) {
-        if (validationService.validationApiKey(key)) {
-            orderService.updateStatusPaid(id, transactionId);
-            return new ResponseEntity<>(OK);
-        }
-        throw new AccessDeniedAlertException("Access denied!", "validation", ERR_VALIDATION);
+        validationService.validationApiKey(key);
+        orderService.updateStatusPaid(id, transactionId);
+        return new ResponseEntity<>(OK);
     }
 
     @GetMapping("/result/{linkId}")
     public ResponseEntity<Map<String, Object>> getResult(@RequestHeader(value = "X-API-Key", required = false) String key,
                                                          @PathVariable String linkId) {
-        if (validationService.validationApiKey(key)) {
-            return new ResponseEntity<>(orderService.getResultMapOrder(linkId), OK);
-        }
-        throw new AccessDeniedAlertException("Access denied!", "Validation", "validationerror");
+        validationService.validationApiKey(key);
+        return new ResponseEntity<>(orderService.getResultMapOrder(linkId), OK);
     }
 }

@@ -4,6 +4,7 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 import ru.myrating.application.domain.enumeration.OrderStatusEnum;
+import ru.myrating.application.domain.jsonb.OrderRequestData;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

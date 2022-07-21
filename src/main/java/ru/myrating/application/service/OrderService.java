@@ -14,9 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static ru.myrating.application.config.Constants.EMAIL_REGEX;
-import static ru.myrating.application.config.Constants.UPPER_CYRILLIC_LITTERS;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.NEW;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.PAID;
 import static ru.myrating.application.web.rest.errors.ErrorConstants.ERR_VALIDATION;
@@ -78,48 +75,7 @@ public class OrderService {
     }
 
     public OrderRequest createOrder(OrderRequest orderRequest) {
-        validationRequest(orderRequest);
         orderRequest.setStatus(NEW);
         return save(orderRequest);
-    }
-
-    private void validationRequest(OrderRequest orderRequest) {
-        if (isNotEmpty(orderRequest.getOrderData().getFirstName())) {
-            if (!orderRequest.getOrderData().getFirstName().matches(UPPER_CYRILLIC_LITTERS)) {
-                throw new BadRequestAlertException("FirstName must contains only Cyrillic upper letters", "orderManagement", ERR_VALIDATION);
-            }
-        } else {
-            throw new BadRequestAlertException("FirstName must not be empty", "orderManagement", ERR_VALIDATION);
-        }
-        if (isNotEmpty(orderRequest.getOrderData().getLastName())) {
-            if (!orderRequest.getOrderData().getLastName().matches(UPPER_CYRILLIC_LITTERS)) {
-                throw new BadRequestAlertException("LastName must contains only Cyrillic upper letters", "orderManagement", ERR_VALIDATION);
-            }
-        } else {
-            throw new BadRequestAlertException("LastName must not be empty", "orderManager", ERR_VALIDATION);
-        }
-        if (orderRequest.getOrderData().getPassportSerial() != null) {
-            if (!String.valueOf(orderRequest.getOrderData().getPassportSerial()).matches("\\d{4}")) {
-                throw new BadRequestAlertException("PassportSerial must contains only digital and length 4", "orderManagement", ERR_VALIDATION);
-            }
-        } else {
-            throw new BadRequestAlertException("PassportSerial must not be empty", "orderManagement", ERR_VALIDATION);
-        }
-        if (orderRequest.getOrderData().getPassportNumber() != null) {
-            if (!String.valueOf(orderRequest.getOrderData().getPassportNumber()).matches("\\d{6}"))
-                throw new BadRequestAlertException("PassportNumber must contains only digital and length 6", "orderManagement", ERR_VALIDATION);
-        } else {
-            throw new BadRequestAlertException("PassportNumber must not be empty", "orderManagement", ERR_VALIDATION);
-        }
-        if (isNotEmpty(orderRequest.getOrderData().getEmail())) {
-            if (!orderRequest.getOrderData().getEmail().toUpperCase().matches(EMAIL_REGEX)) {
-                throw new BadRequestAlertException("Email invalid", "orderManagement", ERR_VALIDATION);
-            }
-        } else {
-            throw new BadRequestAlertException("Email must not be empty", "orderManagement", ERR_VALIDATION);
-        }
-        if (orderRequest.getOrderData().getBirthDate() == null) {
-            throw new BadRequestAlertException("BirthDate must not be empty", "orderManagement", ERR_VALIDATION);
-        }
     }
 }
