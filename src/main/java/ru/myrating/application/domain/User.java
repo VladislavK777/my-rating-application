@@ -31,7 +31,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
-    @SequenceGenerator(name = "user_generator", sequenceName = "user_generator", initialValue = 51)
+    @SequenceGenerator(name = "user_generator", sequenceName = "user_generator", initialValue = 51, allocationSize = 1)
     private Long id;
 
     @NotNull
@@ -40,10 +40,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String login;
 
-    @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60)
     @Column(name = "password_hash", length = 60, nullable = false)
+    @JsonIgnore
     private String password;
 
     @Size(max = 50)
@@ -52,6 +52,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Size(max = 50)
     @Column(name = "last_name", length = 50)
+    @JsonIgnore
     private String lastName;
 
     @Email
@@ -61,10 +62,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Column(nullable = false)
+    @JsonIgnore
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
     @Column(name = "lang_key", length = 10)
+    @JsonIgnore
     private String langKey;
 
     @Size(max = 256)
@@ -82,21 +85,27 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String resetKey;
 
     @Column(name = "reset_date")
+    @JsonIgnore
     private Instant resetDate = null;
 
     @Column(name = "api_key")
+    @JsonIgnore
     private UUID apiKey = null;
 
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-        name = "jhi_user_authority",
-        joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
-        inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
+            name = "jhi_user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")}
     )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
+
+    @JoinColumn(name = "user_profile_id")
+    @OneToOne
+    private UserProfile profile;
 
     public Long getId() {
         return id;
@@ -203,6 +212,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.authorities = authorities;
     }
 
+    public UserProfile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(UserProfile profile) {
+        this.profile = profile;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -232,14 +249,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
-            "}";
+                "login='" + login + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", activated='" + activated + '\'' +
+                ", langKey='" + langKey + '\'' +
+                ", activationKey='" + activationKey + '\'' +
+                "}";
     }
 }

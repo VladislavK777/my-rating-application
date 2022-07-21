@@ -4,10 +4,7 @@ import ru.myrating.application.config.Constants;
 import ru.myrating.application.domain.Authority;
 import ru.myrating.application.domain.User;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,6 +27,7 @@ public class AdminUserDTO {
     @Size(max = 50)
     private String lastName;
 
+    @NotNull
     @Email
     @Size(min = 5, max = 254)
     private String email;

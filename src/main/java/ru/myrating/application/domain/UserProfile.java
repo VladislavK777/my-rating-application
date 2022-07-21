@@ -1,54 +1,58 @@
 package ru.myrating.application.domain;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.*;
 import ru.myrating.application.domain.enumeration.ProfileTypeEnum;
+import ru.myrating.application.domain.jsonb.RequisitesData;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "user_profile")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@TypeDefs({
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+})
 public class UserProfile extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_profile_generator")
-    @SequenceGenerator(name = "user_profile_generator", sequenceName = "user_profile_generator")
+    @SequenceGenerator(name = "user_profile_generator", sequenceName = "user_profile_generator", allocationSize = 1)
     private Long id;
 
     @Column(name = "profile_type")
     @Enumerated(EnumType.STRING)
     private ProfileTypeEnum profileType;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "middle_name")
-    private String middleName;
-
+    @NotNull
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Email
-    @Column(name = "email")
-    private String email;
-
+    @NotNull
     @Column(name = "fee")
     private int fee;
 
     @Column(name = "ref_link")
     private String refLink;
 
-    @OneToOne
-    @JoinColumn(name = "requisites_id")
-    private Requisites requisites;
+    @NotNull
+    @Column(name = "url")
+    private String url;
+
+    @NotNull
+    @Type(type = "jsonb")
+    @Column(name = "requisites_data", columnDefinition = "jsonb")
+    @Basic(fetch = LAZY)
+    private RequisitesData requisitesData;
 
     public Long getId() {
         return id;
@@ -66,44 +70,12 @@ public class UserProfile extends AbstractAuditingEntity implements Serializable 
         this.profileType = profileType;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public int getFee() {
@@ -122,12 +94,20 @@ public class UserProfile extends AbstractAuditingEntity implements Serializable 
         this.refLink = refLink;
     }
 
-    public Requisites getRequisites() {
-        return requisites;
+    public String getUrl() {
+        return url;
     }
 
-    public void setRequisites(Requisites requisites) {
-        this.requisites = requisites;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public RequisitesData getRequisitesData() {
+        return requisitesData;
+    }
+
+    public void setRequisitesData(RequisitesData requisitesData) {
+        this.requisitesData = requisitesData;
     }
 
     @Override
@@ -150,14 +130,11 @@ public class UserProfile extends AbstractAuditingEntity implements Serializable 
     public String toString() {
         return "UserProfile{" +
                 "id=" + id +
-                ", profileType=" + profileType +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", middleName='" + middleName + '\'' +
+                ", profileType=" + profileType.getValue() +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", email='" + email + '\'' +
                 ", fee=" + fee +
                 ", refLink='" + refLink + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 }

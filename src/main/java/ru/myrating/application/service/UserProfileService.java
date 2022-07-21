@@ -6,28 +6,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.myrating.application.domain.UserProfile;
 import ru.myrating.application.repository.UserProfileRepository;
-import tech.jhipster.security.RandomUtil;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static tech.jhipster.security.RandomUtil.generateRandomAlphanumericString;
 
 @Service
 @Transactional
 public class UserProfileService {
     private final Logger log = LoggerFactory.getLogger(UserProfileService.class);
-
-    private final RequisitesService requisitesService;
     private final UserProfileRepository userProfileRepository;
 
-    public UserProfileService(RequisitesService requisitesService, UserProfileRepository userProfileRepository) {
-        this.requisitesService = requisitesService;
+    public UserProfileService(UserProfileRepository userProfileRepository) {
         this.userProfileRepository = userProfileRepository;
     }
 
     public UserProfile save(UserProfile userProfile) {
-        if (isEmpty(userProfile.getRefLink())) {
-            userProfile.setRefLink(RandomUtil.generateRandomAlphanumericString());
-        }
-        userProfile.setRequisites(requisitesService.save(userProfile.getRequisites()));
+        if (isEmpty(userProfile.getRefLink()))
+            userProfile.setRefLink(generateRandomAlphanumericString());
         return userProfileRepository.saveAndFlush(userProfile);
+    }
+
+    public UserProfile getOne(Long userProfileId) {
+        return userProfileRepository.getById(userProfileId);
+    }
+
+    public void deleteProfile(UserProfile userProfile) {
+        userProfileRepository.delete(userProfile);
     }
 }

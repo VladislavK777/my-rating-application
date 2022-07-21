@@ -5,13 +5,48 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
     <changeSet id="00000000000000" author="jhipster">
-        <createSequence sequenceName="user_generator" startValue="51" incrementBy="50"/>
+        <createSequence sequenceName="user_generator" startValue="51" incrementBy="1"/>
+        <createSequence sequenceName="user_profile_generator" startValue="1" incrementBy="1"/>
     </changeSet>
 
     <!--
         JHipster core tables.
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
+    <changeSet id="20220720000002" author="jhipster">
+        <createTable tableName="user_profile">
+            <column name="id" remarks="ID записи" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="profile_type" remarks="Тип профиля" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" remarks="Номер телефона" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ref_link" remarks="Реферальная ссылка" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fee" remarks="Комиссия за купленный отчет" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" remarks="Адрес сайта партнера" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="requisites_data" remarks="Реквизиты" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" remarks="Автор записи" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" remarks="Дата создания записи" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
+            <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp with time zone"/>
+        </createTable>
+    </changeSet>
+
     <changeSet id="00000000000001" author="jhipster">
         <createTable tableName="jhi_user">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
@@ -43,6 +78,7 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp with time zone"/>
             <column name="api_key" type="uuid"/>
+            <column name="user_profile_id" type="bigint"/>
         </createTable>
 
         <createTable tableName="jhi_authority">
@@ -73,6 +109,12 @@
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_profile_id"
+                                 baseTableName="jhi_user"
+                                 constraintName="fk_user_profile_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
 
         <addNotNullConstraint columnName="password_hash"
                               columnDataType="varchar(60)"
