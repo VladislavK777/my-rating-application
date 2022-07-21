@@ -34,6 +34,10 @@ public class UserProfile extends AbstractAuditingEntity implements Serializable 
     private ProfileTypeEnum profileType;
 
     @NotNull
+    @Column(name = "partner_name")
+    private String partnerName;
+
+    @NotNull
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -68,6 +72,14 @@ public class UserProfile extends AbstractAuditingEntity implements Serializable 
 
     public void setProfileType(ProfileTypeEnum profileType) {
         this.profileType = profileType;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
     }
 
     public String getPhoneNumber() {

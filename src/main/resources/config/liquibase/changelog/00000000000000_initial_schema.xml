@@ -21,6 +21,9 @@
             <column name="profile_type" remarks="Тип профиля" type="varchar">
                 <constraints nullable="false"/>
             </column>
+            <column name="partner_name" remarks="Имя парнера" type="varchar">
+                <constraints nullable="false"/>
+            </column>
             <column name="phone_number" remarks="Номер телефона" type="varchar">
                 <constraints nullable="false"/>
             </column>

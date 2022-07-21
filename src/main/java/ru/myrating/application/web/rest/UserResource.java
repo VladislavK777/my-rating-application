@@ -16,8 +16,10 @@ import ru.myrating.application.config.Constants;
 import ru.myrating.application.domain.User;
 import ru.myrating.application.repository.UserRepository;
 import ru.myrating.application.security.AuthoritiesConstants;
+import ru.myrating.application.service.UserQueryService;
 import ru.myrating.application.service.UserService;
 import ru.myrating.application.service.ValidationService;
+import ru.myrating.application.service.dto.UserCriteria;
 import ru.myrating.application.web.rest.errors.BadRequestAlertException;
 import ru.myrating.application.web.rest.errors.EmailAlreadyUsedException;
 import ru.myrating.application.web.rest.errors.LoginAlreadyUsedException;
@@ -90,14 +92,14 @@ public class UserResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
-
     private final UserService userService;
-
+    private final UserQueryService userQueryService;
     private final UserRepository userRepository;
     private final ValidationService validationService;
 
-    public UserResource(UserService userService, UserRepository userRepository, ValidationService validationService) {
+    public UserResource(UserService userService, UserQueryService userQueryService, UserRepository userRepository, ValidationService validationService) {
         this.userService = userService;
+        this.userQueryService = userQueryService;
         this.userRepository = userRepository;
         this.validationService = validationService;
     }
@@ -174,13 +176,13 @@ public class UserResource {
      */
     @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<User>> getAllUsers(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<User>> getAllUsers(UserCriteria criteria, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all User for an admin");
         /*if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }*/
 
-        final Page<User> page = userService.getAllManagedUsers(pageable);
+        final Page<User> page = userQueryService.getAllManagedUsers(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
