@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
     <changeSet id="20220624000000" author="jhipster">
-        <createSequence sequenceName="order_request_generator" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="order_request_generator" startValue="3001" incrementBy="1"/>
         <createSequence sequenceName="order_response_generator" startValue="1" incrementBy="1"/>
         <createSequence sequenceName="order_fault_queue_generator" startValue="1" incrementBy="1"/>
         <createSequence sequenceName="order_report_content_generator" startValue="1" incrementBy="1"/>
