@@ -21,8 +21,8 @@ public class UserProfileService {
     }
 
     public UserProfile save(UserProfile userProfile) {
-        if (isEmpty(userProfile.getRefLink()))
-            userProfile.setRefLink(generateRandomAlphanumericString());
+        if (isEmpty(userProfile.getReferenceLink()))
+            userProfile.setReferenceLink(generateRandomAlphanumericString());
         return userProfileRepository.saveAndFlush(userProfile);
     }
 

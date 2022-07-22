@@ -27,7 +27,7 @@
             <column name="phone_number" remarks="Номер телефона" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="ref_link" remarks="Реферальная ссылка" type="varchar">
+            <column name="reference_link" remarks="Реферальная ссылка" type="varchar">
                 <constraints nullable="false"/>
             </column>
             <column name="fee" remarks="Комиссия за купленный отчет" type="int">
@@ -48,6 +48,12 @@
             <column name="last_modified_by" remarks="Автор изменений" type="varchar"/>
             <column name="last_modified_date" remarks="Дата изменения записи" type="timestamp with time zone"/>
         </createTable>
+        <createIndex indexName="partner_name" tableName="user_profile">
+            <column name="partner_name"/>
+        </createIndex>
+        <createIndex indexName="reference_link" tableName="user_profile" unique="true">
+            <column name="reference_link"/>
+        </createIndex>
     </changeSet>
 
     <changeSet id="00000000000001" author="jhipster">

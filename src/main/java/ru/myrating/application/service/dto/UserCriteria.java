@@ -9,6 +9,7 @@ import java.util.Objects;
 public class UserCriteria implements Serializable, Criteria {
 
     private StringFilter partnerName;
+    private StringFilter referenceLink;
 
     public StringFilter getPartnerName() {
         return partnerName;
@@ -18,11 +19,20 @@ public class UserCriteria implements Serializable, Criteria {
         this.partnerName = partnerName;
     }
 
+    public StringFilter getReferenceLink() {
+        return referenceLink;
+    }
+
+    public void setReferenceLink(StringFilter referenceLink) {
+        this.referenceLink = referenceLink;
+    }
+
     public UserCriteria() {
     }
 
     public UserCriteria(UserCriteria other) {
         this.partnerName = other.partnerName == null ? null : other.partnerName.copy();
+        this.referenceLink = other.referenceLink == null ? null : other.referenceLink.copy();
     }
 
     @Override
@@ -40,13 +50,15 @@ public class UserCriteria implements Serializable, Criteria {
         }
         final UserCriteria that = (UserCriteria) o;
         return
-                Objects.equals(partnerName, that.partnerName);
+                Objects.equals(partnerName, that.partnerName) &&
+                        Objects.equals(referenceLink, that.referenceLink);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-                partnerName
+                partnerName,
+                referenceLink
         );
     }
 
@@ -54,6 +66,7 @@ public class UserCriteria implements Serializable, Criteria {
     public String toString() {
         return "UserCriteria{" +
                 (partnerName != null ? "partnerName=" + partnerName + ", " : "") +
+                (referenceLink != null ? "referenceLink=" + referenceLink + ", " : "") +
                 "}";
     }
 }

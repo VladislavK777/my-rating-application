@@ -11,13 +11,8 @@ import java.util.Optional;
 
 public interface CatRecommendationByRatingRepository extends JpaRepository<CatRecommendationByRating, Long> {
     String CAT_RECOMMENDATION_RATING_BETWEEN = "catRecommendationByRatingBetween";
-    String CAT_RECOMMENDATION_RATING_EQUALS = "catRecommendationByRatingEquals";
 
     @Cacheable(cacheNames = CAT_RECOMMENDATION_RATING_BETWEEN)
-    @Query("from CatRecommendationByRating c where c.from < :value and c.to >= :value")
+    @Query("from CatRecommendationByRating c where c.from <= :value and c.to > :value")
     Optional<CatRecommendationByRating> findByBetweenValue(@Param("value") Long value);
-
-    @Cacheable(cacheNames = CAT_RECOMMENDATION_RATING_EQUALS)
-    @Query("from CatRecommendationByRating c where c.from = :value and c.to = :value")
-    Optional<CatRecommendationByRating> findByEqualsValue(@Param("value") Long value);
 }

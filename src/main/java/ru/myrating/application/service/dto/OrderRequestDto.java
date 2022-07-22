@@ -1,9 +1,6 @@
 package ru.myrating.application.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import ru.myrating.application.domain.OrderRequest;
-import ru.myrating.application.domain.enumeration.OrderStatusEnum;
 
 import java.time.LocalDateTime;
 
@@ -12,23 +9,19 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @JsonInclude(NON_NULL)
 public class OrderRequestDto {
     private Long id;
-    @JsonIgnore
     private LocalDateTime createdDate;
-    private String firstName;
-    private String refLink;
-    @JsonIgnore
-    private OrderStatusEnum status;
-    private String email;
+    private String status;
     private String login;
+    private String partnerName;
+    private String lastName;
+    private String email;
+    private String urlReport;
 
-    public OrderRequestDto(OrderRequest orderRequest) {
-        this.id = orderRequest.getId();
-        this.createdDate = orderRequest.getCreatedDate();
-        this.firstName = orderRequest.getFirstName();
-        this.refLink = orderRequest.getRefLink();
-        this.status = orderRequest.getStatus();
-        this.email = orderRequest.getEmail();
-        this.login = orderRequest.getLogin();
+    public OrderRequestDto(Long id) {
+        this.id = id;
+    }
+
+    public OrderRequestDto() {
     }
 
     public Long getId() {
@@ -47,28 +40,36 @@ public class OrderRequestDto {
         this.createdDate = createdDate;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getRefLink() {
-        return refLink;
-    }
-
-    public void setRefLink(String refLink) {
-        this.refLink = refLink;
-    }
-
-    public OrderStatusEnum getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatusEnum status) {
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -79,11 +80,11 @@ public class OrderRequestDto {
         this.email = email;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUrlReport() {
+        return urlReport;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUrlReport(String urlReport) {
+        this.urlReport = urlReport;
     }
 }

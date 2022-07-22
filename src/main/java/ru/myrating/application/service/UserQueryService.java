@@ -14,7 +14,9 @@ import ru.myrating.application.repository.UserRepository;
 import ru.myrating.application.service.dto.UserCriteria;
 import tech.jhipster.service.QueryService;
 
-import javax.persistence.criteria.JoinType;
+import java.util.Optional;
+
+import static javax.persistence.criteria.JoinType.INNER;
 
 @Service
 @Transactional(readOnly = true)
@@ -33,12 +35,20 @@ public class UserQueryService extends QueryService<User> {
         return userRepository.findAll(specification, pageable);
     }
 
+    public Optional<User> findUserByReferenceLink(UserCriteria criteria) {
+        return userRepository.findOne(createSpecification(criteria));
+    }
+
     protected Specification<User> createSpecification(UserCriteria criteria) {
         Specification<User> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getPartnerName() != null) {
                 specification = specification.and(buildSpecification(criteria.getPartnerName(),
-                        root -> root.join(User_.profile, JoinType.LEFT).get(UserProfile_.partnerName)));
+                        root -> root.join(User_.profile, INNER).get(UserProfile_.partnerName)));
+            }
+            if (criteria.getReferenceLink() != null) {
+                specification = specification.and(buildSpecification(criteria.getReferenceLink(),
+                        root -> root.join(User_.profile, INNER).get(UserProfile_.referenceLink)));
             }
         }
         return specification;

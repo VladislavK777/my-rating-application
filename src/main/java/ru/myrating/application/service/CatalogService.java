@@ -141,9 +141,7 @@ public class CatalogService {
         Objects.requireNonNull(cacheManager.getCache(CatCurrentDebtLoadRepository.CAT_CURRENT_DEBT_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatDelayPeriodRepository.CAT_DELAY_PERIOD_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatOldRepository.CAT_OLD_BETWEEN)).clear();
-        Objects.requireNonNull(cacheManager.getCache(CatOldRepository.CAT_OLD_EQUALS)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatRecommendationByRatingRepository.CAT_RECOMMENDATION_RATING_BETWEEN)).clear();
-        Objects.requireNonNull(cacheManager.getCache(CatRecommendationByRatingRepository.CAT_RECOMMENDATION_RATING_EQUALS)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatRecommendationBySystemRepository.CAT_RECOMMENDATION_SYSTEM_CODE)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatRecommendationByEmptyHistoryRepository.CAT_RECOMMENDATION_EMPTY_HISTORY)).clear();
         Objects.requireNonNull(cacheManager.getCache(CatRequestCreditHistory7DaysRepository.CAT_HISTORY_7_DAYS_BETWEEN)).clear();

@@ -10,7 +10,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import java.io.Serializable;
 
 import static javax.persistence.FetchType.LAZY;
@@ -29,22 +28,13 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
     @SequenceGenerator(name = "order_request_generator", sequenceName = "order_request_generator", allocationSize = 1)
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "ref_link")
-    private String refLink;
+    @JoinColumn(name = "partner_user_id")
+    @ManyToOne(fetch = LAZY)
+    private User partnerUser;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum status;
-
-    @Email
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "login")
-    private String login;
 
     @Type(type = "jsonb")
     @Column(name = "order_data", columnDefinition = "jsonb")
@@ -69,12 +59,12 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public User getPartnerUser() {
+        return partnerUser;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setPartnerUser(User partnerUser) {
+        this.partnerUser = partnerUser;
     }
 
     public OrderStatusEnum getStatus() {
@@ -85,36 +75,12 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
         this.status = status;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public OrderRequestData getOrderData() {
         return orderData;
     }
 
     public void setOrderData(OrderRequestData orderData) {
         this.orderData = orderData;
-    }
-
-    public String getRefLink() {
-        return refLink;
-    }
-
-    public void setRefLink(String refLink) {
-        this.refLink = refLink;
     }
 
     public String getPaymentTransactionId() {
@@ -137,8 +103,8 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
         return personDataIsDeleted;
     }
 
-    public void setPersonDataIsDeleted(boolean personDateIsDeleted) {
-        this.personDataIsDeleted = personDateIsDeleted;
+    public void setPersonDataIsDeleted(boolean personDataIsDeleted) {
+        this.personDataIsDeleted = personDataIsDeleted;
     }
 
     @Override
@@ -161,11 +127,7 @@ public class OrderRequest extends AbstractAuditingEntity implements Serializable
     public String toString() {
         return "OrderRequest{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", refLink='" + refLink + '\'' +
                 ", status=" + status +
-                ", email='" + email + '\'' +
-                ", login='" + login + '\'' +
                 ", transactionId='" + paymentTransactionId + '\'' +
                 '}';
     }

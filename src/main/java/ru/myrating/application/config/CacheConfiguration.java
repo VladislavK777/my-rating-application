@@ -76,11 +76,9 @@ public class CacheConfiguration {
 
             createCache(cm, ru.myrating.application.domain.catalog.CatOld.class.getName());
             createCache(cm, CatOldRepository.CAT_OLD_BETWEEN);
-            createCache(cm, CatOldRepository.CAT_OLD_EQUALS);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatRecommendationByRating.class.getName());
             createCache(cm, CatRecommendationByRatingRepository.CAT_RECOMMENDATION_RATING_BETWEEN);
-            createCache(cm, CatRecommendationByRatingRepository.CAT_RECOMMENDATION_RATING_EQUALS);
 
             createCache(cm, ru.myrating.application.domain.catalog.CatRecommendationBySystem.class.getName());
             createCache(cm, CatRecommendationBySystemRepository.CAT_RECOMMENDATION_SYSTEM_CODE);

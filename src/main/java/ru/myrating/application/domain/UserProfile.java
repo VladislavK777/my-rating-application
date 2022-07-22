@@ -45,8 +45,8 @@ public class UserProfile extends AbstractAuditingEntity implements Serializable 
     @Column(name = "fee")
     private int fee;
 
-    @Column(name = "ref_link")
-    private String refLink;
+    @Column(name = "reference_link")
+    private String referenceLink;
 
     @NotNull
     @Column(name = "url")
@@ -98,12 +98,12 @@ public class UserProfile extends AbstractAuditingEntity implements Serializable 
         this.fee = fee;
     }
 
-    public String getRefLink() {
-        return refLink;
+    public String getReferenceLink() {
+        return referenceLink;
     }
 
-    public void setRefLink(String refLink) {
-        this.refLink = refLink;
+    public void setReferenceLink(String referenceLink) {
+        this.referenceLink = referenceLink;
     }
 
     public String getUrl() {
@@ -142,10 +142,10 @@ public class UserProfile extends AbstractAuditingEntity implements Serializable 
     public String toString() {
         return "UserProfile{" +
                 "id=" + id +
-                ", profileType=" + profileType.getValue() +
+                ", profileType=" + profileType +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", fee=" + fee +
-                ", refLink='" + refLink + '\'' +
+                ", referenceLink='" + referenceLink + '\'' +
                 ", url='" + url + '\'' +
                 '}';
     }
