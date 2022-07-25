@@ -21,7 +21,8 @@
             placeholder="Пароль"
             outlined
             :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="[...required, ...equalPass]"
+            hint="Минимум 8 символов, латиница, цифры и специальные символы"
+            :rules="[...required, passwordRule]"
             @click:append="showPass = !showPass"
           />
         </div>
@@ -64,6 +65,7 @@ export default defineComponent({
       passwordRepeat: '',
       showRepeat: false,
       required: [v => !!v || 'Это поле необходимо заполнить'],
+      passwordRule: v => /^[A-Za-z\d@$!%*#?&]{8,}$/.test(v) || 'Пароль не соответствует требованиям',
       equalPass: [v => v === this.password || 'Пароли не совпадают']
     }
   },

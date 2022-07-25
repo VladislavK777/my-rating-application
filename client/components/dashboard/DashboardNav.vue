@@ -8,10 +8,10 @@
       <NuxtLink to="/dashboard/requests" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
         Запросы
       </NuxtLink>
-      <NuxtLink to="/dashboard/register" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
+      <NuxtLink to="/dashboard/registration/legal" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
         Регистрация юридического лица
       </NuxtLink>
-      <NuxtLink to="/dashboard/register" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
+      <NuxtLink to="/dashboard/registration/individual" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
         Регистрация физического лица
       </NuxtLink>
       <NuxtLink to="/dashboard/payments" class="dashboard-nav__link" active-class="dashboard-nav__link--active">

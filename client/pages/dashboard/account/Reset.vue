@@ -7,20 +7,25 @@
           <span>Укажите новый пароль</span>
           <v-text-field
             v-model="password"
-            type="password"
+            :type="showPass ? 'text' : 'password'"
             placeholder="Пароль"
             outlined
-            :rules="required"
+            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+            hint="Минимум 8 символов, латиница, цифры и специальные символы"
+            :rules="[...required, passwordRule]"
+            @click:append="showPass = !showPass"
           />
         </div>
         <div class="form__input">
           <span>Повторите пароль</span>
           <v-text-field
             v-model="passwordRepeat"
-            type="password"
+            :type="showRepeat ? 'text' : 'password'"
             placeholder="Пароль"
             outlined
-            :rules="required"
+            :append-icon="showRepeat ? 'mdi-eye' : 'mdi-eye-off'"
+            :rules="[...required, ...equalPass]"
+            @click:append="showRepeat = !showRepeat"
           />
         </div>
         <v-btn
@@ -45,8 +50,12 @@ export default defineComponent({
   data() {
     return {
       password: '',
+      showPass: false,
       passwordRepeat: '',
-      required: [v => !!v || 'Это поле необходимо заполнить']
+      showRepeat: false,
+      required: [v => !!v || 'Это поле необходимо заполнить'],
+      passwordRule: v => /^[A-Za-z\d@$!%*#?&]{8,}$/.test(v) || 'Пароль не соответствует требованиям',
+      equalPass: [v => v === this.password || 'Пароли не совпадают']
     }
   },
   methods: {
