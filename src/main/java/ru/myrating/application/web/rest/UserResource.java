@@ -3,15 +3,11 @@ package ru.myrating.application.web.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.myrating.application.config.Constants;
 import ru.myrating.application.domain.User;
 import ru.myrating.application.repository.UserRepository;
@@ -19,13 +15,12 @@ import ru.myrating.application.security.AuthoritiesConstants;
 import ru.myrating.application.service.UserQueryService;
 import ru.myrating.application.service.UserService;
 import ru.myrating.application.service.ValidationService;
-import ru.myrating.application.service.dto.UserCriteria;
+import ru.myrating.application.service.dto.criteria.UserCriteria;
 import ru.myrating.application.web.rest.errors.BadRequestAlertException;
 import ru.myrating.application.web.rest.errors.EmailAlreadyUsedException;
 import ru.myrating.application.web.rest.errors.LoginAlreadyUsedException;
 import ru.myrating.application.web.rest.vm.ManagedUserVM;
 import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 import javax.validation.Valid;
@@ -36,6 +31,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.OK;
 
 /**
  * REST controller for managing users.
@@ -171,20 +168,13 @@ public class UserResource {
     /**
      * {@code GET /admin/users} : get all users with all the details - calling this are only allowed for the administrators.
      *
-     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
     @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<User>> getAllUsers(UserCriteria criteria, @org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<User>> getAllUsers(UserCriteria criteria) {
         log.debug("REST request to get all User for an admin");
-        /*if (!onlyContainsAllowedProperties(pageable)) {
-            return ResponseEntity.badRequest().build();
-        }*/
-
-        final Page<User> page = userQueryService.getAllManagedUsers(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(userQueryService.getAllManagedUsers(criteria), OK);
     }
 
     private boolean onlyContainsAllowedProperties(Pageable pageable) {

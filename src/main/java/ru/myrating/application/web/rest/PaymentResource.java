@@ -1,7 +1,6 @@
 package ru.myrating.application.web.rest;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +12,7 @@ import ru.myrating.application.service.PaymentService;
 import ru.myrating.application.service.dto.payment.PaymentUserDTO;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -27,7 +27,7 @@ public class PaymentResource {
 
     @GetMapping
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Page<PaymentUserDTO>> getAllPayment(@RequestParam(required = false) Integer year, Pageable pageable) throws IOException {
-        return new ResponseEntity<>(paymentService.getAllPayments(year, pageable), OK);
+    public ResponseEntity<List<PaymentUserDTO>> getAllPayment(@RequestParam(required = false) Integer year, Sort sort) throws IOException {
+        return new ResponseEntity<>(paymentService.getAllPayments(year, sort), OK);
     }
 }

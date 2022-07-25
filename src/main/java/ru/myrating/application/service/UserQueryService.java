@@ -2,8 +2,6 @@ package ru.myrating.application.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +10,11 @@ import ru.myrating.application.domain.User;
 import ru.myrating.application.domain.UserProfile_;
 import ru.myrating.application.domain.User_;
 import ru.myrating.application.repository.UserRepository;
-import ru.myrating.application.service.dto.UserCriteria;
+import ru.myrating.application.service.dto.criteria.UserCriteria;
 import tech.jhipster.service.QueryService;
 import tech.jhipster.service.filter.StringFilter;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.List.of;
@@ -34,22 +33,25 @@ public class UserQueryService extends QueryService<User> {
         this.userRepository = userRepository;
     }
 
-    public Page<User> getAllManagedUsers(UserCriteria criteria, Pageable pageable) {
-        log.debug("find by criteria : {}, page: {}", criteria, pageable);
+    public List<User> getAllManagedUsers(UserCriteria criteria) {
+        log.debug("find by criteria : {}", criteria);
         StringFilter authoritiesFilter = new StringFilter();
         authoritiesFilter.setIn(of(USER));
         criteria.setAuthorities(authoritiesFilter);
         final Specification<User> specification = createSpecification(criteria);
-        return userRepository.findAll(specification, pageable);
+        return userRepository.findAll(specification);
     }
 
-    public Optional<User> findUserByReferenceLink(UserCriteria criteria) {
+    public Optional<User> findUserByCriteria(UserCriteria criteria) {
         return userRepository.findOne(createSpecification(criteria));
     }
 
     protected Specification<User> createSpecification(UserCriteria criteria) {
         Specification<User> specification = where(null);
         if (criteria != null) {
+            if (criteria.getLogin() != null) {
+                specification = specification.and(buildSpecification(criteria.getLogin(), User_.login));
+            }
             if (criteria.getAuthorities() != null) {
                 specification = specification.and(buildSpecification(criteria.getAuthorities(),
                         root -> root.join(User_.authorities, INNER).get(Authority_.name)));

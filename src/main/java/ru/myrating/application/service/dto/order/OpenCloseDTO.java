@@ -1,15 +1,15 @@
-package ru.myrating.application.service.dto;
+package ru.myrating.application.service.dto.order;
 
 import java.io.Serializable;
 
-public class OpenCloseDto implements Serializable {
+public class OpenCloseDTO implements Serializable {
     private boolean open;
     private boolean close;
 
-    public OpenCloseDto() {
+    public OpenCloseDTO() {
     }
 
-    public OpenCloseDto(boolean open, boolean close) {
+    public OpenCloseDTO(boolean open, boolean close) {
         this.open = open;
         this.close = close;
     }

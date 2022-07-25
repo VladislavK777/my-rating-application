@@ -32,7 +32,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     @CreatedDate
     @Column(name = "created_date", updatable = false)
-    @JsonIgnore
     private LocalDateTime createdDate = now();
 
     @LastModifiedBy

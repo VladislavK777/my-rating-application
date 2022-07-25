@@ -30,7 +30,6 @@ import static java.time.LocalDateTime.now;
 import static java.util.UUID.randomUUID;
 import static ru.myrating.application.config.Constants.WEBSOCKET_QUEUE;
 import static ru.myrating.application.domain.enumeration.OrderStatusEnum.FAULT;
-import static ru.myrating.application.domain.enumeration.OrderStatusEnum.SENT;
 
 @Async
 @Service
@@ -119,7 +118,6 @@ public class RatingService {
             orderRequest.setOrderReportContent(new OrderReportContent(linkId, map, true, now().plusDays(applicationProperties.getLifeTimeResultDays())));
             simpMessagingTemplate.convertAndSend(WEBSOCKET_QUEUE, new ReportDTO(orderRequest.getId(), linkId.toString()));
             mailService.sendEmail(orderRequest.getOrderData().getEmail(), "Ваш отчет по рейтингу готов", applicationProperties.getLinkReport() + linkId, false, false);
-            orderRequest.setStatus(SENT);
             orderService.save(orderRequest);
         } catch (Exception e) {
             log.error("Calculate rating failed: " + e);

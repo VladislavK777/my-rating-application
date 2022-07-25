@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrating.application.service.CatalogService;
-import ru.myrating.application.service.dto.OrderStatusDTO;
+import ru.myrating.application.service.dto.order.OrderStatusDTO;
 
 import java.util.List;
 

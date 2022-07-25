@@ -3,7 +3,7 @@ package ru.myrating.application.service.mapper;
 import org.springframework.stereotype.Component;
 import ru.myrating.application.config.ApplicationProperties;
 import ru.myrating.application.domain.OrderRequest;
-import ru.myrating.application.service.dto.OrderRequestDto;
+import ru.myrating.application.service.dto.order.OrderRequestDTO;
 
 @Component
 public class OrderRequestMapper {
@@ -13,8 +13,8 @@ public class OrderRequestMapper {
         this.applicationProperties = applicationProperties;
     }
 
-    public OrderRequestDto toDto(OrderRequest orderRequest) {
-        OrderRequestDto orderRequestDto = new OrderRequestDto();
+    public OrderRequestDTO toDto(OrderRequest orderRequest) {
+        OrderRequestDTO orderRequestDto = new OrderRequestDTO();
         orderRequestDto.setId(orderRequest.getId());
         orderRequestDto.setCreatedDate(orderRequest.getCreatedDate());
         orderRequestDto.setStatus(orderRequest.getStatus().getValue());
@@ -23,6 +23,14 @@ public class OrderRequestMapper {
         orderRequestDto.setLastName(orderRequest.getOrderData().getLastName());
         orderRequestDto.setEmail(orderRequest.getOrderData().getEmail());
         orderRequestDto.setUrlReport(orderRequest.getOrderReportContent() != null ? applicationProperties.getLinkReport() + orderRequest.getOrderReportContent().getOrderResultLink() : null);
+        return orderRequestDto;
+    }
+
+    public OrderRequestDTO toDtoByPartner(OrderRequest orderRequest) {
+        OrderRequestDTO orderRequestDto = new OrderRequestDTO();
+        orderRequestDto.setId(orderRequest.getId());
+        orderRequestDto.setCreatedDate(orderRequest.getCreatedDate());
+        orderRequestDto.setStatus(orderRequest.getStatus().getValue());
         return orderRequestDto;
     }
 }

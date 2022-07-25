@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.myrating.application.domain.OrderRequest;
 import ru.myrating.application.service.OrderService;
 import ru.myrating.application.service.ValidationService;
-import ru.myrating.application.service.dto.OrderRequestDto;
+import ru.myrating.application.service.dto.order.OrderRequestDTO;
 
 import java.util.Map;
 
@@ -25,12 +25,12 @@ public class PublicOrderResource {
     }
 
     @PostMapping
-    public ResponseEntity<OrderRequestDto> create(@RequestHeader(value = "X-API-Key", required = false) String key,
+    public ResponseEntity<OrderRequestDTO> create(@RequestHeader(value = "X-API-Key", required = false) String key,
                                                   @RequestParam(required = false) String referenceLink,
                                                   @RequestBody OrderRequest body) {
         validationService.validationApiKey(key);
         validationService.validationRequest(body);
-        return new ResponseEntity<>(new OrderRequestDto(orderService.createOrder(body, referenceLink).getId()), OK);
+        return new ResponseEntity<>(new OrderRequestDTO(orderService.createOrder(body, referenceLink).getId()), OK);
     }
 
     @PutMapping("/paid/{id}")

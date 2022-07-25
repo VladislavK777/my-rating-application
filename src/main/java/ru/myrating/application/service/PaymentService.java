@@ -2,9 +2,7 @@ package ru.myrating.application.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import ru.myrating.application.service.dto.payment.PaymentDetailsDTO;
@@ -18,7 +16,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-import static java.lang.Math.min;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Comparator.comparing;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -35,7 +32,7 @@ public class PaymentService {
         this.paymentResultMapper = paymentResultMapper;
     }
 
-    public Page<PaymentUserDTO> getAllPayments(@Nullable Integer year, Pageable pageable) throws IOException {
+    public List<PaymentUserDTO> getAllPayments(@Nullable Integer year, Sort sort) throws IOException {
         List<PaymentResultDbDTO> resultDbDTO = jdbcTemplate.query(year == null ? readFileAsString()
                 : readFileAsString() + " and payment_details.year = " + year, paymentResultMapper);
         Map<Long, PaymentUserDTO> mapUsers = new HashMap<>();
@@ -58,7 +55,7 @@ public class PaymentService {
                 mapUsers.put(paymentResultDbDTO.getPaymentUserDTO().getPartnerId(), paymentResultDbDTO.getPaymentUserDTO());
             }
         }
-        return getPageableResult(new ArrayList<>(mapUsers.values()), pageable);
+        return sortResult(new ArrayList<>(mapUsers.values()), sort);
     }
 
     private String readFileAsString() throws IOException {
@@ -75,20 +72,17 @@ public class PaymentService {
         return fileData.toString();
     }
 
-    private Page<PaymentUserDTO> getPageableResult(List<PaymentUserDTO> listResult, Pageable pageable) {
-        final int start = (int) pageable.getOffset();
-        final int end = min((start + pageable.getPageSize()), listResult.size());
-        List<PaymentUserDTO> list = listResult.subList(start, end);
-        if (pageable.getSort().isSorted()) {
-            pageable.getSort().forEach(sort -> {
-                if (DESC.equals(sort.getDirection())) {
-                    list.sort(getComparator(sort.getProperty()).reversed());
+    private List<PaymentUserDTO> sortResult(List<PaymentUserDTO> listResult, Sort sort) {
+        if (sort.isSorted()) {
+            sort.forEach(s -> {
+                if (DESC.equals(s.getDirection())) {
+                    listResult.sort(getComparator(s.getProperty()).reversed());
                 } else {
-                    list.sort(getComparator(sort.getProperty()));
+                    listResult.sort(getComparator(s.getProperty()));
                 }
             });
         }
-        return new PageImpl<>(list, pageable, list.size());
+        return listResult;
     }
 
     private Comparator<PaymentUserDTO> getComparator(String sortProperty) {

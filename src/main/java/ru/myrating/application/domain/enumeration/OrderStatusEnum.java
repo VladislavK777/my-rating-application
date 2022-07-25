@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum OrderStatusEnum {
-    NEW("Новый", true),
+    NEW("Не оплачен", true),
     PAID("Оплачен", true),
-    SENT("Отправлен", false),
     FAULT("Ошибка заказа", false);
 
     private final String value;

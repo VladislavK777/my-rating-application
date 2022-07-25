@@ -1,4 +1,4 @@
-package ru.myrating.application.service.dto;
+package ru.myrating.application.service.dto.criteria;
 
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.StringFilter;
@@ -11,6 +11,7 @@ public class UserCriteria implements Serializable, Criteria {
     private StringFilter partnerName;
     private StringFilter referenceLink;
     private StringFilter authorities;
+    private StringFilter login;
 
     public StringFilter getPartnerName() {
         return partnerName;
@@ -36,6 +37,14 @@ public class UserCriteria implements Serializable, Criteria {
         this.authorities = authorities;
     }
 
+    public StringFilter getLogin() {
+        return login;
+    }
+
+    public void setLogin(StringFilter login) {
+        this.login = login;
+    }
+
     public UserCriteria() {
     }
 
@@ -43,6 +52,7 @@ public class UserCriteria implements Serializable, Criteria {
         this.partnerName = other.partnerName == null ? null : other.partnerName.copy();
         this.referenceLink = other.referenceLink == null ? null : other.referenceLink.copy();
         this.authorities = other.authorities == null ? null : other.authorities.copy();
+        this.login = other.login == null ? null : other.login.copy();
     }
 
     @Override
@@ -62,7 +72,8 @@ public class UserCriteria implements Serializable, Criteria {
         return
                 Objects.equals(partnerName, that.partnerName) &&
                         Objects.equals(referenceLink, that.referenceLink) &&
-                        Objects.equals(authorities, that.authorities);
+                        Objects.equals(authorities, that.authorities) &&
+                        Objects.equals(login, that.login);
     }
 
     @Override
@@ -70,7 +81,8 @@ public class UserCriteria implements Serializable, Criteria {
         return Objects.hash(
                 partnerName,
                 referenceLink,
-                authorities
+                authorities,
+                login
         );
     }
 
@@ -80,6 +92,7 @@ public class UserCriteria implements Serializable, Criteria {
                 (partnerName != null ? "partnerName=" + partnerName + ", " : "") +
                 (referenceLink != null ? "referenceLink=" + referenceLink + ", " : "") +
                 (authorities != null ? "authorities=" + authorities + ", " : "") +
+                (login != null ? "login=" + login + ", " : "") +
                 "}";
     }
 }

@@ -1,4 +1,4 @@
-package ru.myrating.application.service.dto;
+package ru.myrating.application.service.dto.order;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @JsonInclude(NON_NULL)
-public class OrderRequestDto {
+public class OrderRequestDTO {
     private Long id;
     private LocalDateTime createdDate;
     private String status;
@@ -17,11 +17,17 @@ public class OrderRequestDto {
     private String email;
     private String urlReport;
 
-    public OrderRequestDto(Long id) {
+    public OrderRequestDTO(Long id) {
         this.id = id;
     }
 
-    public OrderRequestDto() {
+    public OrderRequestDTO() {
+    }
+
+    public OrderRequestDTO(Long id, LocalDateTime createdDate, String status) {
+        this.id = id;
+        this.createdDate = createdDate;
+        this.status = status;
     }
 
     public Long getId() {

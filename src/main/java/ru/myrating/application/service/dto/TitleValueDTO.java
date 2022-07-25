@@ -2,14 +2,14 @@ package ru.myrating.application.service.dto;
 
 import java.io.Serializable;
 
-public class TitleValueDto implements Serializable {
+public class TitleValueDTO implements Serializable {
     private String title;
     private Object text;
 
-    public TitleValueDto() {
+    public TitleValueDTO() {
     }
 
-    public TitleValueDto(String title, Object text) {
+    public TitleValueDTO(String title, Object text) {
         this.title = title;
         this.text = text;
     }

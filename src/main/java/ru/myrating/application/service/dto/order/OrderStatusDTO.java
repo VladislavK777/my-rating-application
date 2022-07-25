@@ -1,4 +1,4 @@
-package ru.myrating.application.service.dto;
+package ru.myrating.application.service.dto.order;
 
 import ru.myrating.application.domain.enumeration.OrderStatusEnum;
 
