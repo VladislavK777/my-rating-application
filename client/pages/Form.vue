@@ -57,8 +57,9 @@ export default {
   methods: {
     async submitForm({ firstName, lastName, passport, email, birthDate }) {
       this.loading = true
+      const refLink = this.$route.query.ref || ''
       const data = await this.$axios.$post(
-        'public/api/order',
+        `public/api/order?referenceLink=${refLink}`,
         {
           orderData: {
             firstName,

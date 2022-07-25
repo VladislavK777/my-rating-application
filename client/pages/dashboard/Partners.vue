@@ -24,7 +24,7 @@
           :headers="headers"
           fixed-header
           :items="data"
-          items-per-page="-1"
+          :items-per-page="-1"
           no-data-text="Нет данных"
           :loading="loading"
           loading-text="Поиск..."
@@ -180,12 +180,6 @@ export default {
 
 <style scoped lang="scss">
 ::v-deep .table {
-  max-height: 250px !important;
-
-  &__container {
-    max-height: 250px !important;
-  }
-
   &__header {
     color: var(--v-black-base) !important;
     font-weight: 600;

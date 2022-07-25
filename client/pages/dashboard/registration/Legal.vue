@@ -4,7 +4,7 @@
       <v-col><span class="font-weight-medium">Общие данные</span></v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           :value="form.profile.partnerName"
           label="Название партнера"
@@ -15,7 +15,7 @@
           @input="form.profile.partnerName = $event"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.login"
           label="Логин"
@@ -24,7 +24,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           :value="form.password"
           label="Пароль"
@@ -35,7 +35,7 @@
           @input="form.password = $event"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.fee"
           label="Комиссия"
@@ -45,7 +45,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.url"
           label="URL"
@@ -54,7 +54,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.firstName"
           label="Имя"
@@ -63,7 +63,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.phoneNumber"
           label="Номер телефона"
@@ -73,7 +73,7 @@
           :rules="[required, phone]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           :value="date"
           label="Дата регистрации"
@@ -82,7 +82,7 @@
           disabled
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.email"
           label="Электронная почта"
@@ -96,7 +96,7 @@
       <v-col><span class="font-weight-medium">Реквизиты</span></v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.customerName"
           label="Заказчик"
@@ -105,7 +105,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.inn"
           label="ИНН"
@@ -115,7 +115,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.bik"
           label="БИК"
@@ -125,7 +125,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.paymentAccount"
           label="Р/С"
@@ -135,7 +135,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.legalAddress"
           label="Юридический адрес"
@@ -144,7 +144,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.kpp"
           label="КПП"
@@ -154,7 +154,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.bankName"
           label="Банк"
@@ -163,7 +163,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.correcpondentAccount"
           label="К/С"
@@ -173,7 +173,7 @@
           :rules="[required]"
         />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-text-field
           v-model="form.profile.requisitesData.postAddress"
           label="Почтовый адрес"
@@ -184,7 +184,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" md="3">
+      <v-col cols="12" sm="6" md="4" lg="3">
         <v-btn color="primary" height="70" block @click="submitRegistration">Сохранить</v-btn>
       </v-col>
     </v-row>
