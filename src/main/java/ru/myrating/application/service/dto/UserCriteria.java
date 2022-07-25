@@ -10,6 +10,7 @@ public class UserCriteria implements Serializable, Criteria {
 
     private StringFilter partnerName;
     private StringFilter referenceLink;
+    private StringFilter authorities;
 
     public StringFilter getPartnerName() {
         return partnerName;
@@ -27,12 +28,21 @@ public class UserCriteria implements Serializable, Criteria {
         this.referenceLink = referenceLink;
     }
 
+    public StringFilter getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(StringFilter authorities) {
+        this.authorities = authorities;
+    }
+
     public UserCriteria() {
     }
 
     public UserCriteria(UserCriteria other) {
         this.partnerName = other.partnerName == null ? null : other.partnerName.copy();
         this.referenceLink = other.referenceLink == null ? null : other.referenceLink.copy();
+        this.authorities = other.authorities == null ? null : other.authorities.copy();
     }
 
     @Override
@@ -51,14 +61,16 @@ public class UserCriteria implements Serializable, Criteria {
         final UserCriteria that = (UserCriteria) o;
         return
                 Objects.equals(partnerName, that.partnerName) &&
-                        Objects.equals(referenceLink, that.referenceLink);
+                        Objects.equals(referenceLink, that.referenceLink) &&
+                        Objects.equals(authorities, that.authorities);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
                 partnerName,
-                referenceLink
+                referenceLink,
+                authorities
         );
     }
 
@@ -67,6 +79,7 @@ public class UserCriteria implements Serializable, Criteria {
         return "UserCriteria{" +
                 (partnerName != null ? "partnerName=" + partnerName + ", " : "") +
                 (referenceLink != null ? "referenceLink=" + referenceLink + ", " : "") +
+                (authorities != null ? "authorities=" + authorities + ", " : "") +
                 "}";
     }
 }

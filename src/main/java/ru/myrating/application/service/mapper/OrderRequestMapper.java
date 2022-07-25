@@ -15,7 +15,7 @@ public class OrderRequestMapper {
 
     public OrderRequestDto toDto(OrderRequest orderRequest) {
         OrderRequestDto orderRequestDto = new OrderRequestDto();
-        orderRequestDto.setId(orderRequestDto.getId());
+        orderRequestDto.setId(orderRequest.getId());
         orderRequestDto.setCreatedDate(orderRequest.getCreatedDate());
         orderRequestDto.setStatus(orderRequest.getStatus().getValue());
         orderRequestDto.setLogin(orderRequest.getPartnerUser() != null ? orderRequest.getPartnerUser().getLogin() : "Без партнера");

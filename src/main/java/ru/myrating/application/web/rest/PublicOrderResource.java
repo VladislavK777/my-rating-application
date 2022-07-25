@@ -25,12 +25,12 @@ public class PublicOrderResource {
     }
 
     @PostMapping
-    public OrderRequestDto create(@RequestHeader(value = "X-API-Key", required = false) String key,
-                                  @RequestParam(required = false) String referenceLink,
-                                  @RequestBody OrderRequest body) {
+    public ResponseEntity<OrderRequestDto> create(@RequestHeader(value = "X-API-Key", required = false) String key,
+                                                  @RequestParam(required = false) String referenceLink,
+                                                  @RequestBody OrderRequest body) {
         validationService.validationApiKey(key);
         validationService.validationRequest(body);
-        return new OrderRequestDto(orderService.createOrder(body, referenceLink).getId());
+        return new ResponseEntity<>(new OrderRequestDto(orderService.createOrder(body, referenceLink).getId()), OK);
     }
 
     @PutMapping("/paid/{id}")
