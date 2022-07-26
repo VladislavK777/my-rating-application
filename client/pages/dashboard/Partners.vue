@@ -37,6 +37,13 @@
           <template #item.requisites="{ item }">
             <v-icon @click="editRequisites(item)">mdi-clipboard-outline</v-icon>
           </template>
+          <template #item.createdDate="{ item }">
+            {{ new Intl.DateTimeFormat('ru', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric'
+          }).format(new Date(item.createdDate)) }}
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -99,7 +106,7 @@ export default {
         { text: 'Название партнера', value: 'profile.partnerName', sortable: false, class: 'table__header' },
         { text: 'Логин', value: 'login', sortable: false, class: 'table__header' },
         { text: 'URL', value: 'profile.url', sortable: false, class: 'table__header' },
-        { text: 'Дата регистрации', value: 'login', class: 'table__header', sort: this.compareDates },
+        { text: 'Дата регистрации', value: 'createdDate', class: 'table__header' },
         { text: 'Имя', value: 'firstName', sortable: false, class: 'table__header' },
         { text: 'Телефон', value: 'profile.phoneNumber', sortable: false, class: 'table__header' },
         { text: 'Email', value: 'email', sortable: false, class: 'table__header' },

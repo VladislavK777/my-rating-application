@@ -8,9 +8,6 @@
       </v-container>
     </v-main>
     <DashboardDrawer v-model="drawer" v-if="$vuetify.breakpoint.mobile" />
-<!--    <v-footer color="light-grey" :absolute="true" app>
-      <TheFooter />
-    </v-footer>-->
   </v-app>
 </template>
 
