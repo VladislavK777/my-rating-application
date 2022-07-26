@@ -61,7 +61,7 @@ public class PaymentService {
     private String readFileAsString() throws IOException {
         StringBuilder fileData = new StringBuilder();
         BufferedReader reader = new BufferedReader(
-                new FileReader("src/main/resources/sql/payment.sql", UTF_8));
+                new FileReader("sql/payment.sql", UTF_8));
         char[] buf = new char[1024];
         int numRead;
         while ((numRead = reader.read(buf)) != -1) {

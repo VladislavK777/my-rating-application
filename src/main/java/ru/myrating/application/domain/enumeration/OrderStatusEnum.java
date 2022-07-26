@@ -6,6 +6,7 @@ import java.util.List;
 public enum OrderStatusEnum {
     NEW("Не оплачен", true),
     PAID("Оплачен", true),
+    SENT("Отправлен", false),
     FAULT("Ошибка заказа", false);
 
     private final String value;
