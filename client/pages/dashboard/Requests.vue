@@ -38,11 +38,11 @@ export default {
   name: 'RequestsPage',
   layout: 'dashboard',
   async asyncData({ $axios }) {
-    const data = (await $axios.$get('/api/order', {
+    const data = await $axios.$get('/api/order', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
-    })).content
+    })
     return { data }
   },
   data() {

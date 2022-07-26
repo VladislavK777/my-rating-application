@@ -9,8 +9,12 @@ export default defineComponent({
   name: 'DashboardPage',
   layout: 'dashboard',
   middleware: [
-    function({ redirect }) {
-      redirect('/dashboard/partners');
+    function({ store, redirect }) {
+      if (store.getters['user/getUserRole'] === 'ADMIN') {
+        redirect('/dashboard/partners');
+      } else {
+        redirect('/dashboard/partner/requests');
+      }
     },
   ],
 })

@@ -16,6 +16,7 @@
           show-expand
           single-expand
           :items="data"
+          item-key="partnerId"
           :items-per-page="-1"
           no-data-text="Нет данных"
           hide-default-footer

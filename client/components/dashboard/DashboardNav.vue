@@ -20,10 +20,10 @@
     </div>
     <div v-else class="dashboard-nav-container"
          :class="{ 'dashboard-nav-container--mobile': $vuetify.breakpoint.mobile }">
-      <NuxtLink to="/dashboard/requests" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
+      <NuxtLink to="/dashboard/partner/requests" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
         Запросы
       </NuxtLink>
-      <NuxtLink to="/dashboard/payments" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
+      <NuxtLink to="/dashboard/partner/payments" class="dashboard-nav__link" active-class="dashboard-nav__link--active">
         Выплаты
       </NuxtLink>
     </div>
