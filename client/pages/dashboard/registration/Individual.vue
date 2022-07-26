@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form">
+  <v-form ref="form" :class="{ 'px-2': $vuetify.breakpoint.mobile }">
     <v-row>
       <v-col><span class="font-weight-medium">Общие данные</span></v-col>
     </v-row>

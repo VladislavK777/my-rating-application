@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ 'px-2': $vuetify.breakpoint.mobile }">
     <v-row>
       <v-col cols="12">
         <v-btn color="black" outlined height="40">Скачать в CSV
@@ -10,6 +10,7 @@
           color="black"
           outlined
           dense
+          hide-details
           placeholder="Найти партнера"
           append-icon="mdi-magnify"
           class="ml-10"
@@ -18,7 +19,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" class="">
+      <v-col cols="12">
         <v-data-table
           :height="tableHeight"
           :headers="headers"
@@ -41,8 +42,11 @@
             {{ new Intl.DateTimeFormat('ru', {
             year: 'numeric',
             month: 'numeric',
-            day: 'numeric'
+            day: 'numeric',
           }).format(new Date(item.createdDate)) }}
+          </template>
+          <template #item.profile.fee="{ item }">
+            {{ item.profile.fee }} руб.
           </template>
         </v-data-table>
       </v-col>
@@ -170,11 +174,6 @@ export default {
     cancelEditRequisites() {
       this.requisitesEntity = null
       this.requisitesId = null
-    },
-    compareDates(a, b) {
-      const dateA = '25.07.2022'.split('.')
-      const dateB = '24.07.2022'.split('.')
-      return new Date(dateA[1] - 1, dateA[0], dateA[2]) > new Date(dateB[1] - 1, dateB[0], dateB[2])
     }
   },
   watch: {

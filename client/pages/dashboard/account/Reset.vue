@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="11" sm="8" md="10" lg="5" class="reset-container">
+    <v-col cols="11" sm="8" lg="4" class="reset-container">
       <h3 class="form__heading">Восстановление пароля</h3>
       <v-form>
         <div class="form__input">
@@ -37,6 +37,9 @@
           Сохранить
         </v-btn>
       </v-form>
+      <div class="mt-5 text-center">
+        <v-btn text to="/dashboard/account/auth">Войти</v-btn>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -47,6 +50,13 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ResetPage',
   layout: 'auth',
+  middleware: [
+    function({ route, redirect }) {
+      if (!route.query.key) {
+        redirect('/dashboard/account/remember');
+      }
+    },
+  ],
   data() {
     return {
       password: '',
@@ -62,7 +72,7 @@ export default defineComponent({
     submitReset() {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('user/reset', {
-          key: 'key',
+          key: this.$route.query.key,
           newPassword: this.password,
           repeatNewPassword: this.passwordRepeat
         })

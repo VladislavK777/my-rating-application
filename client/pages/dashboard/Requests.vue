@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ 'px-2': $vuetify.breakpoint.mobile }">
     <v-row>
       <v-col cols="12">
         <v-btn color="black" outlined height="40">Скачать в CSV
@@ -8,7 +8,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="12" class="">
+      <v-col cols="12">
         <v-data-table
           :height="tableHeight"
           :headers="headers"

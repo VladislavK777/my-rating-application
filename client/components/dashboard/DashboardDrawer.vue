@@ -17,6 +17,7 @@
     </div>
     <div class="dashboard-drawer__footer">
       <span>{{ userEmail }}</span>
+      <v-btn text to="/dashboard/account/change" width="fit-content">Изменить пароль</v-btn>
       <v-btn text @click="logout" width="fit-content">Выйти</v-btn>
     </div>
   </v-navigation-drawer>

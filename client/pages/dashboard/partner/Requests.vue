@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ 'px-2': $vuetify.breakpoint.mobile }">
     <v-row>
       <v-col cols="12">
         <v-btn v-if="!$vuetify.breakpoint.xs" color="black" outlined height="40">Скачать в CSV
@@ -7,14 +7,32 @@
         </v-btn>
       </v-col>
     </v-row>
-    <div class="mt-5">
-      <span>Количество запросов всего/оплаченные:</span>
-      <span class="ml-6 font-weight-medium">{{ data.all }}/{{ data.allPaid }}</span>
-    </div>
-    <div class="mt-5 mb-5">
-      <span>Количество запросов за период всего/оплаченные:</span>
-      <span class="ml-6 font-weight-medium">{{ data.allPeriod }}/{{ data.allPeriodPaid }}</span>
-    </div>
+    <template v-if="!$vuetify.breakpoint.xs">
+      <div class="mt-5">
+        <span>Количество запросов всего/оплаченные:</span>
+        <span class="ml-6 font-weight-medium">{{ data.all }}/{{ data.allPaid }}</span>
+      </div>
+      <div class="mt-5 mb-5">
+        <span>Количество запросов за период всего/оплаченные:</span>
+        <span class="ml-6 font-weight-medium">{{ data.allPeriod }}/{{ data.allPeriodPaid }}</span>
+      </div>
+    </template>
+    <template v-else>
+      <v-row align="end">
+        <v-col cols="8">
+          <span>Количество запросов всего/оплаченные:</span>
+        </v-col>
+        <v-col cols="4" align="end">
+          <span class="ml-6 font-weight-medium">{{ data.all }}/{{ data.allPaid }}</span>
+        </v-col>
+        <v-col cols="8">
+          <span>Количество запросов за период всего/оплаченные:</span>
+        </v-col>
+        <v-col cols="4" align="end">
+          <span class="ml-6 font-weight-medium">{{ data.allPeriod }}/{{ data.allPeriodPaid }}</span>
+        </v-col>
+      </v-row>
+    </template>
     <v-row>
       <v-col cols="12" sm="6" md="4" lg="2">
         <v-select
@@ -23,6 +41,7 @@
           outlined
           label="Статус"
           dense
+          hide-details
           :items="statuses"
           item-text="name"
           item-value="alias"
@@ -36,7 +55,7 @@
     <v-row>
       <v-col cols="12" lg="6">
         <v-data-table
-          :height="tableHeight"
+          :height="$vuetify.breakpoint.xs ? 'undefined' : tableHeight"
           :headers="headers"
           fixed-header
           :items="data.orders"
@@ -63,7 +82,6 @@
 </template>
 
 <script lang="ts">
-import { debounce } from 'lodash'
 import DatePicker from '../../../components/base/DatePicker.vue'
 
 export default {
@@ -99,16 +117,14 @@ export default {
   mounted() {
     const table = document.getElementById('table')
     const footer = document.getElementById('footer')
-    this.tableHeight = this.$vuetify.breakpoint.mobile
-      ? 'undefined'
-      : footer.getBoundingClientRect().y - table.getBoundingClientRect().y + 100
+    this.tableHeight = footer.getBoundingClientRect().y - table.getBoundingClientRect().y + 100
   },
   methods: {
-    search: debounce(async function() {
+    async search() {
       this.loading = true
       this.data = await this.$axios.$get(`/api/order/partner?dateFrom=${this.period[0]}&dateTo=${this.period[1]}&status=${this.status || ''}`)
       this.loading = false
-    }, 300)
+    }
   },
   watch: {
     status() {
@@ -124,8 +140,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-
 ::v-deep .table {
   &__header {
     color: var(--v-black-base) !important;

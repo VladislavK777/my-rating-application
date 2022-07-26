@@ -14,6 +14,7 @@
         outlined
         dense
         label="Выбрать период"
+        hide-details
         append-icon="mdi-calendar"
         readonly
         clearable

@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col cols="11" sm="8" md="10" lg="5" class="remember-container">
+    <v-col cols="11" sm="8" lg="4" class="remember-container">
       <h3 class="form__heading">Забыли пароль?</h3>
       <span>Укажите вашу электронную почту и мы отправим ссылку для восстановления пароля</span>
       <v-form>
@@ -19,6 +19,9 @@
           Отправить
         </v-btn>
       </v-form>
+      <div class="mt-5 text-center">
+        <v-btn text to="/dashboard/account/auth">Войти</v-btn>
+      </div>
     </v-col>
   </v-row>
 </template>

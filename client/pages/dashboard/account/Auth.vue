@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col cols="11" sm="8" md="10" lg="5" class="auth-container">
+    <v-col cols="11" sm="8" lg="4" class="auth-container">
       <h3 class="form__heading">Вход в личный кабинет</h3>
       <v-form ref="form">
         <div class="form__input">
