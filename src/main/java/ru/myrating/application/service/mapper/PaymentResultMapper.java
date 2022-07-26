@@ -17,7 +17,7 @@ import java.util.Map;
 @Component
 public class PaymentResultMapper implements RowMapper<PaymentResultDbDTO> {
     private final ObjectMapper objectMapper;
-    private final Map<Integer, String> mapMonths = new HashMap();
+    private final Map<Integer, String> mapMonths = new HashMap<>();
 
     public PaymentResultMapper(ObjectMapper objectMapper) {
         init();
@@ -54,9 +54,15 @@ public class PaymentResultMapper implements RowMapper<PaymentResultDbDTO> {
         }
         PaymentDetailsDTO paymentDetailsDTO = new PaymentDetailsDTO();
         paymentDetailsDTO.setPeriod(mapMonths.get(rs.getInt("month")) + " " + rs.getInt("year"));
+        paymentDetailsDTO.setMonthId(rs.getInt("month"));
+        paymentDetailsDTO.setMonthName(mapMonths.get(rs.getInt("month")));
         paymentDetailsDTO.setOrderCount(rs.getInt("count"));
         paymentDetailsDTO.setPayment(rs.getInt("payment"));
         paymentDetailsDTO.setOrderBy(rs.getInt("order_by"));
         return new PaymentResultDbDTO(paymentUserDTO, paymentDetailsDTO);
+    }
+
+    public Map<Integer, String> getMapMonths() {
+        return mapMonths;
     }
 }
