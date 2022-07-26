@@ -9,7 +9,10 @@
     class="dashboard-drawer"
   >
     <div>
-      <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг" class="mb-10">
+      <div class="dashboard-drawer__header">
+        <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг">
+        <v-btn v-if="$vuetify.breakpoint.xs" icon @click="$emit('input', false)"><v-icon>mdi-close</v-icon></v-btn>
+      </div>
       <DashboardNav />
     </div>
     <div class="dashboard-drawer__footer">
@@ -55,6 +58,13 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+
+  &__header {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &__footer {

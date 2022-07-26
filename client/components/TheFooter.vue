@@ -1,18 +1,18 @@
 <template>
   <v-container fluid>
     <v-row justify-md="space-around" align-content="end" class="footer">
-      <v-col md="4" class="footer-container"
+      <v-col cols="12" sm="4" md="4" class="footer-container"
              :class="{ 'footer-container--mobile': isMobile, 'footer-container--left': !isMobile  }">
         <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг" class="footer__logo">
         <span>Наши реквизиты</span>
         <span>Мой рейтинг © 2011–2022</span>
       </v-col>
-      <v-col md="4" class="footer-container"
+      <v-col cols="12" sm="4" md="4" class="footer-container"
              :class="{ 'footer-container--mobile': isMobile, 'footer-container--center': !isMobile  }">
         <span>Политика конфиденциальности</span>
         <span>Способ оплаты и условия возврата</span>
       </v-col>
-      <v-col md="4" class="footer-container"
+      <v-col cols="12" sm="4" md="4" class="footer-container"
              :class="{ 'footer-container--mobile': isMobile, 'footer-container--right': !isMobile  }">
         <span class="font-weight-medium">Поддержка</span>
         <span>WhatsApp</span>
@@ -27,7 +27,7 @@ export default {
   name: 'TheFooter',
   computed: {
     isMobile() {
-      return this.$vuetify.breakpoint.mobile
+      return this.$vuetify.breakpoint.xs
     },
   },
 }

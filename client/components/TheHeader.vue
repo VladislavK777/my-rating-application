@@ -1,9 +1,14 @@
 <template>
   <v-app-bar elevation="0" height="104" max-height="104" color="light-grey">
-    <v-row class="pt-3 px-10" no-gutters align="center" :style="{ gap: $vuetify.breakpoint.mobile ? '30px' : '50px' }">
+    <v-row
+      no-gutters
+      align="center"
+      :class="{ 'pt-3': !$vuetify.breakpoint.xs, 'px-10': !$vuetify.breakpoint.xs }"
+      :style="{ gap: $vuetify.breakpoint.xs ? '30px' : '50px' }"
+    >
       <img src="~/assets/logo.svg" height="16" alt="Мой рейтинг">
       <span v-if="userRole === 'ADMIN'">Административный интерфейс</span>
-      <span v-else>Личный кабинет партнера</span>
+      <span v-else-if="!$vuetify.breakpoint.xs">Личный кабинет партнера</span>
       <v-spacer />
       <template v-if="!$vuetify.breakpoint.mobile">
         <span>{{ userEmail }}</span>
