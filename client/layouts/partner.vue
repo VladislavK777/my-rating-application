@@ -8,9 +8,9 @@
       </v-container>
     </v-main>
     <DashboardDrawer v-model="drawer" v-if="$vuetify.breakpoint.mobile" />
-<!--    <v-footer color="light-grey" :absolute="true" app>
+    <v-footer color="light-grey" :absolute="true" app>
       <TheFooter />
-    </v-footer>-->
+    </v-footer>
   </v-app>
 </template>
 
@@ -20,9 +20,9 @@ import DashboardNav from '../components/dashboard/DashboardNav.vue'
 import DashboardDrawer from '../components/dashboard/DashboardDrawer.vue'
 
 export default defineComponent({
-  name: 'DashboardLayout',
+  name: 'PartnerLayout',
   components: { DashboardDrawer, DashboardNav },
-  middleware: ['auth', 'admin'],
+  middleware: ['auth', 'partner'],
   data() {
     return {
       drawer: false

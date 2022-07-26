@@ -51,10 +51,10 @@ export default {
         { text: 'Номер запроса', value: 'id', sortable: false, class: 'table__header' },
         { text: 'Дата запроса', value: 'createdDate', sortable: false, class: 'table__header' },
         { text: 'Фамилия', value: 'lastName', sortable: false, class: 'table__header' },
-        { text: 'Ссылка на отчёт', value: 'urlReport', sortable: false, class: 'table__header' },
+        { text: 'Ссылка на отчет', value: 'urlReport', sortable: false, class: 'table__header' },
         { text: 'Статус', value: 'status', sortable: false, class: 'table__header' },
         { text: 'Email', value: 'email', sortable: false, class: 'table__header',  },
-        { text: 'Название партнёра', value: 'partnerName', sortable: false, class: 'table__header' },
+        { text: 'Название партнера', value: 'partnerName', sortable: false, class: 'table__header' },
         { text: 'Логин', value: 'login', sortable: false, class: 'table__header' },
       ],
       tableHeight: 500

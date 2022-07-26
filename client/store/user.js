@@ -18,6 +18,7 @@ export const mutations = {
     state.user = user
   },
   setRole(state, role) {
+    localStorage.setItem('role', role)
     state.role = role
   },
   setToken(state, token) {
