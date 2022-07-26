@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.myrating.application.security.AuthoritiesConstants;
 import ru.myrating.application.service.PaymentService;
+import ru.myrating.application.service.dto.payment.PaymentDetailsDTO;
 import ru.myrating.application.service.dto.payment.PaymentUserDTO;
 
 import java.io.IOException;
@@ -29,5 +30,10 @@ public class PaymentResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<PaymentUserDTO>> getAllPayment(@RequestParam(required = false) Integer year, Sort sort) throws IOException {
         return new ResponseEntity<>(paymentService.getAllPayments(year, sort), OK);
+    }
+
+    @GetMapping("/partner")
+    public ResponseEntity<List<PaymentDetailsDTO>> getPaymentByPartner(@RequestParam Integer year) {
+        return new ResponseEntity<>(paymentService.getPaymentsByPartner(year), OK);
     }
 }

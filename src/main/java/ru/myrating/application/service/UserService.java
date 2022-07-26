@@ -222,7 +222,9 @@ public class UserService {
                     }
                     user.setImageUrl(userDTO.getImageUrl());
                     user.setActivated(userDTO.isActivated());
-                    user.setLangKey(userDTO.getLangKey());
+                    if (userDTO.getLangKey() != null) {
+                        user.setLangKey(userDTO.getLangKey());
+                    }
                     if (userDTO.getApiKey() != null) {
                         user.setApiKey(fromString(userDTO.getApiKey()));
                     }
