@@ -2,9 +2,17 @@
   <div :class="{ 'px-2': $vuetify.breakpoint.mobile }">
     <v-row>
       <v-col cols="12">
-        <v-btn color="black" outlined height="40">Скачать в CSV
-          <v-icon color="black" class="ml-2">mdi-tray-arrow-down</v-icon>
-        </v-btn>
+        <span class="font-weight-medium mr-5">Выбрать год</span>
+        <v-select
+          v-model="year"
+          color="black"
+          outlined
+          label="Год"
+          dense
+          hide-details
+          :items="[2022]"
+          :style="{ width: '290px', display: 'inline-block' }"
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -14,7 +22,6 @@
           :headers="headers"
           fixed-header
           show-expand
-          single-expand
           :items="data"
           item-key="partnerId"
           :items-per-page="-1"
@@ -25,25 +32,15 @@
           <template #item.requisites="{ item }">
             <v-icon @click="editRequisites(item)">mdi-clipboard-outline</v-icon>
           </template>
-          <template #expanded-item="{ item }">
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                <tr>
-                  <th v-for="payment in item.paymentDetails" :key="payment.period" class="text-left">
-                    {{ payment.period }}
-                  </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td v-for="payment in item.paymentDetails" :key="payment.period">
-                    {{ payment.orderCount }} шт./{{ payment.payment }} руб.
-                  </td>
-                </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
+          <template #expanded-item="{ headers, item }">
+            <td :colspan="headers.length">
+              <div class="payment__details">
+                <div v-for="payment in item.paymentDetails" :key="payment.period" :colspan="headers.length">
+                  <span class="font-weight-medium">{{ payment.period }}:</span> {{ payment.orderCount }}
+                  шт./{{ payment.payment }} руб.
+                </div>
+              </div>
+            </td>
           </template>
         </v-data-table>
       </v-col>
@@ -84,7 +81,7 @@ export default {
   components: { RequisitesEditDialog },
   layout: 'dashboard',
   async asyncData({ $axios }) {
-    const data = await $axios.$get('/api/payment', {
+    const data = await $axios.$get(`/api/payment?year=${new Date().getFullYear()}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
@@ -101,6 +98,7 @@ export default {
         { text: 'Ставка вознаграждения', value: 'partnerFee', class: 'table__header' },
         { text: '', value: 'data-table-expand', sortable: false, align: 'center', class: 'table__header' }
       ],
+      year: new Date().getFullYear(),
       tableHeight: 500,
       requisitesDialog: false,
       requisitesEntity: null,
@@ -115,6 +113,11 @@ export default {
       : window.innerHeight - table.getBoundingClientRect().y - 100
   },
   methods: {
+    async search(year) {
+      this.loading = true
+      this.data = await this.$axios.$get(`/api/payment?year=${year}`)
+      this.loading = false
+    },
     async editRequisites(entity) {
       this.requisitesEntity = await this.$axios.$get(`/api/admin/users/${entity.partnerLogin}`)
       this.requisitesId = this.data.indexOf(entity)
@@ -132,11 +135,24 @@ export default {
       this.requisitesEntity = null
       this.requisitesId = null
     }
+  },
+  watch: {
+    year(value) {
+      this.search(value)
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.payment {
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
 ::v-deep .table {
   &__header {
     color: var(--v-black-base) !important;
