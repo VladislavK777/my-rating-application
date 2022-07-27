@@ -17,7 +17,8 @@
     </div>
     <div class="dashboard-drawer__footer">
       <span>{{ userEmail }}</span>
-      <v-btn text to="/dashboard/account/change" width="fit-content">Изменить пароль</v-btn>
+      <v-btn v-if="userRole === 'ADMIN'" text to="/dashboard/account/admin" width="fit-content">Изменить аккаунт</v-btn>
+      <v-btn v-else text to="/dashboard/account/change" width="fit-content">Изменить пароль</v-btn>
       <v-btn text @click="logout" width="fit-content">Выйти</v-btn>
     </div>
   </v-navigation-drawer>
@@ -37,6 +38,9 @@ export default defineComponent({
     }
   },
   computed: {
+    userRole() {
+      return this.$store.getters['user/getUserRole']
+    },
     userEmail() {
       return this.$store.getters['user/getUserEmail']
     }

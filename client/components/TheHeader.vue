@@ -13,9 +13,9 @@
       <v-spacer />
       <template v-if="!$vuetify.breakpoint.mobile">
         <div class="email-container">
-          <span v-if="userRole === 'ADMIN'" class="email-container__admin" @click="goChangeAdmin">{{ userEmail }}</span>
-          <span v-else>{{ userEmail }}</span>
-          <span class="email-container__change" @click="goChange">изменить пароль</span>
+          <span>{{ userEmail }}</span>
+          <span v-if="userRole === 'ADMIN'" class="email-container__change" @click="goChangeAdmin">изменить аккаунт</span>
+          <span v-else class="email-container__change" @click="goChange">изменить пароль</span>
         </div>
         <v-btn text @click="logout">Выйти</v-btn>
       </template>
