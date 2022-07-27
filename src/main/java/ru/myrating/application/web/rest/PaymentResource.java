@@ -28,12 +28,12 @@ public class PaymentResource {
 
     @GetMapping
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<PaymentUserDTO>> getAllPayment(@RequestParam(required = false) Integer year, Sort sort) throws IOException {
+    public ResponseEntity<List<PaymentUserDTO>> getAllPayments(@RequestParam(required = false) Integer year, Sort sort) throws IOException {
         return new ResponseEntity<>(paymentService.getAllPayments(year, sort), OK);
     }
 
     @GetMapping("/partner")
-    public ResponseEntity<List<PaymentDetailsDTO>> getPaymentByPartner(@RequestParam Integer year) {
+    public ResponseEntity<List<PaymentDetailsDTO>> getPaymentsByPartner(@RequestParam Integer year) {
         return new ResponseEntity<>(paymentService.getPaymentsByPartner(year), OK);
     }
 }
