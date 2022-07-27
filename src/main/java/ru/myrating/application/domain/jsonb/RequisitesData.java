@@ -18,8 +18,8 @@ public class RequisitesData implements Serializable {
     private Long correcpondentAccount;
     private String legalAddress;
     private String postAddress;
-    private Long cardNumber;
-    private Long wallet;
+    private String cardNumber;
+    private String wallet;
     private String walletName;
 
     public String getCustomerName() {
@@ -94,19 +94,19 @@ public class RequisitesData implements Serializable {
         this.postAddress = postAddress;
     }
 
-    public Long getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(Long cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
-    public Long getWallet() {
+    public String getWallet() {
         return wallet;
     }
 
-    public void setWallet(Long wallet) {
+    public void setWallet(String wallet) {
         this.wallet = wallet;
     }
 

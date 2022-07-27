@@ -108,8 +108,8 @@ public class ValidationService {
             if (isEmpty(userDTO.getProfile().getRequisitesData().getBankName())
                     && isEmpty(userDTO.getProfile().getRequisitesData().getWalletName()))
                 throw new BadRequestAlertException("BankName or WalletName must not be empty", "validationService", ERR_VALIDATION);
-            if (userDTO.getProfile().getRequisitesData().getCardNumber() == null
-                    && userDTO.getProfile().getRequisitesData().getWallet() == null)
+            if (isEmpty(userDTO.getProfile().getRequisitesData().getCardNumber())
+                    && isEmpty(userDTO.getProfile().getRequisitesData().getWallet()))
                 throw new BadRequestAlertException("CardNumber or Wallet must not be empty", "validationService", ERR_VALIDATION);
         }
     }
