@@ -11,6 +11,7 @@ import ru.myrating.application.security.SecurityUtils;
 import ru.myrating.application.service.MailService;
 import ru.myrating.application.service.UserService;
 import ru.myrating.application.service.dto.AdminUserDTO;
+import ru.myrating.application.service.dto.EmailDTO;
 import ru.myrating.application.service.dto.PasswordChangeDTO;
 import ru.myrating.application.web.rest.errors.*;
 import ru.myrating.application.web.rest.vm.KeyAndPasswordVM;
@@ -153,11 +154,11 @@ public class AccountResource {
     /**
      * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
      *
-     * @param mail the mail of the user.
+     * @param emailDTO the mail of the user.
      */
     @PostMapping(path = "/account/reset-password/init")
-    public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+    public void requestPasswordReset(@RequestBody EmailDTO emailDTO) {
+        Optional<User> user = userService.requestPasswordReset(emailDTO.getEmail());
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
         } else {
