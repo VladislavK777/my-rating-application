@@ -2,7 +2,7 @@
   <v-row justify="center" align="center">
     <v-col cols="11" sm="8" lg="4" class="change-container">
       <h3 class="form__heading">Изменить пароль</h3>
-      <v-form>
+      <v-form ref="form">
         <div class="form__input">
           <span>Укажите текущий пароль</span>
           <v-text-field

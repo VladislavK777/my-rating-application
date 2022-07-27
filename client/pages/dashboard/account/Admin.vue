@@ -60,18 +60,16 @@ export default defineComponent({
       login: '',
       email: '',
       password: '',
-      showPass: false,
+      showPass: false
     }
   },
   methods: {
     submitChange() {
-      if (this.$refs.form.validate()) {
-        this.$store.dispatch('user/adminChange', {
-          login: this.login,
-          email: this.email,
-          password: this.password
-        })
-      }
+      this.$store.dispatch('user/adminChange', {
+        login: this.login,
+        email: this.email,
+        password: this.password
+      })
     }
   }
 })

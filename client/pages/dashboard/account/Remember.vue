@@ -3,7 +3,7 @@
     <v-col cols="11" sm="8" lg="4" class="remember-container">
       <h3 class="form__heading">Забыли пароль?</h3>
       <span>Укажите вашу электронную почту и мы отправим ссылку для восстановления пароля</span>
-      <v-form>
+      <v-form ref="form">
         <v-text-field
           v-model="email"
           placeholder="Электронная почта"

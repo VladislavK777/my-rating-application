@@ -2,7 +2,7 @@
   <v-row justify="center" align="center">
     <v-col cols="11" sm="8" lg="4" class="reset-container">
       <h3 class="form__heading">Восстановление пароля</h3>
-      <v-form>
+      <v-form ref="form">
         <div class="form__input">
           <span>Укажите новый пароль</span>
           <v-text-field
