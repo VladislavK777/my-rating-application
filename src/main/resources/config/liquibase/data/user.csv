@@ -1,3 +1,3 @@
 id;login;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;last_modified_by;api_key;user_profile_id
-1;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@moyrating.ru;;true;ru;system;system;10dc1c93-084e-4696-8777-755df21d43ef;null
-2;system;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;System;System;sysmet@moyrating.ru;;true;ru;system;system;4d7a8b90-7520-4b19-9c3e-36b8f253225d;null
+1;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;support@moyreyting.ru;;true;ru;system;system;10dc1c93-084e-4696-8777-755df21d43ef;null
+2;system;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;System;System;system@moyreyting.ru;;true;ru;system;system;4d7a8b90-7520-4b19-9c3e-36b8f253225d;null
