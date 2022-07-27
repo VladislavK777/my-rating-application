@@ -80,6 +80,8 @@ export default defineComponent({
           currentPassword: this.oldPassword,
           newPassword: this.password,
           repeatNewPassword: this.passwordRepeat
+        }).then(() => {
+          this.$router.push('/dashboard')
         })
       }
     }

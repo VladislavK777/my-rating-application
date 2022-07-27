@@ -75,6 +75,8 @@ export default defineComponent({
           key: this.$route.query.key,
           newPassword: this.password,
           repeatNewPassword: this.passwordRepeat
+        }).then(() => {
+          this.$router.push('/dashboard/account/auth')
         })
       }
     }
