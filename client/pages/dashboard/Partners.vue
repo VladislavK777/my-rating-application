@@ -111,7 +111,7 @@ export default {
         { text: 'URL', value: 'profile.url', sortable: false, class: 'table__header' },
         { text: 'Дата регистрации', value: 'createdDate', class: 'table__header' },
         { text: 'Имя', value: 'firstName', sortable: false, class: 'table__header' },
-        { text: 'Телефон', value: 'profile.phoneNumber', sortable: false, class: 'table__header' },
+        { text: 'Телефон', value: 'profile.phoneNumber', sortable: false, width: 200, class: 'table__header' },
         { text: 'Email', value: 'email', sortable: false, class: 'table__header' },
         { text: 'Реферальная ссылка', value: 'profile.referenceLink', sortable: false, class: 'table__header' },
         { text: 'Ставка вознаграждения', value: 'profile.fee', class: 'table__header' }

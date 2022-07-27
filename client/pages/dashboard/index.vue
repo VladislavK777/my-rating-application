@@ -9,10 +9,10 @@ export default defineComponent({
   name: 'DashboardPage',
   layout: 'dashboard',
   middleware: [
-    function({ store, redirect }) {
-      if (store.getters['user/getUserRole'] === 'ADMIN') {
+    function({ redirect }) {
+      if (localStorage.getItem('role') === 'ADMIN') {
         redirect('/dashboard/partners');
-      } else if (store.getters['user/getUserRole'] === 'PARTNER') {
+      } else if (localStorage.getItem('role') === 'PARTNER') {
         redirect('/dashboard/partner/requests');
       } else {
         redirect('/dashboard/account/auth');
