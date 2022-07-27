@@ -1,41 +1,35 @@
 <template>
   <v-row justify="center" align="center">
     <v-col cols="11" sm="8" lg="4" class="change-container">
-      <h3 class="form__heading">Изменить пароль</h3>
+      <h3 class="form__heading">Изменить аккаунт</h3>
       <v-form>
         <div class="form__input">
-          <span>Укажите текущий пароль</span>
+          <span>Логин</span>
           <v-text-field
-            v-model="oldPassword"
-            type="password"
-            placeholder="Пароль"
+            v-model="login"
+            type="text"
+            placeholder="Логин"
             outlined
-            :rules="required"
           />
         </div>
         <div class="form__input">
-          <span>Укажите новый пароль</span>
+          <span>Электронная почта</span>
+          <v-text-field
+            v-model="email"
+            type="text"
+            placeholder="Электронная почта"
+            outlined
+          />
+        </div>
+        <div class="form__input">
+          <span>Пароль</span>
           <v-text-field
             v-model="password"
             :type="showPass ? 'text' : 'password'"
             placeholder="Пароль"
             outlined
             :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-            hint="Минимум 8 символов, латиница, цифры и специальные символы"
-            :rules="[...required, passwordRule]"
             @click:append="showPass = !showPass"
-          />
-        </div>
-        <div class="form__input">
-          <span>Повторите пароль</span>
-          <v-text-field
-            v-model="passwordRepeat"
-            :type="showRepeat ? 'text' : 'password'"
-            placeholder="Пароль"
-            outlined
-            :append-icon="showRepeat ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="[...required, ...equalPass]"
-            @click:append="showRepeat = !showRepeat"
           />
         </div>
         <v-btn
@@ -48,7 +42,7 @@
         </v-btn>
       </v-form>
       <div class="mt-5 text-center">
-        <v-btn text to="/dashboard">На главную</v-btn>
+        <v-btn text to="/dashboard/partners">На главную</v-btn>
       </div>
     </v-col>
   </v-row>
@@ -58,28 +52,24 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'ChangePage',
+  name: 'AdminChangePage',
   layout: 'change',
-  middleware: 'partner',
+  middleware: 'admin',
   data() {
     return {
-      oldPassword: '',
+      login: '',
+      email: '',
       password: '',
       showPass: false,
-      passwordRepeat: '',
-      showRepeat: false,
-      required: [v => !!v || 'Это поле необходимо заполнить'],
-      passwordRule: v => /^[A-Za-z\d@$!%*#?&]{8,}$/.test(v) || 'Пароль не соответствует требованиям',
-      equalPass: [v => v === this.password || 'Пароли не совпадают']
     }
   },
   methods: {
     submitChange() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('user/change', {
-          currentPassword: this.oldPassword,
-          newPassword: this.password,
-          repeatNewPassword: this.passwordRepeat
+        this.$store.dispatch('user/adminChange', {
+          login: this.login,
+          email: this.email,
+          password: this.password
         })
       }
     }

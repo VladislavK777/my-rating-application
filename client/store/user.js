@@ -51,6 +51,9 @@ export const actions = {
     }
     commit('setUser', user)
   },
+  async adminChange(_, payload) {
+    await this.$axios.$post('api/account/admin', payload)
+  },
   async change(_, payload) {
     await this.$axios.$post('api/account/change-password', payload)
   },

@@ -17,7 +17,17 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ChangeLayout',
-  middleware: 'auth'
+  middleware: 'auth',
+  created() {
+    if (!this.$store.getters['user/getToken']) {
+      const token = localStorage.getItem('token')
+      this.$store.commit('user/setToken', token)
+      this.$axios.defaults.headers.common = {
+        Authorization: `Bearer ${token}`
+      }
+      this.$store.dispatch('user/getUser')
+    }
+  }
 })
 </script>
 

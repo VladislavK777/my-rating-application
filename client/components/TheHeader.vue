@@ -13,7 +13,8 @@
       <v-spacer />
       <template v-if="!$vuetify.breakpoint.mobile">
         <div class="email-container">
-          <span>{{ userEmail }}</span>
+          <span v-if="userRole === 'ADMIN'" class="email-container__admin" @click="goChangeAdmin">{{ userEmail }}</span>
+          <span v-else>{{ userEmail }}</span>
           <span class="email-container__change" @click="goChange">изменить пароль</span>
         </div>
         <v-btn text @click="logout">Выйти</v-btn>
@@ -50,8 +51,10 @@ export default defineComponent({
     }
   },
   methods: {
+    goChangeAdmin() {
+      this.$router.replace({ path: '/dashboard/account/admin' })
+    },
     goChange() {
-      console.log()
       this.$router.replace({ path: '/dashboard/account/change' })
     },
     logout() {
@@ -71,6 +74,16 @@ export default defineComponent({
 .email-container {
   display: flex;
   flex-direction: column;
+
+  &__admin {
+    color: #272727;
+    transition: all .2s;
+
+    &:hover {
+      cursor: pointer;
+      color: var(--v-primary-base);
+    }
+  }
 
   &__change {
     color: #272727;
