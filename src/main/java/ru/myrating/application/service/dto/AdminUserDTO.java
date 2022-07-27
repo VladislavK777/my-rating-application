@@ -22,12 +22,13 @@ public class AdminUserDTO {
     private String login;
 
     @Size(max = 50)
+    @NotBlank
     private String firstName;
 
     @Size(max = 50)
     private String lastName;
 
-    @NotNull
+    @NotBlank
     @Email
     @Size(min = 5, max = 254)
     private String email;
