@@ -2,9 +2,7 @@
   <div :class="{ 'px-2': $vuetify.breakpoint.mobile }">
     <v-row>
       <v-col cols="12">
-        <v-btn color="black" outlined height="40">Скачать в CSV
-          <v-icon color="black" class="ml-2">mdi-tray-arrow-down</v-icon>
-        </v-btn>
+        <ButtonCsv api-url='/api/report/orders' file-name="Запросы" />
       </v-col>
     </v-row>
     <v-row>
@@ -33,10 +31,12 @@
 </template>
 
 <script lang="ts">
+import ButtonCsv from '../../components/base/ButtonCsv.vue'
 
 export default {
   name: 'RequestsPage',
   layout: 'dashboard',
+  components: { ButtonCsv },
   async asyncData({ $axios }) {
     const data = await $axios.$get('/api/order', {
       headers: {

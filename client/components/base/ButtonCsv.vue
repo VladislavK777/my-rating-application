@@ -13,19 +13,22 @@ export default defineComponent({
     apiUrl: {
       type: String,
       required: true
+    },
+    fileName: {
+      type: String,
+      required: true
     }
   },
   methods: {
     async downloadCsv() {
-      const data = await this.$axios.$get(this.apiUrl)
-      await this.generateLink(data, 'name')
+      const data = await this.$axios.$get(this.apiUrl, { responseType: 'blob' })
+      await this.generateLink(data)
     },
-    async generateLink(response, filename) {
-      const data = await response.blob()
-      const url = URL.createObjectURL(new Blob([data], { type: 'application/octet-stream' }))
+    generateLink(response) {
+      const url = URL.createObjectURL(new Blob([response], { type: 'application/vnd.ms-excel' }))
       const link = document.createElement('a')
       link.href = url
-      link.setAttribute('download', filename)
+      link.setAttribute('download', this.fileName)
       document.body.appendChild(link)
       link.click()
       link.remove()

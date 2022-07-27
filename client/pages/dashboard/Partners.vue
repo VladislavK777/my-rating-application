@@ -2,9 +2,7 @@
   <div :class="{ 'px-2': $vuetify.breakpoint.mobile }">
     <v-row>
       <v-col cols="12">
-        <v-btn color="black" outlined height="40">Скачать в CSV
-          <v-icon color="black" class="ml-2">mdi-tray-arrow-down</v-icon>
-        </v-btn>
+        <ButtonCsv :api-url="`/api/report/users?partnerName.contains=${query}`" file-name="Партнеры" />
         <v-text-field
           v-model="query"
           color="black"
@@ -87,12 +85,13 @@
 
 <script lang="ts">
 import { extend, debounce } from 'lodash'
+import ButtonCsv from '../../components/base/ButtonCsv.vue'
 import PartnerEditDialog from '../../components/dashboard/PartnerEditDialog.vue'
 import RequisitesEditDialog from '../../components/dashboard/RequisitesEditDialog.vue'
 
 export default {
   name: 'PartnersPage',
-  components: { RequisitesEditDialog, PartnerEditDialog },
+  components: { ButtonCsv, RequisitesEditDialog, PartnerEditDialog },
   layout: 'dashboard',
   async asyncData({ $axios }) {
     const data = await $axios.$get('/api/admin/users', {

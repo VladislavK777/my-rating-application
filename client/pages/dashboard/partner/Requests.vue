@@ -2,9 +2,11 @@
   <div :class="{ 'px-2': $vuetify.breakpoint.mobile }">
     <v-row>
       <v-col cols="12">
-        <v-btn v-if="!$vuetify.breakpoint.xs" color="black" outlined height="40">Скачать в CSV
-          <v-icon color="black" class="ml-2">mdi-tray-arrow-down</v-icon>
-        </v-btn>
+        <ButtonCsv
+          v-if="!$vuetify.breakpoint.xs"
+          :api-url="`/api/report/orders/partner?dateFrom=${period[0]}&dateTo=${period[1]}&status=${status || ''}`"
+          file-name="Запросы"
+        />
       </v-col>
     </v-row>
     <template v-if="!$vuetify.breakpoint.xs">
@@ -82,11 +84,12 @@
 </template>
 
 <script lang="ts">
+import ButtonCsv from '../../../components/base/ButtonCsv.vue'
 import DatePicker from '../../../components/base/DatePicker.vue'
 
 export default {
   name: 'PartnerRequestsPage',
-  components: { DatePicker },
+  components: { ButtonCsv, DatePicker },
   layout: 'partner',
   async asyncData({ $axios }) {
     const data = await $axios.$get('/api/order/partner', {
