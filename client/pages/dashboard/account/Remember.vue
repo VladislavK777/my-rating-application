@@ -41,7 +41,9 @@ export default defineComponent({
   methods: {
     submitRemember() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('user/remember', this.email)
+        this.$store.dispatch('user/remember', {
+          email: this.email
+        })
       }
     }
   }
