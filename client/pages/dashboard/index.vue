@@ -12,8 +12,10 @@ export default defineComponent({
     function({ store, redirect }) {
       if (store.getters['user/getUserRole'] === 'ADMIN') {
         redirect('/dashboard/partners');
-      } else {
+      } else if (store.getters['user/getUserRole'] === 'PARTNER') {
         redirect('/dashboard/partner/requests');
+      } else {
+        redirect('/dashboard/account/auth');
       }
     },
   ],

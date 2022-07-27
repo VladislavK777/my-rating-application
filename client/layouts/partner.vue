@@ -29,12 +29,14 @@ export default defineComponent({
     }
   },
   created() {
-    const token = localStorage.getItem('token')
-    this.$store.commit('user/setToken', token)
-    this.$axios.defaults.headers.common = {
-      Authorization: `Bearer ${token}`
+    if (!this.$store.getters['user/getToken']) {
+      const token = localStorage.getItem('token')
+      this.$store.commit('user/setToken', token)
+      this.$axios.defaults.headers.common = {
+        Authorization: `Bearer ${token}`
+      }
+      this.$store.dispatch('user/getUser')
     }
-    this.$store.dispatch('user/getUser')
   }
 })
 </script>

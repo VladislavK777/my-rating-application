@@ -5,11 +5,17 @@ export const state = () => ({
 })
 
 export const getters = {
+  getUser(state) {
+    return state.user
+  },
   getUserEmail(state) {
     return state.user.email
   },
   getUserRole(state) {
     return state.role
+  },
+  getToken(state) {
+    return state.token
   },
 }
 
@@ -34,11 +40,11 @@ export const actions = {
     this.$axios.defaults.headers.common = {
       Authorization: `Bearer ${data.id_token}`,
     }
-    dispatch('getUser')
+    await dispatch('getUser')
   },
   async getUser({ commit }) {
     const user = await this.$axios.$get('api/account')
-    if(user.authorities.find(role => role === 'ROLE_ADMIN')) {
+    if (user.authorities.find((role) => role === 'ROLE_ADMIN')) {
       commit('setRole', 'ADMIN')
     } else {
       commit('setRole', 'PARTNER')
@@ -58,6 +64,8 @@ export const actions = {
     await this.$axios.$get('api/authenticate')
     commit('setToken', null)
     localStorage.removeItem('token')
+    commit('setRole', null)
+    localStorage.removeItem('role')
     commit('setUser', {})
     delete this.$axios.defaults.headers.common.Authorization
   },
